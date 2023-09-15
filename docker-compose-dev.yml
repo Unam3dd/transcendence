@@ -20,7 +20,6 @@ services:
   # POSTGRESQL DATABASE
 
   postgresql:
-    hostname: postgresql
     build:
       context: ./containers/postgresql/
       dockerfile: Dockerfile
@@ -53,7 +52,6 @@ services:
   # ADMINER
 
   adminer:
-    hostname: adminer
     image: adminer:latest
     container_name: adminer
     restart: on-failure
@@ -70,12 +68,11 @@ services:
   # AngularJS
 
   angularjs:
-    hostname: angularjs
     container_name: angularjs
     build:
       context: ./containers/nodejs
       dockerfile: Dockerfile
-    command: ["npm", "run", "build"]
+    command: ["npm", "run", "start"]
     volumes:
       - type: bind
         source: ./frontend
@@ -88,16 +85,15 @@ services:
       postgresql:
         condition: service_healthy
     healthcheck:
-      test: test -d frontend/dist/
+      test: nc -w 5 127.0.0.1 4200
       interval: 5s
       retries: 30
-    restart: on-failure
+    restart: always
     networks:
       - transcendence
   
   # NestJS
   nestjs:
-    hostname: nestjs
     container_name: nestjs
     build:
       context: ./containers/nodejs
@@ -113,7 +109,7 @@ services:
       postgresql:
         condition: service_healthy
       angularjs:
-        condition: service_completed_successfully
+        condition: service_healthy
     ports:
       - "3000:3000"
     healthcheck:
@@ -121,43 +117,5 @@ services:
       interval: 5s
       retries: 30
     restart: on-failure
-    networks:
-      - transcendence
-  
-  # Nginx Reverse Proxy
-  nginx:
-    hostname: nginx
-    container_name: nginx
-    build:
-      context: ./containers/nginx
-      dockerfile: Dockerfile
-    volumes:
-      - type: bind
-        source: ./volumes/nginx/
-        target: /etc/nginx/*
-        bind:
-          create_host_path: true
-      - type: bind
-        source: ./volumes/nginx_log/
-        target: /var/log/nginx
-        bind:
-          create_host_path: true
-      - type: bind
-        source: ./frontend/dist/frontend/
-        target: /var/www/html/
-        bind:
-          create_host_path: true
-    depends_on:
-      postgresql:
-        condition: service_healthy
-      angularjs:
-        condition: service_completed_successfully
-      nestjs:
-        condition: service_healthy
-    restart: always
-    env_file:
-      - .env
-    ports:
-      - ${NGINX_PORT}:443
     networks:
       - transcendence
