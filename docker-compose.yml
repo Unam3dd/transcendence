@@ -1,0 +1,57 @@
+version: '3.9'
+
+networks:
+  transcendence:
+    driver: bridge
+
+# VOLUMES
+
+volumes:
+  db:
+    name: db
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./volumes/postgresql/
+
+services:
+
+  # POSTGRESQL DATABASE
+  postgres:
+    image: postgres:latest
+    container_name: postgresql
+    restart: always
+    env_file:
+      - .env
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_INITDB_ARGS: --encoding=UTF-8
+      PG_DATA: /var/lib/postgresql/data
+    volumes:
+      - type: bind
+        source: ./volumes/db
+        target: /var/lib/postgresql/data
+        bind:
+          create_host_path: true
+    ports:
+     - "${DB_PORT}:5432"
+    networks:
+      - transcendence
+  
+  # ADMINER
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer
+    restart: on-failure
+    env_file:
+      - .env
+    ports:
+     - "${ADMINER_PORT}:8080"
+    depends_on:
+      - postgres
+    networks:
+      - transcendence
