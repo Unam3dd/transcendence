@@ -98,7 +98,7 @@ services:
     build:
       context: ./containers/nodejs
       dockerfile: Dockerfile
-    command: ["npm", "start" ]
+    command: ["npm", "run", "start:dev" ]
     volumes:
       - type: bind
         source: ./backend
