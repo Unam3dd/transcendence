@@ -13,22 +13,17 @@ export class UsersService {
         private usersRepository: Repository<User>
     ){}
 
-    findAll(): Promise<User[]> {
+    public findAll(): Promise<User[]> {
         return this.usersRepository.find();
     }
 
-    async findOne(id: number): Promise<User | null> {
+    public async findOne(id: number): Promise<User> {
         const data = await this.usersRepository.find();
+        if (id <= 0 || id > data.length) return (null);
+        return (data.find(e => id === e.id));
+    }
 
-        var account: User = null;
-
-        data.forEach((user) => {
-            if (user.id === id) {
-                account = user;
-                return ;
-            }
-        })
-
-        return (account);
+    public async register(user: CreateUserDto): Promise<User> {
+        return this.usersRepository.save({...user})
     }
 }
