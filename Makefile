@@ -31,12 +31,12 @@ build_dev:
 	@docker compose -f docker-compose-dev.yml build
 
 lint:
-	cd backend && @npm run lint
+	@cd backend && npm run lint
 
 format:
-	cd backend && @npm run format
+	@cd backend && npm run format
 
 re:
-	sudo make stop down rm format lint up_dev
+	@sudo make stop down rm format lint up_dev
 
 .PHONY: all dev stop down build build_dev lint format re
