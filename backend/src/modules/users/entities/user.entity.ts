@@ -1,16 +1,22 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User {
-    @PrimaryColumn()
-    id: number;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @Column()
-    firstName: string;
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  firstName: string;
 
-    @Column()
-    lastName: string;
+  @Column({
+    type: 'varchar',
+    nullable: false,
+  })
+  lastName: string;
 
-    @Column({ default: true })
-    a2f: boolean;
+  @Column({ default: false })
+  a2f: boolean;
 }
