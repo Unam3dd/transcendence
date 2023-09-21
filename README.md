@@ -60,3 +60,4 @@ Transcendence
 
 <a href="https://codelynx.dev/posts/typescript-type-vs-interface">Typescript (Type vs Interfaces)</a>
 <a href="https://blog.bitsrc.io/type-vs-interface-in-typescript-cf3c00bc04ae">Typescript (Type vs Interface)</a>
+<a href="https://api.intra.42.fr/apidoc/guides/web_application_flow">How to use 42API</a>
