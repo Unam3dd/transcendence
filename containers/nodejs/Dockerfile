@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:lts
 WORKDIR /project/
 RUN apt-get update && apt-get upgrade -y && apt-get install netcat-openbsd -y
 RUN npm update -g && npm upgrade -g && npm i -g @angular/cli && npm i -g @nestjs/cli
