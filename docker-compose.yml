@@ -17,7 +17,7 @@ volumes:
 
 services:
 
-  # POSTGRESQL DATABASE
+  # PostgreSQL DATABASE
 
   postgresql:
     hostname: postgresql
@@ -50,7 +50,7 @@ services:
     networks:
       - transcendence
   
-  # ADMINER
+  # Adminer
 
   adminer:
     hostname: adminer
