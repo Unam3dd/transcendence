@@ -57,3 +57,6 @@ Transcendence
 # Ressources
 
 <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html">Typescript Best Pratice</a>
+
+<a href="https://codelynx.dev/posts/typescript-type-vs-interface">Typescript (Type vs Interfaces)</a>
+<a href="https://blog.bitsrc.io/type-vs-interface-in-typescript-cf3c00bc04ae">Typescript (Type vs Interface)</a>

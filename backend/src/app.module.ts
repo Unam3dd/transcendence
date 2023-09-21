@@ -20,7 +20,8 @@ dotenv.config();
       synchronize: true,
       autoLoadEntities: true,
     }),
-    UsersModule, AuthModule
+    UsersModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
