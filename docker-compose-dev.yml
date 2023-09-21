@@ -20,6 +20,7 @@ services:
   # POSTGRESQL DATABASE
 
   postgresql:
+    hostname: postgresql-dev
     build:
       context: ./containers/postgresql/
       dockerfile: Dockerfile
@@ -52,6 +53,7 @@ services:
   # ADMINER
 
   adminer:
+    hostname: adminer-dev
     image: adminer:latest
     container_name: adminer
     restart: on-failure
@@ -65,10 +67,11 @@ services:
     networks:
       - transcendence
 
-  # AngularJS
+  # Angular
 
-  angularjs:
-    container_name: angularjs
+  angular:
+    hostname: angular-dev
+    container_name: angular
     build:
       context: ./containers/nodejs
       dockerfile: Dockerfile
@@ -94,6 +97,7 @@ services:
   
   # NestJS
   nestjs:
+    hostname: nestjs-dev
     container_name: nestjs
     build:
       context: ./containers/nodejs
@@ -108,7 +112,7 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-      angularjs:
+      angular:
         condition: service_healthy
     ports:
       - "3000:3000"

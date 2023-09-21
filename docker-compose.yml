@@ -67,11 +67,11 @@ services:
     networks:
       - transcendence
 
-  # AngularJS
+  # Angular
 
-  angularjs:
-    hostname: angularjs
-    container_name: angularjs
+  angular:
+    hostname: angular
+    container_name: angular
     build:
       context: ./containers/nodejs
       dockerfile: Dockerfile
@@ -112,7 +112,7 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-      angularjs:
+      angular:
         condition: service_completed_successfully
     ports:
       - "3000:3000"
@@ -150,7 +150,7 @@ services:
     depends_on:
       postgresql:
         condition: service_healthy
-      angularjs:
+      angular:
         condition: service_completed_successfully
       nestjs:
         condition: service_healthy
