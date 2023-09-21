@@ -2,10 +2,19 @@
 Transcendence
 
 # Techno
- - NestJS
- - AngularJS
- - PostgreSQL
- - Docker
+ - TypeScript (Language)
+ - NestJS (Back)
+ - Angular (Front)
+ - PostgreSQL (Database)
+ - Docker (Security/Management)
+ - Snyk (Security)
+ - Sqlmap (SQLInjection)
+ - ExcaliburJS (Gameplay)
+ - TailWind (Front)
+ - Angular Matérial (Front)
+ - Vite (Front)
+ - Postman (Back)
+ - WebSocket || socket.io (Back)
 
 # Security & Problems
  - The user should encounter no unhandled errors and no warnings when browsing the website
@@ -44,3 +53,7 @@ Transcendence
  - It can be a canvas game, or it can be a game rendered in 3D, it can also be ugly but in any case it must be faithful to the original Pong (1972)
  - You must offer some customization options (for example power-ups or different maps). However the user should be able to select a default version of the game without any extra features if they want to
  - The game must be responsive.
+
+# Ressources
+
+- ![Typescript Best Practice](https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html)
