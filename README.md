@@ -56,4 +56,4 @@ Transcendence
 
 # Ressources
 
-- ![Typescript Best Practice](https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html)
+![Typescript Best Practice](https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html)
