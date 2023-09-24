@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { AuthTo42Data } from 'src/interfaces/auth.interfaces';
-import axios from 'axios';
-import { TokensFrom42API } from 'src/interfaces/api.interfaces';
+import axios, { AxiosError } from 'axios';
+import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 
 @Injectable()
 export class ApiService {
@@ -31,17 +31,18 @@ export class ApiService {
     }
   }
 
-  async Get42UserInfo(tokens: TokensFrom42API): Promise<any> {
-	try {
-		const config = {
-			headers: { Authorization: `Bearer ${tokens.access_token}`}
-		};
+  async Get42UserInfo(tokens: TokensFrom42API): Promise<UserInfoAPI> {
+	  try {
+		  const config = {
+			  headers: { Authorization: `Bearer ${tokens.access_token}`}
+	    };
 
-		const { data } = await axios.get(`${process.env.API42_URL}/v2/me`, config);
+		  const { data } = await axios.get(`${process.env.API42_URL}/v2/me`, config);
 
-		return (data);
-	} catch (err) {
-		return (err);
-	}
+		  return (data);
+	  } catch (err) {
+      console.log(err);
+      throw new Error('Get42UserInfo(): Error');
+	  }
   }
 }
