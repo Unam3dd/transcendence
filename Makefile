@@ -1,11 +1,15 @@
 all:
-	@echo "command		| description"
+	@echo "COMMAND:		| DESCRIPTION:"
 	@echo "up		| up prod docker compose"
 	@echo "up_dev		| up dev docker compose"
 	@echo "stop		| stop docker compose"
 	@echo "down		| down docker compose"
 	@echo "build		| build docker compose"
 	@echo "build_dev	| build dev docker compose"
+	@echo "rm		| rm dist directories & volumes"
+	@echo "lint		| ...?"
+	@echo "format		| ...?"
+	@echo "re		| stop + down + rm + lint + up_dev"
 
 up:
 	@docker compose -f docker-compose.yml up --build
