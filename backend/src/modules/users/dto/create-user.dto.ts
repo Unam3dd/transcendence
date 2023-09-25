@@ -3,23 +3,44 @@ import {
   IsBoolean,
   IsNumber,
   IsOptional,
-  IsNotEmpty,
+  IsEmail,
+  Length,
+  IsUrl,
 } from 'class-validator';
 
 export class CreateUserDto {
   @IsOptional()
-  @IsNumber()
+  @IsNumber({}, { message: 'id must be a integer !' })
   id: number;
 
-  @IsString()
-  @IsNotEmpty()
-  firstName: string;
+  @IsOptional()
+  @IsString({ message: 'login must be a string or null' })
+  login: string | null;
 
+  @IsOptional()
+  @IsString({ message: 'firstName must be a string or null'})
+  firstName: string | null;
+
+  @IsOptional()
+  @IsString({ message: 'lastName must be a string or null'})
+  lastName: string | null;
+
+  @IsOptional()
+  @Length(3, 120, {
+    message: 'nickName must be between 3 and 120 characters',
+  })
   @IsString()
-  @IsNotEmpty()
-  lastName: string;
+  nickName: string | null;
+
+  @IsEmail({}, { message: 'Invalid email format !' })
+  @IsOptional()
+  email: string | null;
 
   @IsOptional()
   @IsBoolean()
   a2f: boolean;
+
+  @IsOptional()
+  @IsUrl({}, { message: 'URL is required !' })
+  avatar: string;
 }

@@ -1,34 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { AuthTo42Data } from './../../interfaces/auth.interfaces';
-import axios from 'axios';
+import { Inject, Injectable } from '@nestjs/common';
+import { ApiService } from '../api/api.service';
+import { TokensFrom42API } from 'src/interfaces/api.interfaces';
 
 @Injectable()
 export class AuthService {
-  async AuthTo42API(code: string) {
-    
-    const payload: AuthTo42Data = {
-      grant_type: 'authorization_code',
-      client_id: process.env.CLIENT_ID,
-      client_secret: process.env.SECRET_TOKEN,
-      code: code,
-      redirect_uri: process.env.REDIRECT_URI
-    };
+  @Inject(ApiService)
+  private readonly apiService: ApiService;
 
-    try {
-        const res = await axios.post<AuthTo42Data>(
-            process.env.AUTH_URL, 
-            payload,
-            { 
-                headers: {
-                    'Content-Type': 'application/json',
-                    Accept: 'application/json'
-                },
-            }
-        );
-
-        console.log(res);
-    } catch (err) {
-        console.log(err);
-    }
+  async AuthTo42API(code: string): Promise<TokensFrom42API> {
+    console.log('Authenticate to 42 API !');
+    return await this.apiService.GetTokenFrom42API(code);
   }
 }

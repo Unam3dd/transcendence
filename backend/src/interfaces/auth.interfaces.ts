@@ -4,4 +4,4 @@ export interface AuthTo42Data {
   client_secret: string;
   code: string;
   redirect_uri: string;
-};
+}

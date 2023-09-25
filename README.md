@@ -10,9 +10,8 @@ Transcendence
  - Snyk (Security)
  - Sqlmap (SQLInjection)
  - ExcaliburJS (Gameplay)
- - TailWind (Front)
  - Angular Matérial (Front)
- - Vite (Front)
+ - TailWind (Front)
  - Postman (Back)
  - WebSocket || socket.io (Back)
 
@@ -56,8 +55,8 @@ Transcendence
 
 # Ressources
 
-<a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html">Typescript Best Pratice</a>
+- <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html">Typescript Best Pratice</a>
 
-<a href="https://codelynx.dev/posts/typescript-type-vs-interface">Typescript (Type vs Interfaces)</a>
-<a href="https://blog.bitsrc.io/type-vs-interface-in-typescript-cf3c00bc04ae">Typescript (Type vs Interface)</a>
-<a href="https://api.intra.42.fr/apidoc/guides/web_application_flow">How to use 42API</a>
+- <a href="https://codelynx.dev/posts/typescript-type-vs-interface">Typescript (Type vs Interfaces)</a>
+- <a href="https://blog.bitsrc.io/type-vs-interface-in-typescript-cf3c00bc04ae">Typescript (Type vs Interface)</a>
+- <a href="https://api.intra.42.fr/apidoc/guides/web_application_flow">How to use 42API</a>
