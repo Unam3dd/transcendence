@@ -4,6 +4,11 @@ volumes
 node_modules
 */nodes_modules
 
+# Env
+backend/.env
+frontend/.env
+.env
+
 # compiled output
 /dist
 /node_modules
