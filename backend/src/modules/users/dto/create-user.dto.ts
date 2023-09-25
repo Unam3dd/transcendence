@@ -18,11 +18,11 @@ export class CreateUserDto {
   login: string | null;
 
   @IsOptional()
-  @IsString({ message: 'firstName must be a string or null'})
+  @IsString({ message: 'firstName must be a string or null' })
   firstName: string | null;
 
   @IsOptional()
-  @IsString({ message: 'lastName must be a string or null'})
+  @IsString({ message: 'lastName must be a string or null' })
   lastName: string | null;
 
   @IsOptional()

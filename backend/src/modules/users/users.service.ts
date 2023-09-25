@@ -22,7 +22,11 @@ export class UsersService {
     return data.find((e) => id === e.id);
   }
 
-  public async register(user: CreateUserDto): Promise<User> {
+  public async findOneByLogin(login: string): Promise<User|null> {
+    return (await this.usersRepository.findOne({ where: { login }}));
+  }
+
+  public async registerUser(user: CreateUserDto): Promise<User> {
     const { id } = user;
 
     const uinfo = await this.usersRepository.findOne({ where: { id } });
@@ -42,7 +46,7 @@ export class UsersService {
 
     this.usersRepository.update(updated.id, updated);
 
-    return target;
+    return (target);
   }
 
   public async deleteUser(id: number): Promise<User> {
@@ -52,6 +56,6 @@ export class UsersService {
 
     this.usersRepository.remove(target);
 
-    return target;
+    return (target);
   }
 }

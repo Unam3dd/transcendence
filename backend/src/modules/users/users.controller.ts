@@ -23,7 +23,7 @@ export class UsersController {
   @Post()
   async RegisterNewUser(@Body() User: CreateUserDto, @Res() res: Response) {
     try {
-      await this.usersService.register(User);
+      await this.usersService.registerUser(User);
       return res.status(HttpStatus.CREATED).send();
     } catch (e) {
       console.log(e);
