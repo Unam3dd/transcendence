@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { AuthTo42Data } from 'src/interfaces/auth.interfaces';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 
 @Injectable()
 export class ApiService {
-  async GetTokenFrom42API(code: string): Promise<any> {
+  async GetTokenFrom42API(code: string): Promise<TokensFrom42API> {
     const payload: AuthTo42Data = {
       grant_type: 'authorization_code',
       client_id: process.env.CLIENT_ID,
@@ -14,8 +14,10 @@ export class ApiService {
       redirect_uri: process.env.REDIRECT_URI,
     };
 
+    console.log(payload);
+
     try {
-      const { data } = await axios.post<AuthTo42Data>(
+      const { data } = await axios.post<TokensFrom42API>(
         process.env.AUTH_URL,
         payload,
         {
@@ -25,24 +27,27 @@ export class ApiService {
           },
         },
       );
-	  return (data);
+      return (data);
     } catch (err) {
-      return (null);
+      return null;
     }
   }
 
   async Get42UserInfo(tokens: TokensFrom42API): Promise<UserInfoAPI> {
-	  try {
-		  const config = {
-			  headers: { Authorization: `Bearer ${tokens.access_token}`}
-	    };
+    try {
+      const config = {
+        headers: { Authorization: `Bearer ${tokens.access_token}` },
+      };
 
-		  const { data } = await axios.get(`${process.env.API42_URL}/v2/me`, config);
+      const { data } = await axios.get(
+        `${process.env.API42_URL}/v2/me`,
+        config,
+      );
 
-		  return (data);
-	  } catch (err) {
+      return data;
+    } catch (err) {
       console.log(err);
       throw new Error('Get42UserInfo(): Error');
-	  }
+    }
   }
 }
