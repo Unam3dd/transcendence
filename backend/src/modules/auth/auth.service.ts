@@ -39,7 +39,6 @@ export class AuthService {
       a2f: false,
       email: null,
       avatar: user.image.versions.medium,
-
     };
 
     try {

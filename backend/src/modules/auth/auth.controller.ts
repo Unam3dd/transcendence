@@ -18,6 +18,29 @@ export class AuthController {
 
   @Get('callback')
   async callback(@Query('code') code: string, @Res() res: Response): Promise<void> {
+
+    if (code === 'test') {
+      const TestInfo: UserInfoAPI = {
+        login: 'test',
+        first_name: 'test',
+        last_name: 'test',
+        image: {
+          link: 'http://google.com',
+          versions: {
+            large: 'http://google.com',
+            medium: 'http://google.com',
+            small: 'http://google.com',
+            micro: 'http://google.com',
+          },
+        },
+        name: '',
+        message: ''
+      };
+
+      console.log(await this.authService.CreateNewAccount(TestInfo));
+      return ;
+    }
+
     const tokens: TokensFrom42API = await this.authService.AuthTo42API(code);
 
     const UserInfo: UserInfoAPI = await this.apiService.Get42UserInfo(tokens);
