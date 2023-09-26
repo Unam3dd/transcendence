@@ -4,10 +4,7 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
-import { InjectDataSource, InjectRepository } from '@nestjs/typeorm';
-import { User } from '../users/entities/user.entity';
-import { Repository } from 'typeorm';
-import { UsersService } from '../users/users.service';
+
 
 @Controller('auth')
 export class AuthController {
@@ -19,35 +16,38 @@ export class AuthController {
   @Get('callback')
   async callback(@Query('code') code: string, @Res() res: Response): Promise<void> {
 
-    if (code === 'test') {
-      const TestInfo: UserInfoAPI = {
-        login: 'test',
-        first_name: 'test',
-        last_name: 'test',
-        image: {
-          link: 'http://google.com',
-          versions: {
-            large: 'http://google.com',
-            medium: 'http://google.com',
-            small: 'http://google.com',
-            micro: 'http://google.com',
-          },
+    const TestInfo: UserInfoAPI = {
+      login: 'test',
+      first_name: 'test',
+      last_name: 'test',
+      image: {
+        link: 'http://google.com',
+        versions: {
+          large: 'http://google.com',
+          medium: 'http://google.com',
+          small: 'http://google.com',
+          micro: 'http://google.com',
         },
-        name: '',
-        message: ''
-      };
-
-      console.log(await this.authService.CreateNewAccount(TestInfo));
-      return ;
-    }
+      },
+    };
 
     const tokens: TokensFrom42API = await this.authService.AuthTo42API(code);
 
     const UserInfo: UserInfoAPI = await this.apiService.Get42UserInfo(tokens);
 
     const exist: boolean = await this.authService.CheckAccountAlreadyExist(UserInfo);
+    const testExist: boolean = await this.authService.CheckAccountAlreadyExist(TestInfo);
 
-    console.log(exist);
+    if (code === 'test' && testExist) {
+      res.status(200).send();
+      return ;
+    }
+
+    if (code === 'test' && !testExist) {
+      await this.authService.CreateNewAccount(TestInfo);
+      res.status(201).send();
+      return ;
+    }
 
     if (exist) {
       res.status(200).send();
