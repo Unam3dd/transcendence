@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ProfilePageService} from "../services/profile-page.service";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-profile-page',
@@ -8,16 +9,15 @@ import {ProfilePageService} from "../services/profile-page.service";
 })
 export class ProfilePageComponent implements OnInit{
 
+  //Variables des données à récupérer pour la bdd
   userId: number = 1;
-  firstName: string = "";
-  lastName: string = "";
+  userData$!: Observable<any>;
 
+  //Constructeur indispensable pour injecter le service
   constructor(private profilePageService: ProfilePageService) {}
 
+  //Récupération des données à partir du backend pour pour les afficher en front
   ngOnInit(): void {
-    this.profilePageService.getData(this.userId).subscribe((data: any) => {
-      this.firstName = data.firstName;
-      this.lastName = data.lastName;
-    });
+    this.userData$ = this.profilePageService.getData(this.userId);
   }
 }
