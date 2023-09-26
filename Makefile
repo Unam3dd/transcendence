@@ -1,5 +1,5 @@
 all:
-	@echo "COMMAND:		| DESCRIPTION:"
+	@echo "COMMAND:	| DESCRIPTION:"
 	@echo "up		| up prod docker compose"
 	@echo "up_dev		| up dev docker compose"
 	@echo "stop		| stop docker compose"
