@@ -30,7 +30,7 @@ describe('UsersService', () => {
     expect(userService.updateUser).toBeDefined();
   });
 
-  test('Create fews users', () => {
+  test('Create fews users', async () => {
     let u: CreateUserDto = {
       id: 1,
       login: 'stales',
