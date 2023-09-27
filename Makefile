@@ -1,5 +1,5 @@
 all:
-	@echo "COMMAND:		| DESCRIPTION:"
+	@echo "COMMAND:	| DESCRIPTION:"
 	@echo "up		| up prod docker compose"
 	@echo "up_dev		| up dev docker compose"
 	@echo "stop		| stop docker compose"
@@ -7,8 +7,8 @@ all:
 	@echo "build		| build docker compose"
 	@echo "build_dev	| build dev docker compose"
 	@echo "rm		| rm dist directories & volumes"
-	@echo "lint		| ...?"
-	@echo "format		| ...?"
+	@echo "lint		| relint NestJS backend?"
+	@echo "format		| reformat NestJS backend"
 	@echo "re		| stop + down + rm + lint + up_dev"
 
 up:
@@ -19,9 +19,11 @@ up_dev:
 
 stop:
 	@docker compose stop
+	@docker compose -f snyk.yaml stop
 
 down:
 	@docker compose down --rmi all
+	@docker compose -f snyk.yaml down --rmi all
 
 rm:
 	@rm -rf backend/dist
@@ -46,4 +48,18 @@ test:
 re:
 	@sudo make stop down rm format lint up_dev
 
+<<<<<<< HEAD
 .PHONY: all dev stop down build build_dev lint format test re
+=======
+snyk_backend:
+	@sudo docker compose -f ./snyk.yaml run snyk_backend
+	@sudo docker compose -f ./snyk.yaml stop
+	@sudo docker compose -f ./snyk.yaml down
+
+snyk_frontend:
+	@sudo docker compose -f ./snyk.yaml run snyk_frontend
+	@sudo docker compose -f ./snyk.yaml stop
+	@sudo docker compose -f ./snyk.yaml down
+
+.PHONY: all dev stop down build build_dev lint format re snyk
+>>>>>>> main

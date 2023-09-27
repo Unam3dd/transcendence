@@ -11,18 +11,18 @@ import {
 export class CreateUserDto {
   @IsOptional()
   @IsNumber({}, { message: 'id must be a integer !' })
-  id: number;
+  id?: number;
 
   @IsOptional()
   @IsString({ message: 'login must be a string or null' })
   login: string | null;
 
   @IsOptional()
-  @IsString({ message: 'firstName must be a string or null'})
+  @IsString({ message: 'firstName must be a string or null' })
   firstName: string | null;
 
   @IsOptional()
-  @IsString({ message: 'lastName must be a string or null'})
+  @IsString({ message: 'lastName must be a string or null' })
   lastName: string | null;
 
   @IsOptional()

@@ -14,8 +14,6 @@ export class ApiService {
       redirect_uri: process.env.REDIRECT_URI,
     };
 
-    console.log(payload);
-
     try {
       const { data } = await axios.post<TokensFrom42API>(
         process.env.AUTH_URL,
@@ -27,9 +25,9 @@ export class ApiService {
           },
         },
       );
-      return (data);
+      return data;
     } catch (err) {
-      return null;
+      throw new Error(`GetTokenFrom42API(): ${err}`);
     }
   }
 
@@ -46,8 +44,7 @@ export class ApiService {
 
       return data;
     } catch (err) {
-      console.log(err);
-      throw new Error('Get42UserInfo(): Error');
+      throw new Error(`Get42UserInfo(): ${err}`);
     }
   }
 }
