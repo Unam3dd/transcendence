@@ -3,7 +3,6 @@ import { UsersService } from './users.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
 
 describe('UsersService', () => {
   let userService: UsersService;
@@ -17,7 +16,7 @@ describe('UsersService', () => {
       }],
     }).compile();
 
-    userService = module.get<UsersService>(UsersService);
+    userService = await module.resolve(UsersService);
   });
 
   it('should be defined', () => {
@@ -29,50 +28,4 @@ describe('UsersService', () => {
     expect(userService.registerUser).toBeDefined();
     expect(userService.updateUser).toBeDefined();
   });
-
-  test('Create fews users', async () => {
-    let u: CreateUserDto = {
-      id: 1,
-      login: 'stales',
-      firstName: 'sam',
-      lastName: 'tales',
-      nickName: 'unam3dd',
-      email: null,
-      a2f: false,
-      avatar: 'http://avatar.com/'
-    };
-
-    let users =  [
-      {
-        id: 1,
-        login: 'stales',
-        firstName: 'sam',
-        lastName: 'tales',
-        nickName: 'unam3dd',
-        email: null,
-        a2f: false,
-        avatar: 'http://avatar.com/'
-      },
-      {
-        id: 2,
-        login: 'test1',
-        firstName: 'test1',
-        lastName: 'test1',
-        nickName: null,
-        email: 'test1@gmail.com',
-        a2f: true,
-        avatar: 'http://avatar.com/'
-      },
-      {
-        id: 3,
-        login: 'test2',
-        firstName: 'test2',
-        lastName: 'test2',
-        nickName: 'superNickName',
-        email: 'test2@gmail.com',
-        a2f: false,
-        avatar: 'http://avatar.com'
-      }
-    ];
-  })
 });
