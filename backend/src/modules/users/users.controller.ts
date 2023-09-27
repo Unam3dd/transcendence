@@ -15,6 +15,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { Response } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { isEmpty } from 'class-validator';
 
 @Controller('users')
 export class UsersController {
@@ -23,7 +24,7 @@ export class UsersController {
   @Post()
   async RegisterNewUser(@Body() User: CreateUserDto, @Res() res: Response) {
     try {
-      await this.usersService.register(User);
+      await this.usersService.registerUser(User);
       return res.status(HttpStatus.CREATED).send();
     } catch (e) {
       console.log(e);
@@ -49,7 +50,7 @@ export class UsersController {
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number) {
     const user = await this.usersService.findOne(id);
-    return user === null ? {} : user;
+    return isEmpty(user) ? {} : user;
   }
 
   @Delete(':id')
@@ -61,6 +62,7 @@ export class UsersController {
       await this.usersService.deleteUser(id);
       return res.status(HttpStatus.OK).send();
     } catch (e) {
+      console.error(e);
       return res.status(HttpStatus.NO_CONTENT).send();
     }
   }

@@ -13,13 +13,27 @@ export class AuthController {
   ) {}
 
   @Get('callback')
-  async callback(@Query('code') code: string, @Res() res: Response) {
+  async callback(
+    @Query('code') code: string,
+    @Res() res: Response,
+  ): Promise<any> {
+
     const tokens: TokensFrom42API = await this.authService.AuthTo42API(code);
 
     const UserInfo: UserInfoAPI = await this.apiService.Get42UserInfo(tokens);
 
-    console.log(UserInfo.login, UserInfo.first_name, UserInfo.last_name);
+    const exist: boolean = await this.authService.CheckAccountAlreadyExist(UserInfo);
 
-    res.status(200).send();
+    if (exist) {
+      res.status(200).send();
+      return;
+    }
+
+    if (!(await this.authService.CreateNewAccount(UserInfo))) {
+      res.status(500).send();
+      return;
+    }
+
+    res.status(201).send();
   }
 }
