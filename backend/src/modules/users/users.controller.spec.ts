@@ -48,7 +48,7 @@ describe('UsersController', () => {
       nickName: "mologue",
       email: "chjoie@42.fr",
       a2f: true,
-      avatar: "link"
+      avatar: "http://google.com"
     };
 
     const mockUser : User = {
@@ -59,7 +59,7 @@ describe('UsersController', () => {
       nickName: "mologue",
       email: "chjoie@42.fr",
       a2f: true,
-      avatar: "link",
+      avatar: "http://google.com",
       createdAt: new Date(),
       updatedAt: new Date()
     };
@@ -67,7 +67,7 @@ describe('UsersController', () => {
     jest.spyOn(mockUserRepository, 'create').mockReturnValue(mockUser);
     jest.spyOn(mockUserRepository, 'save').mockResolvedValue(mockUser);
 
-    jest.spyOn(usersService, 'register').mockResolvedValue(undefined);
+    jest.spyOn(usersService, 'registerUser').mockResolvedValue(undefined);
 
     await usersController.RegisterNewUser(mockUserDto, mockResponse as Response);
 
@@ -102,7 +102,7 @@ describe('UsersController', () => {
     jest.spyOn(mockUserRepository, 'create').mockReturnValue(mockUser);
     jest.spyOn(mockUserRepository, 'save').mockResolvedValue(mockUser);
 
-    jest.spyOn(usersService, 'register').mockRejectedValue(new Error("Error thrown when trying to create user"));
+    jest.spyOn(usersService, 'registerUser').mockRejectedValue(new Error("Error thrown when trying to create user"));
 
     await usersController.RegisterNewUser(mockUserDto, mockResponse as Response);
 

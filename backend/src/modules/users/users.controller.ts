@@ -1,4 +1,3 @@
-//import { Controller, Get, Param, Req, Res } from '@nestjs/common';
 import {
   Body,
   Controller,
@@ -27,7 +26,6 @@ export class UsersController {
       await this.usersService.registerUser(User);
       return res.status(HttpStatus.CREATED).send();
     } catch (e) {
-      console.error(e);
       return res.status(HttpStatus.CONFLICT).send();
     }
   }
@@ -38,7 +36,6 @@ export class UsersController {
       await this.usersService.updateUser(User.id, User);
       return res.status(HttpStatus.OK).send();
     } catch (e) {
-      console.error(e);
       return res.status(HttpStatus.NOT_MODIFIED).send();
     }
   }
@@ -63,7 +60,6 @@ export class UsersController {
       await this.usersService.deleteUser(id);
       return res.status(HttpStatus.OK).send();
     } catch (e) {
-      console.error(e);
       return res.status(HttpStatus.NO_CONTENT).send();
     }
   }
