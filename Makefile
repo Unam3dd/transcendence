@@ -40,7 +40,10 @@ lint:
 format:
 	@cd backend && npm run format
 
+test:
+	@docker compose -f docker-compose-test.yml up --build
+
 re:
 	@sudo make stop down rm format lint up_dev
 
-.PHONY: all dev stop down build build_dev lint format re
+.PHONY: all dev stop down build build_dev lint format test re
