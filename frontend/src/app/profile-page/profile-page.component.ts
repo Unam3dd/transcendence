@@ -14,7 +14,7 @@ export class ProfilePageComponent implements OnInit{
   userData$!: Observable<any>;
 
   //Constructeur indispensable pour injecter le service
-  constructor(private profilePageService: ProfilePageService) {}
+  constructor(private profilePageService: ProfilePageService,) {}
 
   //Récupération des données à partir du backend pour pour les afficher en front
   ngOnInit(): void {

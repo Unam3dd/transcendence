@@ -2,12 +2,12 @@
 <!-- Pour afficher une donnée, il suffit de faire {{userData.dataName}} -->
 <!-- "userData$" est l'observable, on l'appel donc puis "| async" te permet d'avoir les données récupéré par l'obervable et empêche les fuites mémoire -->
 <div class="profile-page" *ngIf="userData$ | async as userData">
-  <p>profile-picture</p>
+  <img class="avatar" [src]="userData.avatar" alt="avatar picture">
   <p>Login: {{userData.login}}</p>
   <p>Firstname: {{userData.firstName}}</p>
   <p>Lastname: {{userData.lastName}}</p>
   <p>Nickname: {{userData.nickName}}</p>
-  <p>A2F: <input type="checkbox" [checked]="userData.a2f"> transform-to-toggle-switch</p>
+  <p>A2F: <mat-slide-toggle [(ngModel)]="userData.a2f" color="primary"></mat-slide-toggle> {{userData.a2f}}</p>
   <p>Friends: my-friends</p>
   <p>History: my-games-history</p>
   <p>(Achievements: my-achievements)</p>
