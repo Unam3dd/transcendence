@@ -1,0 +1,22 @@
+version: '3.9'
+
+networks:
+  snyk:
+    driver: bridge
+
+services:
+  snyk:
+    hostname: snyk
+    build:
+      context: ./services/snyk/
+      dockerfile: Dockerfile
+    container_name: snyk
+    volumes:
+      - ./frontend/:/project/frontend/
+      - ./backend/:/project/backend/
+    networks:
+      - snyk
+    env_file:
+      - .env
+    environment:
+      SNYK_TOKEN: ${SNYK_TOKEN}
