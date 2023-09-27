@@ -1,0 +1,10 @@
+#!/bin/sh
+
+chmod -R 777 /project/
+
+echo "Executing unit tests for NestJS functions: "
+
+npm test
+
+echo "All tests are now complete! Exiting..."
+

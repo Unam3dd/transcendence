@@ -1,0 +1,21 @@
+version: '3.9'
+
+networks:
+  test:
+    driver: bridge
+
+services:
+  nestjs-test:
+    hostname: nestjs-test
+    container_name: jest
+    build:
+      context: ./containers/jest
+      dockerfile: Dockerfile
+    volumes:
+      - type: bind
+        source: ./backend
+        target: /project/
+        bind:
+          create_host_path: true
+    networks:
+      - test
