@@ -6,7 +6,7 @@ node_modules
 backend/.dccache
 frontend/.dccache
 backend/src/.dccache
-**/**/.dccache
+**/**/*.dccache
 *.dccache
 **/*.dccache
 
