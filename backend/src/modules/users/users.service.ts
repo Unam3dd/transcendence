@@ -25,13 +25,13 @@ export class UsersService {
     return await this.usersRepository.findOne({ where: { login } });
   }
 
-  public async registerUser(user: CreateUserDto): Promise<User> {
+  public async registerUser(user: CreateUserDto): Promise<User|null> {
     const { id } = user;
 
     const uinfo = await this.usersRepository.findOne({ where: { id } });
 
     if (isEmpty(id) && uinfo)
-      throw new HttpException('User ID already exists', HttpStatus.BAD_REQUEST);
+      throw new HttpException('User ID already exists', HttpStatus.CONFLICT);
 
     return (this.usersRepository.save({ ...user }));
   }
