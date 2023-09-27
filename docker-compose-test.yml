@@ -7,10 +7,11 @@ networks:
 services:
   nestjs-test:
     hostname: nestjs-test
-    container_name: jest
+    container_name: nestjs-test
     build:
-      context: ./containers/jest
+      context: ./containers/nodejs
       dockerfile: Dockerfile
+    command: ["npm", "test"]
     volumes:
       - type: bind
         source: ./backend
