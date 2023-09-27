@@ -5,14 +5,12 @@ networks:
     driver: bridge
 
 services:
-  snyk:
-    hostname: snyk
-    build:
-      context: ./services/snyk/
-      dockerfile: Dockerfile
-    container_name: snyk
+  snyk_backend:
+    hostname: snyk_backend
+    image: snyk/snyk:alpine
+    container_name: snyk-backend
+    command: ["snyk", "code", "test", "/project/backend/"]
     volumes:
-      - ./frontend/:/project/frontend/
       - ./backend/:/project/backend/
     networks:
       - snyk
@@ -20,3 +18,18 @@ services:
       - .env
     environment:
       SNYK_TOKEN: ${SNYK_TOKEN}
+
+  snyk_frontend:
+    hostname: snyk_frontend
+    image: snyk/snyk:alpine
+    command: ["snyk", "code", "test", "/project/frontend/"]
+    container_name: snyk-frontend
+    volumes:
+      - ./frontend/:/project/frontend/
+    networks:
+      - snyk
+    env_file:
+      - .env
+    environment:
+      SNYK_TOKEN: ${SNYK_TOKEN}
+  

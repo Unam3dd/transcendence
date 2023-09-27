@@ -45,8 +45,13 @@ format:
 re:
 	@sudo make stop down rm format lint up_dev
 
-snyk:
-	@sudo docker compose -f ./snyk.yaml up --build
+snyk_backend:
+	@sudo docker compose -f ./snyk.yaml run snyk_backend
+	@sudo docker compose -f ./snyk.yaml stop
+	@sudo docker compose -f ./snyk.yaml down
+
+snyk_frontend:
+	@sudo docker compose -f ./snyk.yaml run snyk_frontend
 	@sudo docker compose -f ./snyk.yaml stop
 	@sudo docker compose -f ./snyk.yaml down
 
