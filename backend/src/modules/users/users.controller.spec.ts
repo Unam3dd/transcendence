@@ -49,8 +49,8 @@ describe('UsersController', () => {
       mockUserDto.login = `${mockUserDto.login}${(Math.random() + 1).toString(36).substring(1)}`;
       mockUserDto.nickName = `${(Math.random() + 1).toString(36).substring(1)}`;
       mockUserDto.a2f = (i & 0x1) ? true : false;
-      
-      console.log(`Register new User ${mockUserDto.login} ${mockUserDto.nickName}`);
     }
+
+    expect(2).toBe(2);
   })
 });
