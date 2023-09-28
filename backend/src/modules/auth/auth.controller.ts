@@ -1,4 +1,4 @@
-import { Controller, Query, Res } from '@nestjs/common';
+import { Controller, HttpStatus, Query, Res } from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Response } from 'express';
@@ -25,15 +25,15 @@ export class AuthController {
     const exist: boolean = await this.authService.CheckAccountAlreadyExist(UserInfo);
 
     if (exist) {
-      res.status(200).send();
+      res.redirect('/home');
       return;
     }
 
     if (!(await this.authService.CreateNewAccount(UserInfo))) {
-      res.status(500).send();
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
       return;
     }
 
-    res.status(201).send();
+    res.redirect('/home');
   }
 }

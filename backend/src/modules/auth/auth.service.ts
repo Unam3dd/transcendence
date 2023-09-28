@@ -12,7 +12,6 @@ export class AuthService {
   private readonly userService: UsersService;
 
   public async AuthTo42API(code: string): Promise<TokensFrom42API> {
-    console.log('Authenticate to 42 API !');
     return (await this.apiService.GetTokenFrom42API(code));
   }
 
@@ -35,7 +34,6 @@ export class AuthService {
     try {
       await this.userService.registerUser(NewAccountDTO);
     } catch (err) {
-      console.error(err);
       return (false);
     }
 
