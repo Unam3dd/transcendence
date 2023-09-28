@@ -12,7 +12,7 @@ export class AuthService {
   private readonly userService: UsersService;
 
   public async AuthTo42API(code: string): Promise<TokensFrom42API> {
-    return (await this.apiService.GetTokenFrom42API(code));
+    return await this.apiService.GetTokenFrom42API(code);
   }
 
   public async CheckAccountAlreadyExist(user: UserInfoAPI): Promise<boolean> {
@@ -20,7 +20,6 @@ export class AuthService {
   }
 
   public async CreateNewAccount(user: UserInfoAPI): Promise<boolean> {
-
     const NewAccountDTO: CreateUserDto = {
       login: user.login,
       firstName: user.first_name,
@@ -34,9 +33,9 @@ export class AuthService {
     try {
       await this.userService.registerUser(NewAccountDTO);
     } catch (err) {
-      return (false);
+      return false;
     }
 
-    return (true);
+    return true;
   }
 }

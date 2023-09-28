@@ -6,14 +6,17 @@ import { Repository } from 'typeorm';
 
 describe('UsersService', () => {
   let userService: UsersService;
-  let mockUserRepository: Repository<User>
+  let mockUserRepository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, {
-        provide: getRepositoryToken(User),
-        useValue: mockUserRepository
-      }],
+      providers: [
+        UsersService,
+        {
+          provide: getRepositoryToken(User),
+          useValue: mockUserRepository,
+        },
+      ],
     }).compile();
 
     userService = await module.resolve(UsersService);

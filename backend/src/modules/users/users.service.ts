@@ -19,7 +19,7 @@ export class UsersService {
   }
 
   public async findOne(id: number): Promise<User | null> {
-    return (await this.usersRepository.findOne({ where: { id }}));
+    return await this.usersRepository.findOne({ where: { id } });
   }
 
   public async findOneByLogin(login: string): Promise<User | null> {
@@ -33,7 +33,7 @@ export class UsersService {
 
     if (isEmpty(id) && uinfo) throw new UserError('User already exist');
 
-    return (this.usersRepository.save({ ...user }));
+    return this.usersRepository.save({ ...user });
   }
 
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
@@ -45,7 +45,7 @@ export class UsersService {
 
     this.usersRepository.update(updated.id, updated);
 
-    return (target);
+    return target;
   }
 
   public async deleteUser(id: number): Promise<User> {
@@ -55,6 +55,6 @@ export class UsersService {
 
     this.usersRepository.remove(target);
 
-    return (target);
+    return target;
   }
 }

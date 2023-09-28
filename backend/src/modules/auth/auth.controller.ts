@@ -17,15 +17,19 @@ export class AuthController {
     @Query('code') code: string,
     @Res() res: Response,
   ): Promise<any> {
-
     const tokens: TokensFrom42API = await this.authService.AuthTo42API(code);
 
     const UserInfo: UserInfoAPI = await this.apiService.Get42UserInfo(tokens);
 
-    const exist: boolean = await this.authService.CheckAccountAlreadyExist(UserInfo);
+    const exist: boolean =
+      await this.authService.CheckAccountAlreadyExist(UserInfo);
+
+    const redirectURI = process.env.DEV_MODE
+      ? process.env.HOME_REDIRECT_DEV
+      : process.env.HOME_REDIRECT;
 
     if (exist) {
-      res.redirect('/home');
+      res.redirect(redirectURI);
       return;
     }
 
@@ -34,6 +38,6 @@ export class AuthController {
       return;
     }
 
-    res.redirect('/home');
+    res.redirect(redirectURI);
   }
 }
