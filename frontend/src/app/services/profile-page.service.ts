@@ -15,7 +15,15 @@ export class ProfilePageService {
 
   //Récupère les données du user en fonction de l'ID
   getData(userId: number): Observable<string> {
-    const url = `${this.backUrl}/${userId}`;
+    const url: string = `${this.backUrl}/${userId}`;
     return this.http.get<string>(url);
+  }
+
+  //Permet de modifier le nickname de l'utilisateur
+  updateUserNickname(userId: number, newNickname: string): Observable<any>{
+    const url: string = `${this.backUrl}/${userId}`;
+    const updateNickname = {nickName: newNickname};
+
+    return this.http.put(url, updateNickname);
   }
 }
