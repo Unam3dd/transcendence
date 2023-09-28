@@ -15,6 +15,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { Response } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
+import { User } from './entities/user.entity';
 
 @Controller('users')
 export class UsersController {
@@ -26,7 +27,7 @@ export class UsersController {
       await this.usersService.registerUser(User);
       return res.status(HttpStatus.CREATED).send();
     } catch (e) {
-      return res.status(HttpStatus.CONFLICT).send();
+      return res.status(HttpStatus.CONFLICT).send({error: e});
     }
   }
 
@@ -36,19 +37,19 @@ export class UsersController {
       await this.usersService.updateUser(User.id, User);
       return res.status(HttpStatus.OK).send();
     } catch (e) {
-      return res.status(HttpStatus.NOT_MODIFIED).send();
+      return res.status(HttpStatus.NOT_MODIFIED).send({error: e});
     }
   }
 
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(@Res() res: Response) {
+    return res.status(HttpStatus.OK).send(await this.usersService.findAll());
   }
 
   @Get(':id')
-  async findOne(@Param('id', ParseIntPipe) id: number) {
-    const user = await this.usersService.findOne(id);
-    return isEmpty(user) ? {} : user;
+  async findOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
+    const user: User = await this.usersService.findOne(id);
+    return res.status(HttpStatus.OK).send(isEmpty(user) ? {} : user);
   }
 
   @Delete(':id')
@@ -60,7 +61,7 @@ export class UsersController {
       await this.usersService.deleteUser(id);
       return res.status(HttpStatus.OK).send();
     } catch (e) {
-      return res.status(HttpStatus.NO_CONTENT).send();
+      return res.status(HttpStatus.NO_CONTENT).send({error: e});
     }
   }
 }
