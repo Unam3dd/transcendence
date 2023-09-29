@@ -4,6 +4,7 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
+import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -13,7 +14,7 @@ export class AuthController {
   ) {}
 
   @Get('callback')
-  async callback(
+  public async callback(
     @Query('code') code: string,
     @Res() res: Response,
   ): Promise<any> {
