@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import * as dotenv from 'dotenv';
+
+dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -20,7 +23,7 @@ async function bootstrap() {
   app.enableCors();
 
   // Disable X-Powered-By express
-  app.getHttpAdapter().getInstance().disable('x-powered-by');
+  app.getHttpAdapter().getInstance().disable('X-Powered-By');
 
   app.useGlobalPipes(new ValidationPipe());
 
