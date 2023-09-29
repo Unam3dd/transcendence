@@ -4,6 +4,7 @@ import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { isEmpty } from 'class-validator';
 
 @Injectable()
 export class AuthService {
@@ -44,6 +45,9 @@ export class AuthService {
 
   public async generateJWT(login: string) {
     const account = await this.userService.findOneByLogin(login);
+    
+    if (isEmpty(account)) return ({});
+
     const payload = { sub: account.id, login: login, nickName: account.nickName };
 
     return (

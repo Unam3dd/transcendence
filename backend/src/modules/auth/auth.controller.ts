@@ -4,7 +4,6 @@ import { AuthService } from './auth.service';
 import { Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
-import { User } from '../users/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -30,6 +29,7 @@ export class AuthController {
       : process.env.HOME_REDIRECT;
 
     if (exist) {
+      await this.authService.generateJWT(UserInfo.login);
       res.redirect(redirectURI);
       return;
     }
