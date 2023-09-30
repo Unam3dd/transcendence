@@ -1,15 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from './modules/users/users.module';
-import * as dotenv from 'dotenv';
 import { AuthModule } from './modules/auth/auth.module';
 import { ApiModule } from './modules/api/api.module';
 import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { UsersController } from './modules/users/users.controller';
 import { AuthController } from './modules/auth/auth.controller';
-
-dotenv.config();
 
 @Module({
   imports: [
