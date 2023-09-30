@@ -22,14 +22,13 @@ export class AuthController {
     const UserInfo: UserInfoAPI = await this.apiService.Get42UserInfo(tokens);
 
     const exist: boolean =
-      await this.authService.CheckAccountAlreadyExist(UserInfo);
+      await this.authService.CheckAccountAlreadyExist(UserInfo.login);
 
     const redirectURI = process.env.DEV_MODE
       ? process.env.HOME_REDIRECT_DEV
       : process.env.HOME_REDIRECT;
 
     if (exist) {
-      await this.authService.generateJWT(UserInfo.login);
       res.redirect(redirectURI);
       return;
     }

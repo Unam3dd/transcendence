@@ -3,6 +3,7 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as dotenv from 'dotenv';
+import * as cookieParser from 'cookie-parser';
 
 dotenv.config();
 
@@ -21,6 +22,8 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();
+
+  app.use(cookieParser())
 
   // Disable X-Powered-By express
   app.getHttpAdapter().getInstance().disable('X-Powered-By');
