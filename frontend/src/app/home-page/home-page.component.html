@@ -1,4 +1,16 @@
-<div>
-  <button class="profile" (click)="moveToProfile()">Profile</button>
-  <button class="game" (click)="moveToGame()">Game</button>
+<div *ngIf="userData$ | async as userData">
+  <ng-container *ngIf="userData.nickName; else columnEmpty">
+    <button class="profile" (click)="moveToProfile()">Profile</button>
+    <button class="game" (click)="moveToGame()">Game</button>
+  </ng-container>
 </div>
+
+<ng-template #columnEmpty>
+  <form (ngSubmit)="updateNickname()">
+    <p>Welcome</p>
+    <p>Enter your nickname</p>
+    <p>(Your nickname will be your login by default)</p>
+    <input [(ngModel)]="nickname" placeholder="Enter your nickname" name="nickname">
+    <button type="submit">Confirm</button>
+  </form>
+</ng-template>
