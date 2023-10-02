@@ -6,11 +6,11 @@
 </div>
 
 <ng-template #columnEmpty>
-  <form (ngSubmit)="updateNickname()" #userForm="ngForm">
+  <form (ngSubmit)="updateNickname()">
     <p>Welcome</p>
     <p>Enter your nickname</p>
     <p>(Your nickname will be your login by default)</p>
-    <input [(ngModel)]="newNickname" placeholder="Enter your nickname">
-    <button type="submit" (click)="updateNickname()">Confirm</button>
+    <input [(ngModel)]="nickname" placeholder="Enter your nickname" name="nickname">
+    <button type="submit">Confirm</button>
   </form>
 </ng-template>
