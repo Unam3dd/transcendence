@@ -1,7 +1,7 @@
-import { Controller, HttpStatus, Query, Res } from '@nestjs/common';
+import { Controller, HttpStatus, Query, Req, Res } from '@nestjs/common';
 import { Get } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
 
@@ -15,6 +15,7 @@ export class AuthController {
   @Get('callback')
   async callback(
     @Query('code') code: string,
+    @Req() req: Request,
     @Res() res: Response,
   ): Promise<any> {
     const tokens: TokensFrom42API = await this.authService.AuthTo42API(code);
@@ -29,6 +30,7 @@ export class AuthController {
       : process.env.HOME_REDIRECT;
 
     if (exist) {
+      res.cookie('authorization', `Bearer ${await this.authService.generateJwt(UserInfo.login)}`);
       res.redirect(redirectURI);
       return;
     }
@@ -38,6 +40,7 @@ export class AuthController {
       return;
     }
 
+    res.cookie('authorization', `Bearer ${await this.authService.generateJwt(UserInfo.login)}`);
     res.redirect(redirectURI);
   }
 }

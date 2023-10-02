@@ -9,6 +9,7 @@ import {
   Res,
   HttpStatus,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -16,7 +17,9 @@ import { Response } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
 import { User } from './entities/user.entity';
+import { AuthGuard } from '../auth/auth.guard';
 
+@UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

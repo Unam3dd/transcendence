@@ -7,9 +7,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersModule } from '../users/users.module';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  imports: [ApiModule, UsersModule, TypeOrmModule.forFeature([User])],
+  imports: [ApiModule, UsersModule, TypeOrmModule.forFeature([User]),
+  JwtModule.register({
+    global: true,
+    secret: process.env.JWT_SECRET,
+    signOptions: { expiresIn: '1h' },
+  })],
   controllers: [AuthController],
   providers: [AuthService, ApiService, UsersService],
 })
