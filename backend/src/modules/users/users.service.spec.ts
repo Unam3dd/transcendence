@@ -3,14 +3,28 @@ import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { AppModule } from '../../app.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { error } from 'console';
 import { UserError } from './users.type';
+import { Repository } from 'typeorm';
+import { getRepositoryToken } from '@nestjs/typeorm';
 
 //Do a serie of tests for a specific set of methods (UsersServices methods here)
 describe('UsersServices', () => {
     let usersService : UsersService;
+    let userRepository : Repository<User>;
+    let result = new User();
 
-    // I load things I need to run my tests
+    //validators doesn't seem to work here? (url, email)
+    const userDto = {
+      id: 1,
+      login: "chjoihe5rgrgghyht",
+      firstName: "chharles",
+      lastName: "joie",
+      nickName: "mologuegrhyhegtg",
+      email: "chjoie@42.frgeghyhtggr",
+      a2f: false,
+      avatar: "link"
+    }
+    // Loading things I need to run my tests
     beforeAll( async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [AppModule,
@@ -18,63 +32,27 @@ describe('UsersServices', () => {
             ],
             providers: [UsersService]
         }).compile();
-
+      
         usersService = module.get<UsersService>(UsersService);
+        userRepository = module.get<Repository<User>>(getRepositoryToken(User));
+
+        // Remove every users in the database to make the tests
+        await userRepository.query('DELETE FROM "user"');
+        await userRepository.query('ALTER SEQUENCE user_id_seq RESTART WITH 1');
     });
+        test('add new User in database', async () => {
 
-/* Things to do before each test
-    beforeEach( async () => {
+          result = await usersService.registerUser(userDto);
+          expect(result).toBeDefined();
 
-    })
-*/
+          const compare = await usersService.findOne(result.id);
+          expect(compare).toEqual(result);
 
-    describe('check registerUser() function', () => {
-
-        it('Should add new User in database', async () => {
-
-          const userDto = {
-                id: 1,
-                login: "chjoie",
-                firstName: "charles",
-                lastName: "joie",
-                nickName: "mologue",
-                email: "chjoie@42.fr",
-                a2f: false,
-                avatar: "link"
-            }
-          
-            //jest.spyOn() will "spy" what happen when method 'registerUser' from usersService is called,
-            //so I can check if the method work as expected
-            const registerUserSpy = jest.spyOn(usersService, 'registerUser');
-
-            await usersService.registerUser(userDto);
-
-            expect(registerUserSpy).toBeCalledWith(userDto);
-      });
-
-      it('Should throw an error', async () => {
-
-        const userDto2 = {
-              id: 1,
-              login: "chjoie",
-              firstName: "charles",
-              lastName: "joie",
-              nickName: "mologue",
-              email: "chjoie@42.fr",
-              a2f: false,
-              avatar: "link"
-        }
-        
-        //jest.spyOn() will "spy" what happen when method 'registerUser' from usersService is called,
-        //so I can check if the method work as expected
-        const registerUserSpy = jest.spyOn(usersService, 'registerUser');
-
-        try {
-          await usersService.registerUser(userDto2);
-        } 
-        catch (e) {
-           expect(e).toBeInstanceOf(UserError);
-        }
-      });
-    });
+        });
+        test('delete existing user', async () => {
+          await expect(usersService.deleteUser(1)).resolves.toEqual(result);
+        });
+        test('delete non existent error', async () => {
+          await expect(usersService.deleteUser(999)).rejects.toThrowError(new UserError('User not found !'));
+        });
 });
