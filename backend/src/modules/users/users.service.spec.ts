@@ -1,31 +1,80 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from './users.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
+import { AppModule } from '../../app.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { error } from 'console';
+import { UserError } from './users.type';
 
-describe('UsersService', () => {
-  let userService: UsersService;
-  let mockUserRepository: Repository<User>
+//Do a serie of tests for a specific set of methods (UsersServices methods here)
+describe('UsersServices', () => {
+    let usersService : UsersService;
 
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [UsersService, {
-        provide: getRepositoryToken(User),
-        useValue: mockUserRepository
-      }],
-    }).compile();
+    // I load things I need to run my tests
+    beforeAll( async () => {
+        const module: TestingModule = await Test.createTestingModule({
+            imports: [AppModule,
+              TypeOrmModule.forFeature([User])
+            ],
+            providers: [UsersService]
+        }).compile();
 
-    userService = await module.resolve(UsersService);
-  });
+        usersService = module.get<UsersService>(UsersService);
+    });
 
-  it('should be defined', () => {
-    expect(userService).toBeDefined();
-    expect(userService.deleteUser).toBeDefined();
-    expect(userService.findAll).toBeDefined();
-    expect(userService.findOne).toBeDefined();
-    expect(userService.findOneByLogin).toBeDefined();
-    expect(userService.registerUser).toBeDefined();
-    expect(userService.updateUser).toBeDefined();
-  });
+/* Things to do before each test
+    beforeEach( async () => {
+
+    })
+*/
+
+    describe('check registerUser() function', () => {
+
+        it('Should add new User in database', async () => {
+
+          const userDto = {
+                id: 1,
+                login: "chjoie",
+                firstName: "charles",
+                lastName: "joie",
+                nickName: "mologue",
+                email: "chjoie@42.fr",
+                a2f: false,
+                avatar: "link"
+            }
+          
+            //jest.spyOn() will "spy" what happen when method 'registerUser' from usersService is called,
+            //so I can check if the method work as expected
+            const registerUserSpy = jest.spyOn(usersService, 'registerUser');
+
+            await usersService.registerUser(userDto);
+
+            expect(registerUserSpy).toBeCalledWith(userDto);
+      });
+
+      it('Should throw an error', async () => {
+
+        const userDto2 = {
+              id: 1,
+              login: "chjoie",
+              firstName: "charles",
+              lastName: "joie",
+              nickName: "mologue",
+              email: "chjoie@42.fr",
+              a2f: false,
+              avatar: "link"
+        }
+        
+        //jest.spyOn() will "spy" what happen when method 'registerUser' from usersService is called,
+        //so I can check if the method work as expected
+        const registerUserSpy = jest.spyOn(usersService, 'registerUser');
+
+        try {
+          await usersService.registerUser(userDto2);
+        } 
+        catch (e) {
+           expect(e).toBeInstanceOf(UserError);
+        }
+      });
+    });
 });
