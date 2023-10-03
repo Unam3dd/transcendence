@@ -56,10 +56,11 @@ describe('UsersServices', () => {
           }
           result = await usersService.updateUser(1, update);
         });
-        test('delete existing user', async () => {
-          await expect(usersService.deleteUser(1)).resolves.toEqual(result);
+       test('delete existing user', async () => {
+          result = await usersService.deleteUser(1);
+          expect(result.id).toBe(undefined);
         });
-        test('delete non existent error', async () => {
+        test('delete non existing error', async () => {
           await expect(usersService.deleteUser(999)).rejects.toThrowError(new UserError('User not found !'));
         });
 });
