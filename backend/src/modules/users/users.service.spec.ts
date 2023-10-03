@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserError } from './users.type';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
+import { Request } from 'supertest';
 
 //Do a serie of tests for a specific set of methods (UsersServices methods here)
 describe('UsersServices', () => {
@@ -28,7 +29,7 @@ describe('UsersServices', () => {
     beforeAll( async () => {
         const module: TestingModule = await Test.createTestingModule({
             imports: [AppModule,
-              TypeOrmModule.forFeature([User])
+              TypeOrmModule.forFeature([User]),
             ],
             providers: [UsersService]
         }).compile();
@@ -48,6 +49,12 @@ describe('UsersServices', () => {
           const compare = await usersService.findOne(result.id);
           expect(compare).toEqual(result);
 
+        });
+       test ('Updating an existing user', async () =>{
+          const update = {
+            firstName : "newNNName"
+          }
+          result = await usersService.updateUser(1, update);
         });
         test('delete existing user', async () => {
           await expect(usersService.deleteUser(1)).resolves.toEqual(result);
