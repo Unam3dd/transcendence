@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {ProfilePageService} from "../services/profile-page.service";
 import { Observable } from 'rxjs';
 
+
 @Component({
   selector: 'app-profile-page',
   templateUrl: './profile-page.component.html',
