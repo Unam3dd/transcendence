@@ -32,7 +32,7 @@ services:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-      POSTGRES_INITDB_ARGS: --encoding=UTF-8
+      POSTGRES_INITDB_ARGS: --no-locale --encoding=UTF-8
       PG_DATA: /var/lib/postgresql/data
     volumes:
       - type: bind
