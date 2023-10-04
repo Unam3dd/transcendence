@@ -33,7 +33,7 @@ export class UsersService {
 
     if (isEmpty(id) && uinfo) throw new UserError('User already exist');
 
-    return (await this.usersRepository.save({ ...user }));
+    return ( await this.usersRepository.save({ ...user }));
   }
 
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
