@@ -8,6 +8,7 @@ import { LoggerModule } from './logger/logger.module';
 import { LoggerMiddleware } from './logger/logger.middleware';
 import { UsersController } from './modules/users/users.controller';
 import { AuthController } from './modules/auth/auth.controller';
+import { EventsGateway } from './gateway/gateway';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ dotenv.config();
     AuthModule,
     ApiModule,
     LoggerModule,
+    EventsGateway,
   ],
   controllers: [],
   providers: [],
