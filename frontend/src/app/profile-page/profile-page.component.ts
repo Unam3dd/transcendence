@@ -13,9 +13,10 @@ export class ProfilePageComponent implements OnInit{
   firstName: string = "";
   lastName: string = "";
 
-  constructor(private profilePageService: ProfilePageService) {}
+  constructor(private profilePageService: ProfilePageService, private readonly cookieService: CookiesService) {}
 
   ngOnInit(): void {
+    console.log(this.cookieService.getCookie('authorization'));
     this.profilePageService.getData(this.userId).subscribe((data: any) => {
       this.firstName = data.firstName;
       this.lastName = data.lastName;
