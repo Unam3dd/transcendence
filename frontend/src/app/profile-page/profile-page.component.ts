@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {ProfilePageService} from "../services/profile-page.service";
-import { CookiesService } from '../services/cookies.service';
 
 @Component({
   selector: 'app-profile-page',
