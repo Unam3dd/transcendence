@@ -6,7 +6,7 @@ export interface TokensFrom42API extends Error {
   created_at: Date;
 }
 
-export interface UserInfoAPI extends Error {
+export interface UserInfoAPI {
   login: string;
   first_name: string;
   last_name: string;

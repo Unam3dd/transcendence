@@ -1,8 +1,17 @@
+backend/.env
+frontend/.env
 *.tar.gz
 volumes
 .vscode
 node_modules
 */nodes_modules
+backend/.dccache
+frontend/.dccache
+backend/src/.dccache
+frontend/src/.dccache
+**/**/*.dccache
+*.dccache
+**/*.dccache
 
 # Env
 backend/.env

@@ -57,6 +57,8 @@ Transcendence
 
 - <a href="https://docs.aws.amazon.com/prescriptive-guidance/latest/best-practices-cdk-typescript-iac/typescript-best-practices.html">Typescript Best Pratice</a>
 
-- <a href="https://codelynx.dev/posts/typescript-type-vs-interface">Typescript (Type vs Interfaces)</a>
+- <a href="https://codelynx.dev/posts/typescript-type-vs-interface">Typescript (Type vs Interface)</a>
 - <a href="https://blog.bitsrc.io/type-vs-interface-in-typescript-cf3c00bc04ae">Typescript (Type vs Interface)</a>
 - <a href="https://api.intra.42.fr/apidoc/guides/web_application_flow">How to use 42API</a>
+Unit Test
+<a href="https://medium.com/@bhkfazano/testing-your-api-services-with-nestjs-mocking-vs-real-database-bbfe689ed745">How to test NestJS</a>

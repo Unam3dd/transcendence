@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { AuthTo42Data } from 'src/interfaces/auth.interfaces';
 import axios from 'axios';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
+import { ApiError } from './api.type';
 
 @Injectable()
 export class ApiService {
@@ -14,8 +15,6 @@ export class ApiService {
       redirect_uri: process.env.REDIRECT_URI,
     };
 
-    console.log(payload);
-
     try {
       const { data } = await axios.post<TokensFrom42API>(
         process.env.AUTH_URL,
@@ -27,9 +26,9 @@ export class ApiService {
           },
         },
       );
-      return (data);
+      return data;
     } catch (err) {
-      return null;
+      throw new ApiError(`GetTokenFrom42API(): ${err}`);
     }
   }
 
@@ -46,8 +45,7 @@ export class ApiService {
 
       return data;
     } catch (err) {
-      console.log(err);
-      throw new Error('Get42UserInfo(): Error');
+      throw new ApiError(`Get42UserInfo(): ${err}`);
     }
   }
 }
