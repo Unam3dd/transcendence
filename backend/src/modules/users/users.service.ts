@@ -33,7 +33,7 @@ export class UsersService {
 
     if (isEmpty(id) && uinfo) throw new UserError('User already exist');
 
-    return this.usersRepository.save({ ...user });
+    return ( await this.usersRepository.save({ ...user }));
   }
 
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
@@ -43,7 +43,7 @@ export class UsersService {
 
     const updated = Object.assign(target, user);
 
-    this.usersRepository.update(updated.id, updated);
+    await this.usersRepository.update(updated.id, updated);
 
     return target;
   }
@@ -53,7 +53,7 @@ export class UsersService {
 
     if (!target) throw new UserError('User not found !');
 
-    this.usersRepository.remove(target);
+    await this.usersRepository.remove(target);
 
     return target;
   }
