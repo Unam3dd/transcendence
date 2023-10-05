@@ -15,26 +15,26 @@ export class CreateUserDto {
 
   @IsOptional()
   @IsString({ message: 'login must be a string or null' })
-  login: string | null;
+  login?: string | null;
 
   @IsOptional()
   @IsString({ message: 'firstName must be a string or null' })
-  firstName: string | null;
+  firstName?: string | null;
 
   @IsOptional()
   @IsString({ message: 'lastName must be a string or null' })
-  lastName: string | null;
+  lastName?: string | null;
 
   @IsOptional()
   @Length(3, 120, {
     message: 'nickName must be between 3 and 120 characters',
   })
   @IsString()
-  nickName: string | null;
+  nickName?: string | null;
 
   @IsEmail({}, { message: 'Invalid email format !' })
   @IsOptional()
-  email: string | null;
+  email?: string | null;
 
   @IsOptional()
   @IsBoolean()

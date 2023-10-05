@@ -16,18 +16,18 @@ export class UsersService {
   ) {}
 
   // Return an array with all users from database 
-  public findAll(): Promise<User[]> {
-    return this.usersRepository.find();
+  public async findAll(): Promise<User[]> {
+    return (await this.usersRepository.find());
   }
   
   // Return a single user from database using its id
   public async findOne(id: number): Promise<User | null> {
-    return (await this.usersRepository.findOne({ where: { id }}));
+    return (await this.usersRepository.findOne({ where: { id } }));
   }
 
   // Return a single user from database using its login
   public async findOneByLogin(login: string): Promise<User | null> {
-    return await this.usersRepository.findOne({ where: { login } });
+    return (await this.usersRepository.findOne({ where: { login } }));
   }
 
   // Adding in the database a new user with all informations collected with the CreateUserDto
@@ -38,7 +38,7 @@ export class UsersService {
 
     if (isEmpty(id) && uinfo) throw new UserError('User already exist');
 
-    return (this.usersRepository.save({ ...user }));
+    return (await this.usersRepository.save({ ...user }));
   }
 
   // Updating an user with all informations collected with the UpdateUserDto
@@ -49,7 +49,7 @@ export class UsersService {
 
     const updated = Object.assign(target, user);
 
-    this.usersRepository.update(updated.id, updated);
+    await this.usersRepository.update(updated.id, updated);
 
     return (target);
   }
@@ -60,7 +60,7 @@ export class UsersService {
 
     if (!target) throw new UserError('User not found !');
 
-    this.usersRepository.remove(target);
+    await this.usersRepository.remove(target);
 
     return (target);
   }

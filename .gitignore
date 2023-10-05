@@ -1,3 +1,4 @@
+**/.env
 *.tar.gz
 volumes
 .vscode
@@ -11,9 +12,6 @@ frontend/src/.dccache
 *.dccache
 **/*.dccache
 
-# Env
-backend/.env
-frontend/.env
 .env
 
 # compiled output
