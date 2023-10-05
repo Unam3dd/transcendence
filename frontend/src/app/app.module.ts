@@ -9,6 +9,10 @@ import { HomePageComponent } from './home-page/home-page.component';
 import { GamePageComponent } from './game-page/game-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import {HttpClientModule} from "@angular/common/http";
+import { FooterComponent } from './footer/footer.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import {FormsModule} from "@angular/forms";
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -17,12 +21,16 @@ import {HttpClientModule} from "@angular/common/http";
     ConnectionComponent,
     HomePageComponent,
     GamePageComponent,
-    ProfilePageComponent
+    ProfilePageComponent,
+    FooterComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    MatSlideToggleModule,
+    FormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
