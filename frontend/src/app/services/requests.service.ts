@@ -1,20 +1,24 @@
 import { Injectable } from '@angular/core';
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Observable, switchMap} from "rxjs";
+import {CookiesService} from "./cookies.service";
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProfilePageService {
+export class RequestsService {
 
   private backUrl: string = 'http://localhost:3000/users';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private readonly cookieService: CookiesService) {}
 
   //Récupère les données du user en fonction de l'ID
-  getData(userId: number): Observable<string> {
+  getData(userId: number): Observable<any> {
+    const hdr = new HttpHeaders();
+    hdr.append('authorization', `Basic ${this.cookieService.getCookie('authorization')}`);
+    console.log(hdr);
     const url: string = `${this.backUrl}/${userId}`;
-    return this.http.get<string>(url);
+    return this.http.get<string>(url, { headers: hdr });
   }
 
   //Permet de modifier le nickname de l'utilisateur

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
-import {ProfilePageService} from "../services/profile-page.service";
+import {RequestsService} from "../services/requests.service";
 import {Observable} from "rxjs";
 import {NgForm} from "@angular/forms";
 
@@ -16,7 +16,7 @@ export class HomePageComponent implements OnInit {
   nickname: string = '';
 
   constructor(private router: Router,
-              private profilePageService: ProfilePageService) {}
+              private profilePageService: RequestsService) {}
 
   ngOnInit() {
     this.userData$ = this.profilePageService.getData(this.userId);

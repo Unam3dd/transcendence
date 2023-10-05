@@ -33,7 +33,6 @@ dotenv.config();
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware)
-    .forRoutes(UsersController, AuthController)
+    consumer.apply(LoggerMiddleware).forRoutes(UsersController, AuthController);
   }
 }

@@ -12,7 +12,8 @@ export class AuthService {
 
   constructor(
     private readonly userService: UsersService,
-    private readonly jwtService: JwtService) {}
+    private readonly jwtService: JwtService,
+  ) {}
 
   public async AuthTo42API(code: string): Promise<TokensFrom42API> {
     return await this.apiService.GetTokenFrom42API(code);
@@ -47,8 +48,14 @@ export class AuthService {
 
     if (!user) throw new UnauthorizedException();
 
-    const payload = { sub: user.id, login: user.login, nickName: user.nickName };
+    const payload = {
+      sub: user.id,
+      login: user.login,
+      nickName: user.nickName,
+    };
 
-    return (await this.jwtService.sign(payload, { secret: process.env.JWT_SECRET }))
+    return await this.jwtService.sign(payload, {
+      secret: process.env.JWT_SECRET,
+    });
   }
 }
