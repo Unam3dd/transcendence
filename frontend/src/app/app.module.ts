@@ -12,6 +12,7 @@ import {HttpClientModule} from "@angular/common/http";
 import { FooterComponent } from './footer/footer.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {FormsModule} from "@angular/forms";
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import {FormsModule} from "@angular/forms";
     HomePageComponent,
     GamePageComponent,
     ProfilePageComponent,
-    FooterComponent
+    FooterComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,

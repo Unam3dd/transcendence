@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Router} from "@angular/router";
 import {RequestsService} from "../services/requests.service";
 import {Observable} from "rxjs";
-import {NgForm} from "@angular/forms";
 
 @Component({
   selector: 'app-home-page',
@@ -11,7 +10,6 @@ import {NgForm} from "@angular/forms";
 })
 export class HomePageComponent implements OnInit {
 
-  userId: number = 1;
   userData$!: Observable<any>;
   nickname: string = '';
 
@@ -19,7 +17,7 @@ export class HomePageComponent implements OnInit {
               private profilePageService: RequestsService) {}
 
   ngOnInit() {
-    this.userData$ = this.profilePageService.getData(this.userId);
+    this.userData$ = this.profilePageService.getData();
   }
 
   //Change pour le template de profile
@@ -34,7 +32,7 @@ export class HomePageComponent implements OnInit {
 
   //Update du nickname de l'utilisateur puis reload la page
   updateNickname() {
-    this.profilePageService.updateUserNickname(this.userId, this.nickname).subscribe(() => {
+    this.profilePageService.updateUserNickname(this.nickname).subscribe(() => {
       window.location.reload();
     });
   }
