@@ -15,15 +15,15 @@ export class UsersService {
   ) {}
 
   public async findAll(): Promise<User[]> {
-    return (await this.usersRepository.find());
+    return await this.usersRepository.find();
   }
 
   public async findOne(id: number): Promise<User | null> {
-    return (await this.usersRepository.findOne({ where: { id } }));
+    return await this.usersRepository.findOne({ where: { id } });
   }
 
   public async findOneByLogin(login: string): Promise<User | null> {
-    return (await this.usersRepository.findOne({ where: { login } }));
+    return await this.usersRepository.findOne({ where: { login } });
   }
 
   public async registerUser(user: CreateUserDto): Promise<User> {
@@ -33,7 +33,7 @@ export class UsersService {
 
     if (isEmpty(id) && uinfo) throw new UserError('User already exist');
 
-    return (await this.usersRepository.save({ ...user }));
+    return await this.usersRepository.save({ ...user });
   }
 
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
@@ -45,7 +45,7 @@ export class UsersService {
 
     await this.usersRepository.update(updated.id, updated);
 
-    return (target);
+    return target;
   }
 
   public async deleteUser(id: number): Promise<User> {
@@ -55,6 +55,6 @@ export class UsersService {
 
     await this.usersRepository.remove(target);
 
-    return (target);
+    return target;
   }
 }

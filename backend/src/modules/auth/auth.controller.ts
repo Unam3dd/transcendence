@@ -30,7 +30,10 @@ export class AuthController {
       : process.env.HOME_REDIRECT;
 
     if (exist) {
-      res.cookie('authorization', `Bearer ${await this.authService.generateJwt(UserInfo.login)}`);
+      res.cookie(
+        'authorization',
+        `Bearer ${await this.authService.generateJwt(UserInfo.login)}`,
+      );
       res.redirect(redirectURI);
       return;
     }
@@ -40,7 +43,10 @@ export class AuthController {
       return;
     }
 
-    res.cookie('authorization', `Bearer ${await this.authService.generateJwt(UserInfo.login)}`);
+    res.cookie(
+      'authorization',
+      `Bearer ${await this.authService.generateJwt(UserInfo.login)}`,
+    );
     res.redirect(redirectURI);
   }
 }
