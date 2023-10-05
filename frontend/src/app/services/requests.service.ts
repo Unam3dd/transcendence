@@ -20,7 +20,7 @@ export class RequestsService {
     const decodeToken = this.jwtService.decode(token);
 
     //Récupère uniquement le payload
-    const payloadToken = atob(decodeToken[1]);
+    const payloadToken = decodeToken[1];
 
     try {
       //Transforme en JSON
@@ -42,7 +42,7 @@ export class RequestsService {
   }
 
   //Récupère les données du user
-  getData(): Observable<string> {
+  getUserData(): Observable<string> {
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
 
@@ -65,25 +65,25 @@ export class RequestsService {
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
 
-    //Récupération du header
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
-
     //Récupération de l'id
     const userId = this.getId(token);
 
+    //Récupération du header
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
     //Définition de l'url totale
-    const url = `${this.backUrl}/${userId}`;
+    const url = `${this.backUrl}`;
 
     if (newNickname.trim() === '') {              //Si newNickname est vide
-      return this.getData().pipe(           //Fait appel à getData pour avoir le login
+      return this.getUserData().pipe(           //Fait appel à getData pour avoir le login
         switchMap((data: any) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
           const loginValue: string = data.login;
           return this.updateUserNickname(loginValue); //Récursion avec la valeur du login
         })
       );
     } else {
-      const updateNickname = {nickName: newNickname};
-      return this.http.put(url, updateNickname);
+      const updateNickname = {id: userId, nickName: newNickname};
+      return this.http.put(url, updateNickname, {headers: hdr});
     }
   }
 }

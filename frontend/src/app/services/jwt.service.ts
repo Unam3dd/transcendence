@@ -10,6 +10,6 @@ export class JwtService {
   //Décode le JWT en récupérant les différentes parties
   decode(token: string): string[] {
     const [ header, payload, signature ] = token.split('.') ?? [];
-    return [header, payload, signature];
+    return [atob(header), atob(payload), signature];
   }
 }

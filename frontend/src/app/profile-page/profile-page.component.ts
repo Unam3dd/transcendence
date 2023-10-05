@@ -18,6 +18,6 @@ export class ProfilePageComponent implements OnInit{
 
   //Récupération des données à partir du backend pour pour les afficher en front
   ngOnInit(): void {
-    this.userData$ = this.profilePageService.getData();
+    this.userData$ = this.profilePageService.getUserData();
   }
 }

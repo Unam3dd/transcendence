@@ -4,12 +4,14 @@ import {ConnectionComponent} from "./connection/connection.component";
 import {HomePageComponent} from "./home-page/home-page.component";
 import {ProfilePageComponent} from "./profile-page/profile-page.component";
 import {GamePageComponent} from "./game-page/game-page.component";
+import {ChatComponent} from "./chat/chat.component";
 
 const routes: Routes = [
   {path: '', component: ConnectionComponent},
   {path: 'home', component: HomePageComponent},
   {path: 'profile', component: ProfilePageComponent},
-  {path: 'game', component: GamePageComponent}
+  {path: 'game', component: GamePageComponent},
+  {path: 'chat', component: ChatComponent}
 ];
 
 @NgModule({

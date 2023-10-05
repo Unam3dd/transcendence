@@ -17,7 +17,7 @@ export class HomePageComponent implements OnInit {
               private profilePageService: RequestsService) {}
 
   ngOnInit() {
-    this.userData$ = this.profilePageService.getData();
+    this.userData$ = this.profilePageService.getUserData();
   }
 
   //Change pour le template de profile
@@ -28,6 +28,11 @@ export class HomePageComponent implements OnInit {
   //Change pour le template de Game
   moveToGame() {
     this.router.navigateByUrl('game');
+  }
+
+  //Change pour le template de Chat
+  moveToChat() {
+    this.router.navigateByUrl('chat');
   }
 
   //Update du nickname de l'utilisateur puis reload la page
