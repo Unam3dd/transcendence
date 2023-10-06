@@ -1,0 +1,36 @@
+.column {
+    // white-space: nowrap;
+    // overflow: hidden;
+    // display: block;
+    // display: contents;
+    // display: flex;
+    // display: flexbox;
+    // display: flow-root;
+    // display: grid;
+    // display: inline;
+    // display: inline-block;
+    // display: inline-flex;
+    // display: inline-flexbox;
+    // justify-content: left;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 200px;
+    text-align: center;
+    padding: 2%;
+    color: red;
+    // height: 700px;
+
+    // width: 1%;
+}
+
+// #rooms-list {
+//     width: 10%;
+// }
+
+// #room-users {
+//     width: 25%;
+// }
+
+// #conversation {
+//     width: 65%;
+// }
