@@ -24,6 +24,7 @@ import { AuthGuard } from '../auth/auth.guard';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
+  // Recieving a POST request to create a new user
   @Post()
   async RegisterNewUser(@Body() User: CreateUserDto, @Res() res: Response) {
     try {
@@ -34,6 +35,7 @@ export class UsersController {
     }
   }
 
+  // Recieving a PUT request to update informations about an user
   @Put()
   async UpdateUserInfo(@Body() User: UpdateUserDto, @Res() res: Response) {
     try {
@@ -44,17 +46,20 @@ export class UsersController {
     }
   }
 
+  // Recieving a GET request to get all users data
   @Get()
   async findAll(@Res() res: Response) {
     return res.status(HttpStatus.OK).send(await this.usersService.findAll());
   }
 
+  // Recieving a GET request to get informations about one user 
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const user: User = await this.usersService.findOne(id);
     return res.status(HttpStatus.OK).send(isEmpty(user) ? {} : user);
   }
 
+  // Recieving a DELETE request to delete one user
   @Delete(':id')
   async deleteUser(
     @Param('id', ParseIntPipe) id: number,

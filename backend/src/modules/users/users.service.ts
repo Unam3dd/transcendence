@@ -7,6 +7,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
 import { UserError } from './users.type';
 
+// This class will do all operations needed for our requests like writing, modifiyng or accessing data from database
 @Injectable()
 export class UsersService {
   constructor(
@@ -14,18 +15,22 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
+  // Return an array with all users from database 
   public async findAll(): Promise<User[]> {
-    return (await this.usersRepository.find());
+    return await this.usersRepository.find();
   }
-
+  
+  // Return a single user from database using its id
   public async findOne(id: number): Promise<User | null> {
-    return (await this.usersRepository.findOne({ where: { id } }));
+    return await this.usersRepository.findOne({ where: { id } });
   }
 
+  // Return a single user from database using its login
   public async findOneByLogin(login: string): Promise<User | null> {
-    return (await this.usersRepository.findOne({ where: { login } }));
+    return await this.usersRepository.findOne({ where: { login } });
   }
 
+  // Adding in the database a new user with all informations collected with the CreateUserDto
   public async registerUser(user: CreateUserDto): Promise<User> {
     const { id } = user;
 
@@ -33,9 +38,10 @@ export class UsersService {
 
     if (isEmpty(id) && uinfo) throw new UserError('User already exist');
 
-    return (await this.usersRepository.save({ ...user }));
+    return await this.usersRepository.save({ ...user });
   }
 
+  // Updating an user with all informations collected with the UpdateUserDto
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
     const target = await this.usersRepository.findOne({ where: { id } });
 
@@ -45,9 +51,10 @@ export class UsersService {
 
     await this.usersRepository.update(updated.id, updated);
 
-    return (target);
+    return target;
   }
 
+  // Deleting an user in the database with its id
   public async deleteUser(id: number): Promise<User> {
     const target = await this.usersRepository.findOne({ where: { id } });
 
@@ -55,6 +62,6 @@ export class UsersService {
 
     await this.usersRepository.remove(target);
 
-    return (target);
+    return target;
   }
 }
