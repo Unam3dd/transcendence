@@ -60,7 +60,7 @@ export class RequestsService {
   }
 
   //Permet de modifier le nickname de l'utilisateur
-  updateUserNickname(newNickname: string): Observable<any>{
+  updateUserHomeData(newNickname: string, email: string): Observable<any>{
 
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
@@ -78,12 +78,12 @@ export class RequestsService {
       return this.getUserData().pipe(           //Fait appel à getData pour avoir le login
         switchMap((data: any) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
           const loginValue: string = data.login;
-          return this.updateUserNickname(loginValue); //Récursion avec la valeur du login
+          return this.updateUserHomeData(loginValue, email); //Récursion avec la valeur du login
         })
       );
     } else {
-      const updateNickname = {id: userId, nickName: newNickname};
-      return this.http.put(url, updateNickname, {headers: hdr});
+      const updateData = {id: userId, nickName: newNickname, email: email};
+      return this.http.put(url, updateData, {headers: hdr});
     }
   }
 }

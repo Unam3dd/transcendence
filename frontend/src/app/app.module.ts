@@ -11,8 +11,11 @@ import { ProfilePageComponent } from './profile-page/profile-page.component';
 import {HttpClientModule} from "@angular/common/http";
 import { FooterComponent } from './footer/footer.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
+import {MatInputModule} from "@angular/material/input";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {MatButtonModule} from "@angular/material/button";
 
 @NgModule({
   declarations: [
@@ -31,6 +34,10 @@ import { ChatComponent } from './chat/chat.component';
     HttpClientModule,
     MatSlideToggleModule,
     FormsModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
