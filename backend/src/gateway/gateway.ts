@@ -7,7 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway()
+@WebSocketGateway(3000, { namespace: 'events' })
 export class EventsGateway {
 
     //To get an instance of the server, so we can send message to every clients of the server and more
