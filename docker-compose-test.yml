@@ -116,6 +116,7 @@ services:
         condition: service_healthy
     ports:
       - "3000:3000"
+      - "3001:3001"
     healthcheck:
       test: nc -w 5 127.0.0.1 3000
       interval: 5s
