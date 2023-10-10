@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-
-export interface test {
-
-}
+import { io } from "socket.io-client";
+import { WS_GATEWAY } from "../env";
+import { CookiesService } from '../services/cookies.service';
+import { JwtService } from '../services/jwt.service';
+import { JWT_PAYLOAD } from '../services/jwt.const';
 
 @Component({
   selector: 'app-chat',
@@ -11,11 +12,21 @@ export interface test {
 })
 export class ChatComponent {
 
-  ngOnInit() {
+  constructor(private readonly cookieService: CookiesService,
+    private readonly jwtService: JwtService) {}
 
-    const name: string = 'salut';
-    const test = { test: name, aurevoir: name}
-    console.log(test);
-    console.table(test);
+
+  ngOnInit() {
+    const [ type, token] = this.cookieService.getCookie('authorization').split('%20') ?? [];
+  
+    const socket = io(WS_GATEWAY);
+
+    socket.emit('message', 'hello world !');
+
+    socket.on('response', (msg) => {
+      const { sub, login, nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
+      console.log(sub, login, nickName);
+      console.log(`${nickName}: ${msg}`);
+    })
   }
 }

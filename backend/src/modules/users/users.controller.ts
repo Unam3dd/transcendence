@@ -18,11 +18,13 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
 import { User } from './entities/user.entity';
 import { AuthGuard } from '../auth/auth.guard';
+import { AuthService } from '../auth/auth.service';
 
 @UseGuards(AuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+
+  constructor(private readonly usersService: UsersService, private readonly authService: AuthService) {}
 
   // Recieving a POST request to create a new user
   @Post()
@@ -40,7 +42,12 @@ export class UsersController {
   async UpdateUserInfo(@Body() User: UpdateUserDto, @Res() res: Response) {
     try {
       await this.usersService.updateUser(User.id, User);
-      return res.status(HttpStatus.OK).send();
+
+      const user: User = await this.usersService.findOne(User.id);
+
+      const token = await this.authService.generateJwtByUser(user);
+
+      return res.status(HttpStatus.OK).send({ 'token': token});
     } catch (e) {
       return res.status(HttpStatus.NOT_MODIFIED).send({ error: e });
     }

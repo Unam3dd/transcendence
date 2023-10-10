@@ -12,7 +12,7 @@ import { UserError } from './users.type';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: Repository<User>
   ) {}
 
   // Return an array with all users from database 

@@ -3,6 +3,8 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Observable, switchMap} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
+import { JWT_PAYLOAD } from './jwt.const';
+import { TokenInterface } from '../interfaces/token.interfaces';
 
 
 @Injectable({
@@ -15,12 +17,14 @@ export class RequestsService {
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
   //Récupère l'ID de l'utilisateur
-  getId(token: string): number {
+  getId(token: string): number | null {
     //Récupère un tableau de valeurs du JWT (header, payload, signature)
     const decodeToken = this.jwtService.decode(token);
 
+    if (!decodeToken) return (null);
+
     //Récupère uniquement le payload
-    const payloadToken = decodeToken[1];
+    const payloadToken = decodeToken[JWT_PAYLOAD];
 
     try {
       //Transforme en JSON
@@ -83,7 +87,7 @@ export class RequestsService {
       );
     } else {
       const updateData = {id: userId, nickName: newNickname, email: email};
-      return this.http.put(url, updateData, {headers: hdr});
+      return this.http.put<TokenInterface>(url, updateData, {headers: hdr});
     }
   }
 }

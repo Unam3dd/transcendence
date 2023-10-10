@@ -3,6 +3,8 @@ import {Router} from "@angular/router";
 import {RequestsService} from "../services/requests.service";
 import {Observable} from "rxjs";
 import {FormControl, Validators} from "@angular/forms";
+import { TokenInterface } from '../interfaces/token.interfaces';
+import { CookiesService } from '../services/cookies.service';
 
 @Component({
   selector: 'app-home-page',
@@ -16,7 +18,8 @@ export class HomePageComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/)]);
 
   constructor(private router: Router,
-              private profilePageService: RequestsService) {}
+              private profilePageService: RequestsService,
+              private cookieService: CookiesService) {}
 
   ngOnInit() {
     this.userData$ = this.profilePageService.getUserData();
@@ -49,8 +52,11 @@ export class HomePageComponent implements OnInit {
   updateNickname() {
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
-    this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe(() => {
-      window.location.reload();
+    this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe((data) => {
+      const { token } = data;
+
+      this.cookieService.setCookie('authorization', 'TOTOTOTOTOTOTOTO');
+      //window.location.reload();
     });
   }
 }

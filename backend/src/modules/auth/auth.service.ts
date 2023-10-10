@@ -4,6 +4,7 @@ import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -54,8 +55,23 @@ export class AuthService {
       nickName: user.nickName,
     };
 
-    return await this.jwtService.sign(payload, {
+    return await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
     });
+  }
+
+  async generateJwtByUser(user: User) {
+
+    if (!user) return (null)
+
+    const payload = { 
+      sub: user.id,
+      login: user.login,
+      nickName: user.nickName
+    }
+
+    return (await this.jwtService.signAsync(payload, {
+      secret: process.env.JWT_SECRET
+    }));
   }
 }
