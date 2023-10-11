@@ -18,8 +18,7 @@ export class HomePageComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/)]);
 
   constructor(private router: Router,
-              private profilePageService: RequestsService,
-              private cookieService: CookiesService) {}
+              private profilePageService: RequestsService) {}
 
   ngOnInit() {
     this.userData$ = this.profilePageService.getUserData();
@@ -53,6 +52,7 @@ export class HomePageComponent implements OnInit {
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
     this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe((data) => {
+
       const { token } = data;
 
       document.cookie = `authorization=${encodeURI(`Bearer ${token}`)}`;
