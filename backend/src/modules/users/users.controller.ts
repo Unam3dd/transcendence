@@ -45,9 +45,7 @@ export class UsersController {
 
       const user: User = await this.usersService.findOne(User.id);
 
-      const token = await this.authService.generateJwtByUser(user);
-
-      return res.status(HttpStatus.OK).send({ 'token': token});
+      return res.status(HttpStatus.OK).send({ 'token': await this.authService.generateJwtByUser(user)});
     } catch (e) {
       return res.status(HttpStatus.NOT_MODIFIED).send({ error: e });
     }

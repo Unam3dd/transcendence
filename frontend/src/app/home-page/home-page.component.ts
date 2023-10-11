@@ -55,8 +55,9 @@ export class HomePageComponent implements OnInit {
     this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe((data) => {
       const { token } = data;
 
-      this.cookieService.setCookie('authorization', 'TOTOTOTOTOTOTOTO');
-      //window.location.reload();
+      document.cookie = `authorization=${encodeURI(`Bearer ${token}`)}`;
+
+      window.location.reload();
     });
   }
 }
