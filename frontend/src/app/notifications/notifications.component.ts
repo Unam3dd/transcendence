@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SnackBarService } from '../services/snack-bar.service';
+import { NotificationService } from '../services/notifications.service';
 
 @Component({
   selector: 'app-notifications',
@@ -8,6 +8,6 @@ import { SnackBarService } from '../services/snack-bar.service';
 })
 export class NotificationsComponent {
 
-  constructor(private readonly snackBarService: SnackBarService){}
+  constructor(private readonly snackBarService: NotificationService){}
 
 }

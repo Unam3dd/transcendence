@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SnackBarService } from '../services/snack-bar.service';
+import { NotificationService } from '../services/notifications.service';
 
 export interface test {
 
@@ -12,7 +12,7 @@ export interface test {
 })
 export class ChatComponent {
 
-  constructor(private readonly snackBar: SnackBarService) { }
+  constructor(private readonly snackBar: NotificationService) { }
   ngOnInit() {
 
     const name: string = 'salut';
