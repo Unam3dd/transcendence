@@ -19,7 +19,13 @@ export class ChatComponent {
   ngOnInit() {
     const [ type, token] = this.cookieService.getCookie('authorization').split('%20') ?? [];
   
-    const socket = io(WS_GATEWAY);
+    const { nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
+
+    const socket = io(WS_GATEWAY, {
+      query: {
+        "username": nickName
+      }
+    });
 
     socket.emit('message', 'hello world !');
 

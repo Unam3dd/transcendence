@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import * as io from 'socket.io-client';
+//import { SocketIoConfig } from './config/socket-io.config';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';

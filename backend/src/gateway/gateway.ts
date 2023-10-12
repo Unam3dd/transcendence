@@ -15,11 +15,16 @@ export class EventsGateway {
     server: Server;
 
 
+    client_array = new Map<string, string>();
+
     //Detect clients connections
-    handleConnection(client: Socket) {
+    handleConnection(client: Socket, ...args: string[]) {
 
+        const username = client.handshake.query.username;
+        this.client_array.set(username as string, client.id);
+        console.log("client name " + username, "client socket = " + client.id);
         console.log("New user connected");
-
+        console.log(this.client_array.get('gregerg'));
         // send message to the client that listen a 'welcome' event
         client.emit('welcome', 'Welcome to the WebSocket server!');
 
