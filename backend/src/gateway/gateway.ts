@@ -14,17 +14,21 @@ export class EventsGateway {
     @WebSocketServer()
     server: Server;
 
-
+    //to stock client socket with the client username
     client_array = new Map<string, string>();
+
 
     //Detect clients connections
     handleConnection(client: Socket, ...args: string[]) {
 
+        // get the username of the user that just connect
         const username = client.handshake.query.username;
-        this.client_array.set(username as string, client.id);
-        console.log("client name " + username, "client socket = " + client.id);
-        console.log("New user connected");
-        console.log(this.client_array.get('gregerg'));
+
+        // stock the user socket and the username in the map array
+        this.client_array.set(client.id, username as string);
+
+        console.log("Client name = " + this.client_array.get(client.id) + ", with socket id = " + client.id + " just connected!");
+
         // send message to the client that listen a 'welcome' event
         client.emit('welcome', 'Welcome to the WebSocket server!');
 
@@ -37,6 +41,8 @@ export class EventsGateway {
     @SubscribeMessage('message')
     receiveNewMessage(@MessageBody() message: string, @ConnectedSocket() client: Socket){
 
+        console.log("client name = " + this.client_array.get(client.id) + ", with socket id = " + client.id + " sent a message:");
+
         // Print the message received by a client
         console.log(message);
 
@@ -46,9 +52,11 @@ export class EventsGateway {
 
 
     //Detect clients disconnection
-    handleDisconnect(client: Socket) {   
+    handleDisconnect(client: Socket) {
 
-        console.log('Client disconnected');
+        console.log("client name = " + this.client_array.get(client.id) + ", with socket id = " + client.id + " disconnected!");
+
+        this.client_array.delete(client.id);
 
         // send message to all clients
         this.server.emit('response', "A new client just disconnect");

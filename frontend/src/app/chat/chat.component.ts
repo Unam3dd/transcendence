@@ -15,17 +15,14 @@ export class ChatComponent {
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {}
 
-
   ngOnInit() {
     const [ type, token] = this.cookieService.getCookie('authorization').split('%20') ?? [];
   
+    // get client username from JWT token
     const { nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
 
-    const socket = io(WS_GATEWAY, {
-      query: {
-        "username": nickName
-      }
-    });
+    // Pass the username when connecting to the gateway
+    const socket = io(WS_GATEWAY, { query: {"username": nickName} });
 
     socket.emit('message', 'hello world !');
 
