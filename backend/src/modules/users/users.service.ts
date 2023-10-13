@@ -15,11 +15,11 @@ export class UsersService {
     private usersRepository: Repository<User>,
   ) {}
 
-  // Return an array with all users from database 
+  // Return an array with all users from database
   public async findAll(): Promise<User[]> {
     return await this.usersRepository.find();
   }
-  
+
   // Return a single user from database using its id
   public async findOne(id: number): Promise<User | null> {
     return await this.usersRepository.findOne({ where: { id } });

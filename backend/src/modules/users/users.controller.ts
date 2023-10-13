@@ -52,7 +52,7 @@ export class UsersController {
     return res.status(HttpStatus.OK).send(await this.usersService.findAll());
   }
 
-  // Recieving a GET request to get informations about one user 
+  // Recieving a GET request to get informations about one user
   @Get(':id')
   async findOne(@Param('id', ParseIntPipe) id: number, @Res() res: Response) {
     const user: User = await this.usersService.findOne(id);
