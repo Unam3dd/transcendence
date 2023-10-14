@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import { Observable, switchMap} from "rxjs";
+import {Observable, of, switchMap} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 
@@ -84,6 +84,45 @@ export class RequestsService {
     } else {
       const updateData = {id: userId, nickName: newNickname, email: email};
       return this.http.put(url, updateData, {headers: hdr});
+    }
+  }
+
+  updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean ) {
+    //Récupère le Cookie et donne l'authorisation
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+
+    //Récupération de l'id
+    const userId = this.getId(token);
+
+    //Récupération du header
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
+    //Définition de l'url totale
+    const url = `${this.backUrl}`;
+
+    const updateData: any = {id: userId};
+
+    if (firstname) {
+      updateData.firstName = firstname;
+    }
+    if (lastname) {
+      updateData.lastName = lastname;
+    }
+    if (nickname) {
+      updateData.nickName = nickname;
+    }
+    if (email) {
+      updateData.email = email;
+    }
+    if (a2f) {
+      updateData.a2f = a2f;
+    }
+
+    //Modifie les champs non vide
+    if (Object.keys(updateData).length > 1){
+      return this.http.put(url, updateData, {headers: hdr});
+    } else {
+      return of(); //Retourne un observable vide si aucune données
     }
   }
 }

@@ -16,10 +16,10 @@ export class HomePageComponent implements OnInit {
   email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/)]);
 
   constructor(private router: Router,
-              private profilePageService: RequestsService) {}
+              private requestsService: RequestsService) {}
 
   ngOnInit() {
-    this.userData$ = this.profilePageService.getUserData();
+    this.userData$ = this.requestsService.getUserData();
   }
 
   //Affiche une erreur si le champ email est vide ou si l'email est non valide
@@ -49,7 +49,7 @@ export class HomePageComponent implements OnInit {
   updateNickname() {
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
-    this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe(() => {
+    this.requestsService.updateUserHomeData(newNickname, newEmail).subscribe(() => {
       window.location.reload();
     });
   }

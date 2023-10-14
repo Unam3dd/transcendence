@@ -7,9 +7,10 @@
   <p>Firstname: {{userData.firstName}}</p>
   <p>Lastname: {{userData.lastName}}</p>
   <p>Nickname: {{userData.nickName}}</p>
-  <p>A2F: <mat-slide-toggle [(ngModel)]="userData.a2f" color="primary"></mat-slide-toggle> {{userData.a2f}}</p>
+  <p>Email: {{userData.email}}</p>
+  <p>A2F: <span *ngIf="userData.a2f; else deactivatedText">activated</span><ng-template #deactivatedText>deactivated</ng-template></p>
   <p>Friends: my-friends</p>
   <p>History: my-games-history</p>
   <p>(Achievements: my-achievements)</p>
-  <button>Change my profile</button>
+  <button mat-raised-button (click)="openDialog()">Change my profile</button>
 </div>
