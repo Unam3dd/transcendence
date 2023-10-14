@@ -19,6 +19,7 @@ import { ChatComponent } from './chat/chat.component';
 import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -38,6 +39,7 @@ import {MatButtonModule} from "@angular/material/button";
     MatSlideToggleModule,
     FormsModule,
     MatInputModule,
+    MatListModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatButtonModule
