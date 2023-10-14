@@ -16,6 +16,8 @@ import { ChatComponent } from './chat/chat.component';
 import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import {MatDialogModule} from "@angular/material/dialog";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import {MatButtonModule} from "@angular/material/button";
     GamePageComponent,
     ProfilePageComponent,
     FooterComponent,
-    ChatComponent
+    ChatComponent,
+    UpdateProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +40,8 @@ import {MatButtonModule} from "@angular/material/button";
     MatInputModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
