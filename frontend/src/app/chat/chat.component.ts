@@ -20,6 +20,7 @@ export class ChatComponent {
     console.log(test);
     console.table(test);
 
-    this.snackBar.notif("test", "test");
+   this.snackBar.friend_notification("chjoie"); // ici pour test, mais la fonction doit être appelé lorsque l'on recoit l'evenement dans les websockets
+
   }
 }
