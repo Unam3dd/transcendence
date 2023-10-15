@@ -17,6 +17,7 @@ import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
 import { NotificationsComponent } from './notifications/notifications.component';
 
 @NgModule({
@@ -41,7 +42,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule
   ],
   providers: [],
   bootstrap: [AppComponent]
