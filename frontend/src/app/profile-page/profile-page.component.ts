@@ -18,6 +18,6 @@ export class ProfilePageComponent implements OnInit{
 
   // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
-    this.userData$ = this.profilePageService.getUserLoggedInformation();
+    this.userData$ = this.profilePageService.getLoggedUserInformation();
   }
 }

@@ -56,7 +56,7 @@ export class RequestsService {
     return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers: hdr });
   }
 
-  getUserLoggedInformation(): Observable<UserInterface> | null {
+  getLoggedUserInformation(): Observable<UserInterface> | null {
 
     const JWT_TOKEN = this.cookieService.getCookie('authorization');
 
