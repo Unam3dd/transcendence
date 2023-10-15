@@ -20,7 +20,7 @@ export class HomePageComponent implements OnInit {
               private profilePageService: RequestsService) {}
 
   ngOnInit() {
-    this.userData$ = this.profilePageService.getUserLoggedInformation();
+    this.userData$ = this.profilePageService.getLoggedUserInformation();
   }
 
   // Show an error if email input has been mal formatted or bad !
