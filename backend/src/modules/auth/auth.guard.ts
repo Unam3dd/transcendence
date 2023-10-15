@@ -5,6 +5,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { isJWT } from 'class-validator';
 import { Request } from 'express';
 
 @Injectable()
@@ -18,7 +19,7 @@ export class AuthGuard implements CanActivate {
     if (!token) throw new UnauthorizedException();
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
     } catch (e) {
@@ -29,7 +30,13 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(req: Request): string | undefined {
-    const [type, token] = req.headers.authorization?.split(' ') ?? [];
+    const [type, token] =
+      req.headers.authorization?.split(
+        req.headers.authorization?.includes('%20') ? '%20' : ' ',
+      ) ?? [];
+
+    if (!isJWT(token)) return undefined;
+
     return type === 'Bearer' ? token : undefined;
   }
 }

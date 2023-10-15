@@ -12,6 +12,6 @@ export class CreateFriendsDto {
   status: boolean;
 
   @IsOptional()
-  @IsBoolean({ message: 'must be true on applicant !'})
+  @IsBoolean({ message: 'must be true on applicant !' })
   applicant: boolean;
 }

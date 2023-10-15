@@ -38,7 +38,7 @@ export class EventsGateway {
   }
 
   //Detect clients disconnection
-  handleDisconnect(client: Socket) {
+  handleDisconnect() {
     console.log('Client disconnected');
 
     // send message to all clients

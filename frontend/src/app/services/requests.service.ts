@@ -3,14 +3,14 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import { Observable, switchMap} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
+import { NESTJS_URL } from '../env';
+import { UserInterface } from '../interfaces/user.interface'
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestsService {
-
-  private backUrl: string = 'http://localhost:3000/users';
 
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
@@ -42,7 +42,7 @@ export class RequestsService {
   }
 
   //Récupère les données du user
-  getUserData(): Observable<string> {
+  getUserData(): Observable<UserInterface> {
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
 
@@ -52,15 +52,25 @@ export class RequestsService {
     //Récupération de l'id
     const userId = this.getId(token);
 
-    //Définition de l'url totale
-    const url = `${this.backUrl}/${userId}`;
-
     //Retour de la récupération des données
-    return this.http.get<string>(url, { headers: hdr });
+    return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers: hdr });
+  }
+
+  getUserLoggedInformation(): Observable<UserInterface> | null {
+
+    const JWT_TOKEN = this.cookieService.getCookie('authorization');
+
+    if (!JWT_TOKEN) return (null);
+
+    const hdr = new HttpHeaders().append('authorization', JWT_TOKEN);
+
+    const url = `${NESTJS_URL}/users/me`
+
+    return (this.http.get<UserInterface>(url, { headers: hdr }));
   }
 
   //Permet de modifier le nickname de l'utilisateur
-  updateUserHomeData(newNickname: string, email: string): Observable<any>{
+  updateUserHomeData(newNickname: string, email: string): Observable<UserInterface>{
 
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
@@ -71,19 +81,16 @@ export class RequestsService {
     //Récupération du header
     const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
 
-    //Définition de l'url totale
-    const url = `${this.backUrl}`;
-
     if (newNickname.trim() === '') {              //Si newNickname est vide
       return this.getUserData().pipe(           //Fait appel à getData pour avoir le login
-        switchMap((data: any) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
+        switchMap((data: UserInterface) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
           const loginValue: string = data.login;
           return this.updateUserHomeData(loginValue, email); //Récursion avec la valeur du login
         })
       );
     } else {
       const updateData = {id: userId, nickName: newNickname, email: email};
-      return this.http.put(url, updateData, {headers: hdr});
+      return this.http.put<UserInterface>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
     }
   }
 }

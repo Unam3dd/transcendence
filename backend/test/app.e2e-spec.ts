@@ -10,7 +10,6 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let usersService: UsersService;
   let userRepository: Repository<User>;
 
   beforeEach(async () => {
@@ -29,7 +28,6 @@ describe('AppController (e2e)', () => {
       providers: [UsersService],
     }).compile();
 
-    usersService = module.get<UsersService>(UsersService);
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
 
     // Remove every users in the database to make the tests
