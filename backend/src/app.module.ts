@@ -9,6 +9,7 @@ import { LoggerMiddleware } from './logger/logger.middleware';
 import { UsersController } from './modules/users/users.controller';
 import { AuthController } from './modules/auth/auth.controller';
 import { GatewayModule } from './gateway/events.module';
+import { FriendsModule } from './modules/friends/friends.module';
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ dotenv.config();
     ApiModule,
     LoggerModule,
     GatewayModule,
+    FriendsModule,
   ],
   controllers: [],
   providers: [],

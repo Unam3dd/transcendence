@@ -4,7 +4,9 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
+import { ApiConflictResponse, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOperation, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
+@ApiTags('Auth Module')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -12,6 +14,9 @@ export class AuthController {
     private readonly apiService: ApiService,
   ) {}
 
+  @ApiOperation({summary: 'Authentication with the 42 Api'})
+  @ApiQuery({ name: 'code', type: String, required: true, description: '42 Api Token' })
+  @ApiInternalServerErrorResponse({description: 'Internal server error'})
   @Get('callback')
   async callback(
     @Query('code') code: string,
