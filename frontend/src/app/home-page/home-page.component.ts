@@ -3,6 +3,7 @@ import {Router} from "@angular/router";
 import {RequestsService} from "../services/requests.service";
 import {Observable} from "rxjs";
 import {FormControl, Validators} from "@angular/forms";
+import { UserInterface } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-home-page',
@@ -11,7 +12,7 @@ import {FormControl, Validators} from "@angular/forms";
 })
 export class HomePageComponent implements OnInit {
 
-  userData$!: Observable<any>;
+  userData$!: Observable<UserInterface> | null;
   nickname = new FormControl('');
   email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/)]);
 
@@ -19,10 +20,10 @@ export class HomePageComponent implements OnInit {
               private profilePageService: RequestsService) {}
 
   ngOnInit() {
-    this.userData$ = this.profilePageService.getUserData();
+    this.userData$ = this.profilePageService.getLoggedUserInformation();
   }
 
-  //Affiche une erreur si le champ email est vide ou si l'email est non valide
+  // Show an error if email input has been mal formatted or bad !
   getEmptyErrorMessage() {
     if (this.email.hasError('required')) {
       return 'Please enter a value';
@@ -30,22 +31,22 @@ export class HomePageComponent implements OnInit {
     return this.email.hasError('pattern') ? 'Not a valid email': '';
   }
 
-  //Change pour le template de profile
+  // Move to Profile page
   moveToProfile() {
     this.router.navigateByUrl('profile');
   }
 
-  //Change pour le template de Game
+  // Move to Game page
   moveToGame() {
     this.router.navigateByUrl('game');
   }
 
-  //Change pour le template de Chat
+  // Move to Chat page
   moveToChat() {
     this.router.navigateByUrl('chat');
   }
 
-  //Update du nickname de l'utilisateur puis reload la page
+  // Update nickName of user and reload the page
   updateNickname() {
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;

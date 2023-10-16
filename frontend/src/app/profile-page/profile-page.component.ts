@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {RequestsService} from "../services/requests.service";
 import { CookiesService } from '../services/cookies.service';
+import { UserInterface } from '../interfaces/user.interface';
 
 
 @Component({
@@ -11,13 +12,12 @@ import { CookiesService } from '../services/cookies.service';
 })
 export class ProfilePageComponent implements OnInit{
 
-  //Variables des données à récupérer pour la bdd
-  userData$!: Observable<any>;
+  userData$!: Observable<UserInterface> | null;
   constructor(private profilePageService: RequestsService, private readonly cookieService: CookiesService) {}
 
 
-  //Récupération des données à partir du backend pour pour les afficher en front
+  // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
-    this.userData$ = this.profilePageService.getUserData();
+    this.userData$ = this.profilePageService.getLoggedUserInformation();
   }
 }

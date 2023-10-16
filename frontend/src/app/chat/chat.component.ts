@@ -1,19 +1,15 @@
-import { Component } from '@angular/core';
-
-export interface test {
-
-}
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrls: ['./chat.component.scss']
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
 
   ngOnInit() {
 
-    const name: string = 'salut';
+    const name = 'salut';
     const test = { test: name, aurevoir: name}
     console.log(test);
     console.table(test);
