@@ -13,7 +13,7 @@ import { UserSanitize } from 'src/interfaces/user.interfaces';
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: Repository<User>
   ) {}
 
   // Return an array with all users from database
@@ -21,6 +21,7 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
+<<<<<<< HEAD
   public async getUsers(): Promise<UserSanitize[]> {
     const users = await this.usersRepository.find();
     const data = [];
@@ -36,6 +37,8 @@ export class UsersService {
     return data;
   }
 
+=======
+>>>>>>> 39-impletment-frontend-chat
   // Return a single user from database using its id
   public async findOne(id: number): Promise<User | null> {
     return await this.usersRepository.findOne({ where: { id } });

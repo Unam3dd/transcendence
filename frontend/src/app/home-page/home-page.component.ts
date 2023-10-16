@@ -50,7 +50,12 @@ export class HomePageComponent implements OnInit {
   updateNickname() {
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
-    this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe(() => {
+    this.profilePageService.updateUserHomeData(newNickname, newEmail).subscribe((data) => {
+
+      const { token } = JSON.parse(data);
+
+      document.cookie = `authorization=${encodeURI(`Bearer ${token}`)}`;
+
       window.location.reload();
     });
   }

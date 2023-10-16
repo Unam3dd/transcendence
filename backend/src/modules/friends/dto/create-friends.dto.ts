@@ -12,6 +12,10 @@ export class CreateFriendsDto {
   status: boolean;
 
   @IsOptional()
+<<<<<<< HEAD
   @IsBoolean({ message: 'must be true on applicant !' })
+=======
+  @IsBoolean({ message: 'must be true on applicant !'})
+>>>>>>> 39-impletment-frontend-chat
   applicant: boolean;
 }

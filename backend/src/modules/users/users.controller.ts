@@ -33,12 +33,16 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { UserSanitize } from 'src/interfaces/user.interfaces';
+import { User } from './entities/user.entity';
 
 @UseGuards(AuthGuard)
 @ApiTags('Users Module')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly authService: AuthService,
+  ) {}
 
   // Recieving a POST request to create a new user
   @Post()
@@ -68,7 +72,12 @@ export class UsersController {
   async UpdateUserInfo(@Body() User: UpdateUserDto, @Res() res: Response) {
     try {
       await this.usersService.updateUser(User.id, User);
-      return res.status(HttpStatus.OK).send();
+
+      const user: User = await this.usersService.findOne(User.id);
+
+      return res
+        .status(HttpStatus.OK)
+        .send({ token: await this.authService.generateJwtByUser(user) });
     } catch (e) {
       return res.status(HttpStatus.NOT_MODIFIED).send();
     }

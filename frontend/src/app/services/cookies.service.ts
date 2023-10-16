@@ -18,6 +18,6 @@ export class CookiesService {
       const [key, value] = cookie.split('=');
       if (key === name) return (value);
     }
-    return (null);
+    return ('');
   }
 }

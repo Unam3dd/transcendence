@@ -1,4 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { io } from "socket.io-client";
+import { WS_GATEWAY } from '../env';
+import { CookiesService } from '../services/cookies.service';
+import { JwtService } from '../services/jwt.service';
+import { JWT_PAYLOAD } from '../services/jwt.const';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-chat',
@@ -7,11 +13,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ChatComponent implements OnInit {
 
-  ngOnInit() {
+  constructor(private readonly cookieService: CookiesService,
+    private readonly jwtService: JwtService) {}
 
-    const name = 'salut';
-    const test = { test: name, aurevoir: name}
-    console.log(test);
-    console.table(test);
+  ngOnInit() {
+    const [ type, token] = this.cookieService.getCookie('authorization').split('%20') ?? [];
+  
+    // get client username from JWT token
+    const { nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
+
+    // Pass the username when connecting to the gateway
+    const socket = io(WS_GATEWAY, { query: {"username": nickName} });
+
+    socket.emit('message', 'hello world !');
+
+    socket.on('response', (msg) => {
+      const { sub, login, nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
+      console.log(sub, login, nickName);
+      console.log(`${nickName}: ${msg}`);
+    })
   }
 }

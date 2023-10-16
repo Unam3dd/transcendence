@@ -1,5 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import * as io from 'socket.io-client';
+//import { SocketIoConfig } from './config/socket-io.config';
+
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -16,6 +19,7 @@ import { ChatComponent } from './chat/chat.component';
 import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -35,6 +39,7 @@ import {MatButtonModule} from "@angular/material/button";
     MatSlideToggleModule,
     FormsModule,
     MatInputModule,
+    MatListModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatButtonModule

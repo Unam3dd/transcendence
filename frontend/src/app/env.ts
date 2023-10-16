@@ -3,6 +3,8 @@ const IP_SERVER = 'localhost';
 const PORT = 3000;
 const REDIRECT_URI = `http://${IP_SERVER}:3000/auth/callback`;
 const PROTO = 'http';
+const WS_PORT = 3001;
+const WS_GATEWAY = `${PROTO}://${IP_SERVER}:${WS_PORT}/events`
 const NESTJS_URL = `${PROTO}://${IP_SERVER}:${PORT}`;
 
-export { CLIENT_ID, IP_SERVER, PORT, REDIRECT_URI, NESTJS_URL};
+export { CLIENT_ID, IP_SERVER, PORT, REDIRECT_URI, NESTJS_URL, WS_PORT, WS_GATEWAY};

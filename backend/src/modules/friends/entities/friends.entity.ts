@@ -13,14 +13,22 @@ export class Friends {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+<<<<<<< HEAD
   @OneToOne(() => User, (user) => user.id)
+=======
+  @OneToOne((type) => User, (user) => user.id)
+>>>>>>> 39-impletment-frontend-chat
   @Column({
     nullable: false,
     type: 'int',
   })
   user1: number;
 
+<<<<<<< HEAD
   @OneToOne(() => User, (user) => user.id)
+=======
+  @OneToOne((type) => User, (user) => user.id)
+>>>>>>> 39-impletment-frontend-chat
   @Column({
     nullable: false,
     type: 'int',

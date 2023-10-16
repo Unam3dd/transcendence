@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import {
   Body,
   Controller,
@@ -9,6 +10,9 @@ import {
   ParseIntPipe,
   Patch,
 } from '@nestjs/common';
+=======
+import { Body, Controller, DefaultValuePipe, Delete, HttpStatus, Param, ParseBoolPipe, ParseIntPipe, Patch } from '@nestjs/common';
+>>>>>>> 39-impletment-frontend-chat
 import { FriendsService } from './friends.service';
 import { Get, Post } from '@nestjs/common';
 import { CreateFriendsDto } from './dto/create-friends.dto';
@@ -22,11 +26,16 @@ export class FriendsController {
 
   @Post('/add')
   async add_friends(@Body() body: CreateFriendsDto, @Res() res: Response) {
+<<<<<<< HEAD
     await this.friendsService.addFriends(body);
+=======
+    const new_friend = await this.friendsService.addFriends(body);
+>>>>>>> 39-impletment-frontend-chat
     res.status(HttpStatus.OK).send();
   }
 
   @Get('/list/:id')
+<<<<<<< HEAD
   async list_friends(
     @Param('id') id: number,
     @Query('approved', new DefaultValuePipe(false), ParseBoolPipe)
@@ -56,5 +65,23 @@ export class FriendsController {
   ) {
     await this.friendsService.deleteFriend(id, friendId);
     return res.status(HttpStatus.OK).send();
+=======
+  async list_friends(@Param('id') id: number,
+  @Query('approved', new DefaultValuePipe(false), ParseBoolPipe) approved: boolean,
+  @Res() res: Response) {
+    return (res.status(HttpStatus.OK).send(await this.friendsService.listFriends(id, approved)))
+  }
+
+  @Patch('/update/:applicantid/:targetid')
+  async updateFriendStatus(@Param('applicantid', ParseIntPipe) applicantid: number, @Param('targetid', ParseIntPipe) targetid: number, @Res() res: Response) {
+    await this.friendsService.UpdateFriends(applicantid, targetid);
+    return (res.status(HttpStatus.OK).send());
+  }
+
+  @Delete('/delete/:id/:friendid')
+  async deleteFriends(@Param('id', ParseIntPipe) id: number, @Param('friendid', ParseIntPipe) friendId: number, @Res() res: Response) {
+    await this.friendsService.deleteFriend(id, friendId);
+    return (res.status(HttpStatus.OK).send());
+>>>>>>> 39-impletment-frontend-chat
   }
 }

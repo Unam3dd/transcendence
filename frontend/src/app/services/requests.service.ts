@@ -5,6 +5,7 @@ import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
 import { UserInterface } from '../interfaces/user.interface'
+import { JWT_PAYLOAD } from './jwt.const';
 
 
 @Injectable({
@@ -15,12 +16,14 @@ export class RequestsService {
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
   //Récupère l'ID de l'utilisateur
-  getId(token: string): number {
+  getId(token: string): number | null {
     //Récupère un tableau de valeurs du JWT (header, payload, signature)
     const decodeToken = this.jwtService.decode(token);
 
+    if (!decodeToken) return (null);
+
     //Récupère uniquement le payload
-    const payloadToken = decodeToken[1];
+    const payloadToken = decodeToken[JWT_PAYLOAD];
 
     try {
       //Transforme en JSON
@@ -70,7 +73,7 @@ export class RequestsService {
   }
 
   //Permet de modifier le nickname de l'utilisateur
-  updateUserHomeData(newNickname: string, email: string): Observable<UserInterface>{
+  updateUserHomeData(newNickname: string, email: string): Observable<string> {
 
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
@@ -90,7 +93,7 @@ export class RequestsService {
       );
     } else {
       const updateData = {id: userId, nickName: newNickname, email: email};
-      return this.http.put<UserInterface>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
+      return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
     }
   }
 }
