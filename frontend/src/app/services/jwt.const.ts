@@ -1,3 +1,3 @@
-export const JWT_HEADER: number = 0;
-export const JWT_PAYLOAD: number = 1;
-export const JWT_SIGNATURE: number = 2;
+export const JWT_HEADER = 0;
+export const JWT_PAYLOAD = 1;
+export const JWT_SIGNATURE = 2;

@@ -17,7 +17,11 @@ export class ChatComponent implements OnInit {
     private readonly jwtService: JwtService) {}
 
   ngOnInit() {
-    const [ type, token] = this.cookieService.getCookie('authorization').split('%20') ?? [];
+    const [ type, token] = this.cookieService.getCookie('authorization')?.split(
+      this.cookieService.getCookie('authorization')?.includes('%20') ? '%20' : ' '
+    ) ?? [];
+
+    console.log(type, token);
   
     // get client username from JWT token
     const { nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);

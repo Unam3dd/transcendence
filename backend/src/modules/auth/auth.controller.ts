@@ -4,16 +4,13 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
-<<<<<<< HEAD
+
 import {
   ApiInternalServerErrorResponse,
   ApiOperation,
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
-=======
-import { ApiConflictResponse, ApiCreatedResponse, ApiInternalServerErrorResponse, ApiOperation, ApiQuery, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
->>>>>>> 39-impletment-frontend-chat
 
 @ApiTags('Auth Module')
 @Controller('auth')
@@ -23,7 +20,6 @@ export class AuthController {
     private readonly apiService: ApiService,
   ) {}
 
-<<<<<<< HEAD
   @ApiOperation({ summary: 'Authentication with the 42 Api' })
   @ApiQuery({
     name: 'code',
@@ -32,11 +28,6 @@ export class AuthController {
     description: '42 Api Token',
   })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-=======
-  @ApiOperation({summary: 'Authentication with the 42 Api'})
-  @ApiQuery({ name: 'code', type: String, required: true, description: '42 Api Token' })
-  @ApiInternalServerErrorResponse({description: 'Internal server error'})
->>>>>>> 39-impletment-frontend-chat
   @Get('callback')
   async callback(
     @Query('code') code: string,

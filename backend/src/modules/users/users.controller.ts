@@ -34,6 +34,7 @@ import {
 } from '@nestjs/swagger';
 import { UserSanitize } from 'src/interfaces/user.interfaces';
 import { User } from './entities/user.entity';
+import { AuthService } from '../auth/auth.service';
 
 @UseGuards(AuthGuard)
 @ApiTags('Users Module')
