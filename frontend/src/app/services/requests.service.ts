@@ -96,4 +96,27 @@ export class RequestsService {
       return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
     }
   }
+
+  updateFriendsStatus(applicant: number, target: number)
+  {
+    // getting the request header
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
+    // making the request
+    const url:string = `${NESTJS_URL}/friends/update/${applicant}/${target}`;
+    this.http.patch<string>(url, null, {headers: hdr}).subscribe();
+  }
+
+  deleteFriends(userId1: number, userId2: number)
+  {
+    // getting the request header
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
+    // making the request
+    const url:string = `${NESTJS_URL}/friends/delete/${userId1}/${userId2}`;
+    this.http.delete(url, {headers: hdr}).subscribe();
+  }
+
 }
