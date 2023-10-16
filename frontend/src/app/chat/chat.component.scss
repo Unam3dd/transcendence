@@ -1,36 +1,25 @@
 .column {
-    // white-space: nowrap;
-    // overflow: hidden;
-    // display: block;
-    // display: contents;
-    // display: flex;
-    // display: flexbox;
-    // display: flow-root;
-    // display: grid;
-    // display: inline;
-    // display: inline-block;
-    // display: inline-flex;
-    // display: inline-flexbox;
-    // justify-content: left;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-auto-rows: 200px;
-    text-align: center;
-    padding: 2%;
-    color: red;
-    // height: 700px;
-
-    // width: 1%;
+    width: 100vw;
+    height: 85vh;
 }
 
-// #rooms-list {
-//     width: 10%;
-// }
+#rooms-list {
+    display: inline-block;
+    background-color: yellow;
+    width: 64px;
+    height: 100%;
+}
 
-// #room-users {
-//     width: 25%;
-// }
+#room-users {
+    display: inline-block;
+    width: 320px;
+    background-color: green;
+    height: 100%;
+}
 
-// #conversation {
-//     width: 65%;
-// }
+#conversation {
+    display: inline-block;
+    width: calc(100% - 384px);
+    background-color: blue;
+    height: 100%;
+}

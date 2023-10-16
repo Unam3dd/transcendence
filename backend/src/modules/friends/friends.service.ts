@@ -13,7 +13,6 @@ export class FriendsService {
   ) {}
 
   async addFriends(payload: CreateFriendsDto): Promise<Friends> {
-
     payload.applicant = true;
 
     await this.friendsRepository.save({ ...payload });
@@ -29,14 +28,23 @@ export class FriendsService {
   }
 
   async listFriends(id: number, approved: boolean): Promise<Friends[]> {
-    return (approved
-        ? await this.friendsRepository.find({where: { user1: id, status: approved}})
-        : await this.friendsRepository.find({where: { user1: id }}))
+    return approved
+      ? await this.friendsRepository.find({
+          where: { user1: id, status: approved },
+        })
+      : await this.friendsRepository.find({ where: { user1: id } });
   }
 
-  async UpdateFriends(applicantid: number, targetid: number): Promise<Friends[]> {
-    const f1: Friends = await this.friendsRepository.findOne({ where: { user1: applicantid, user2: targetid}})
-    const f2: Friends = await this.friendsRepository.findOne({ where: { user1: targetid, user2: applicantid }})
+  async UpdateFriends(
+    applicantid: number,
+    targetid: number,
+  ): Promise<Friends[]> {
+    const f1: Friends = await this.friendsRepository.findOne({
+      where: { user1: applicantid, user2: targetid },
+    });
+    const f2: Friends = await this.friendsRepository.findOne({
+      where: { user1: targetid, user2: applicantid },
+    });
 
     f1.status = true;
     f2.status = true;
@@ -44,16 +52,20 @@ export class FriendsService {
     await this.friendsRepository.update(f1.id, f1);
     await this.friendsRepository.update(f2.id, f2);
 
-    return ([f1, f2]);
+    return [f1, f2];
   }
 
   async deleteFriend(id: number, friendId: number): Promise<Friends[]> {
-    const f1: Friends = await this.friendsRepository.findOne({ where: { user1: id, user2: friendId }})
-    const f2: Friends = await this.friendsRepository.findOne({ where: { user1: friendId, user2: id }})
+    const f1: Friends = await this.friendsRepository.findOne({
+      where: { user1: id, user2: friendId },
+    });
+    const f2: Friends = await this.friendsRepository.findOne({
+      where: { user1: friendId, user2: id },
+    });
 
     await this.friendsRepository.delete(f1);
     await this.friendsRepository.delete(f2);
 
-    return ([f1, f2]);
+    return [f1, f2];
   }
 }

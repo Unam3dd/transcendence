@@ -1,8 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {RequestsService} from "../services/requests.service";
-import { CookiesService } from '../services/cookies.service';
-
+import {MatDialog} from "@angular/material/dialog";
+import {UpdateProfileComponent} from "../update-profile/update-profile.component";
+import { UserInterface } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-profile-page',
@@ -11,13 +12,20 @@ import { CookiesService } from '../services/cookies.service';
 })
 export class ProfilePageComponent implements OnInit{
 
-  //Variables des données à récupérer pour la bdd
-  userData$!: Observable<any>;
-  constructor(private profilePageService: RequestsService, private readonly cookieService: CookiesService) {}
+  userData$!: Observable<UserInterface> | null;
+  constructor(private requestService: RequestsService, public dialog: MatDialog) {}
 
 
-  //Récupération des données à partir du backend pour pour les afficher en front
+  // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
-    this.userData$ = this.profilePageService.getUserData();
+    this.userData$ = this.requestService.getLoggedUserInformation();
+  }
+
+  openDialog() {
+    const dialogRef = this.dialog.open(UpdateProfileComponent);
+
+    dialogRef.afterClosed().subscribe(() => {
+      window.location.reload();
+    });
   }
 }

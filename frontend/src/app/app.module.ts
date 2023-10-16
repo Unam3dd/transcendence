@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
@@ -19,6 +20,9 @@ import {MatButtonModule} from "@angular/material/button";
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { NotificationsComponent } from './notifications/notifications.component';
+import { UpdateProfileComponent } from './update-profile/update-profile.component';
+import {MatDialogModule} from "@angular/material/dialog";
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,8 @@ import { NotificationsComponent } from './notifications/notifications.component'
     ProfilePageComponent,
     FooterComponent,
     ChatComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    UpdateProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -39,11 +44,13 @@ import { NotificationsComponent } from './notifications/notifications.component'
     MatSlideToggleModule,
     FormsModule,
     MatInputModule,
+    MatListModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatSnackBarModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
