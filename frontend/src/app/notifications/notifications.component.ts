@@ -1,6 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
-import { notificationsInterface } from '../services/notifications.service';
+import { notificationsInterface, Action } from '../interfaces/notifications.interface';
+import { CookiesService } from '../services/cookies.service';
+import { RequestsService } from '../services/requests.service';
 
 @Component({
   selector: 'app-notifications',
@@ -9,22 +11,50 @@ import { notificationsInterface } from '../services/notifications.service';
 })
 export class NotificationsComponent{
 
-  constructor(private snackBarRef: MatSnackBarRef<NotificationsComponent>, @Inject(MAT_SNACK_BAR_DATA) public data: notificationsInterface){}
+  constructor(private readonly snackBarRef: MatSnackBarRef<NotificationsComponent>, 
+    @Inject(MAT_SNACK_BAR_DATA) public readonly data: notificationsInterface,
+    private readonly cookieService: CookiesService,
+    private readonly requestService: RequestsService) {}
 
-  action(){
-    if (this.data.action === 1)
-      this.accept_friends();
+  // if user click on the accept button
+  accept(){
+    if (this.data.action === Action.friends_request)
+      this.acceptFriends();
   }
 
-  accept_friends()
+  // if user click on the reject button
+  reject()
   {
-    console.log('need to make update friend request in requests service');
+    if (this.data.action === Action.friends_request)
+      this.rejectFriends();
+  }
+
+
+  acceptFriends()
+  {
+    // get the userId that receive the notifications
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const userId = this.requestService.getId(token);
+
+    if (!userId)
+      throw(Error("user not found"));
+
+    // Accept the friend Request
+    this.requestService.updateFriendsStatus(this.data.sender_id, userId);
     this.snackBarRef.dismiss();
   }
 
-  close()
+  rejectFriends()
   {
-    console.log('notification closed');
+    // get the userId that receive the notifications
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const userId = this.requestService.getId(token);
+
+    if (!userId)
+      throw(Error("user not found"));
+
+    // Reject the friend request and delete the friendship in the database
+    this.requestService.deleteFriends(this.data.sender_id, userId);
     this.snackBarRef.dismiss();
   }
 }
