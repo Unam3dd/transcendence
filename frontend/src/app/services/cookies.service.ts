@@ -14,10 +14,10 @@ export class CookiesService {
   }
 
   getCookie(name: string): string | null {
-    for (let cookie of this.cookies) {
-      let [key, value] = cookie.split('=');
+    for (const cookie of this.cookies) {
+      const [key, value] = cookie.split('=');
       if (key === name) return (value);
     }
-    return (null);
+    return ('');
   }
 }

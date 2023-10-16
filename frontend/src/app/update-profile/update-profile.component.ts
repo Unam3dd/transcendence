@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {RequestsService} from "../services/requests.service";
 import {FormControl} from "@angular/forms";
-import {MatSlideToggleChange} from "@angular/material/slide-toggle";
+import { UserInterface } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-update-profile',
@@ -10,7 +10,7 @@ import {MatSlideToggleChange} from "@angular/material/slide-toggle";
   styleUrls: ['./update-profile.component.scss']
 })
 export class UpdateProfileComponent implements OnInit{
-  userData$!: Observable<any>;
+  userData$!: Observable<UserInterface> | null;
   firstname = new FormControl('');
   lastname = new FormControl('');
   nickname = new FormControl('');
@@ -21,7 +21,7 @@ export class UpdateProfileComponent implements OnInit{
   constructor(private requestService: RequestsService) {}
 
   ngOnInit(): void {
-    this.userData$ = this.requestService.getUserData();
+    this.userData$ = this.requestService.getLoggedUserInformation();
   }
 
   updateDatas() {

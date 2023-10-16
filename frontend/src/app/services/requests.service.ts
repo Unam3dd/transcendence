@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, of, switchMap} from "rxjs";
+import {Observable, switchMap} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
+import { NESTJS_URL } from '../env';
+import { UserInterface } from '../interfaces/user.interface'
+import { JWT_PAYLOAD } from './jwt.const';
 
 
 @Injectable({
@@ -10,17 +13,17 @@ import {JwtService} from "./jwt.service";
 })
 export class RequestsService {
 
-  private backUrl: string = 'http://localhost:3000/users';
-
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
   //Récupère l'ID de l'utilisateur
-  getId(token: string): number {
+  getId(token: string): number | null {
     //Récupère un tableau de valeurs du JWT (header, payload, signature)
     const decodeToken = this.jwtService.decode(token);
 
+    if (!decodeToken) return (null);
+
     //Récupère uniquement le payload
-    const payloadToken = decodeToken[1];
+    const payloadToken = decodeToken[JWT_PAYLOAD];
 
     try {
       //Transforme en JSON
@@ -42,7 +45,7 @@ export class RequestsService {
   }
 
   //Récupère les données du user
-  getUserData(): Observable<string> {
+  getUserData(): Observable<UserInterface> {
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
 
@@ -52,15 +55,25 @@ export class RequestsService {
     //Récupération de l'id
     const userId = this.getId(token);
 
-    //Définition de l'url totale
-    const url = `${this.backUrl}/${userId}`;
-
     //Retour de la récupération des données
-    return this.http.get<string>(url, { headers: hdr });
+    return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers: hdr });
+  }
+
+  getLoggedUserInformation(): Observable<UserInterface> | null {
+
+    const JWT_TOKEN = this.cookieService.getCookie('authorization');
+
+    if (!JWT_TOKEN) return (null);
+
+    const hdr = new HttpHeaders().append('authorization', JWT_TOKEN);
+
+    const url = `${NESTJS_URL}/users/me`
+
+    return (this.http.get<UserInterface>(url, { headers: hdr }));
   }
 
   //Permet de modifier le nickname de l'utilisateur
-  updateUserHomeData(newNickname: string, email: string): Observable<any>{
+  updateUserHomeData(newNickname: string, email: string): Observable<string> {
 
     //Récupère le Cookie et donne l'authorisation
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
@@ -71,58 +84,16 @@ export class RequestsService {
     //Récupération du header
     const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
 
-    //Définition de l'url totale
-    const url = `${this.backUrl}`;
-
     if (newNickname.trim() === '') {              //Si newNickname est vide
       return this.getUserData().pipe(           //Fait appel à getData pour avoir le login
-        switchMap((data: any) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
+        switchMap((data: UserInterface) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
           const loginValue: string = data.login;
           return this.updateUserHomeData(loginValue, email); //Récursion avec la valeur du login
         })
       );
     } else {
       const updateData = {id: userId, nickName: newNickname, email: email};
-      return this.http.put(url, updateData, {headers: hdr});
-    }
-  }
-
-  updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean ) {
-    //Récupère le Cookie et donne l'authorisation
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
-
-    //Récupération de l'id
-    const userId = this.getId(token);
-
-    //Récupération du header
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
-
-    //Définition de l'url totale
-    const url = `${this.backUrl}`;
-
-    const updateData: any = {id: userId};
-
-    if (firstname) {
-      updateData.firstName = firstname;
-    }
-    if (lastname) {
-      updateData.lastName = lastname;
-    }
-    if (nickname) {
-      updateData.nickName = nickname;
-    }
-    if (email) {
-      updateData.email = email;
-    }
-    if (a2f) {
-      updateData.a2f = a2f;
-    }
-
-    //Modifie les champs non vide
-    if (Object.keys(updateData).length > 1){
-      return this.http.put(url, updateData, {headers: hdr});
-    } else {
-      return of(); //Retourne un observable vide si aucune données
+      return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
     }
   }
 }

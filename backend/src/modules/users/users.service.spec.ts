@@ -6,7 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserError } from './users.type';
 import { Repository } from 'typeorm';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { Request } from 'supertest';
 
 //Do a serie of tests for a specific set of methods (UsersServices methods here)
 describe('UsersServices', () => {

@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
 import { UserError } from './users.type';
+import { UserSanitize } from 'src/interfaces/user.interfaces';
 
 // This class will do all operations needed for our requests like writing, modifiyng or accessing data from database
 @Injectable()
@@ -20,9 +21,34 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
+  public async getUsers(): Promise<UserSanitize[]> {
+    const users = await this.usersRepository.find();
+    const data = [];
+
+    users.forEach((u) => {
+      data.push(<UserSanitize>{
+        id: u.id,
+        login: u.login,
+        nickName: u.nickName,
+      });
+    });
+
+    return data;
+  }
+
   // Return a single user from database using its id
   public async findOne(id: number): Promise<User | null> {
     return await this.usersRepository.findOne({ where: { id } });
+  }
+
+  public async findOneSanitize(id: number): Promise<UserSanitize | null> {
+    const user: User = await this.usersRepository.findOne({ where: { id } });
+
+    return <UserSanitize>{
+      id: user.id,
+      login: user.login,
+      nickName: user.nickName,
+    };
   }
 
   // Return a single user from database using its login
@@ -63,5 +89,16 @@ export class UsersService {
     await this.usersRepository.remove(target);
 
     return target;
+  }
+
+  public async decodeJWT(token: string): Promise<string[] | null> {
+    const separator = token.includes('%20') ? '%20' : ' ';
+
+    const [type, jwt] = token.split(separator);
+
+    if (type !== 'Bearer') return null;
+
+    const [header, payload, signature] = jwt.split('.');
+    return [atob(header), atob(payload), signature];
   }
 }
