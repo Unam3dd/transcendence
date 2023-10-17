@@ -38,7 +38,7 @@ export class ChatComponent implements OnInit {
     console.log(test);
     console.table(test);
 
-   this.snackBar.friend_notification("chjoie"); // ici pour test, mais la fonction doit être appelé lorsque l'on recoit l'evenement dans les websockets
+   this.snackBar.friend_notification("chjoie", 2); // ici pour test, mais la fonction doit être appelé lorsque l'on recoit l'evenement dans les websockets
 
     socket.on('response', (msg) => {
       const { sub, login, nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);

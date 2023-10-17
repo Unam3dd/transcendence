@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {Observable, switchMap} from "rxjs";
+import {HttpClient, HttpHeaders, HttpErrorResponse} from "@angular/common/http";
+import {Observable, catchError, switchMap, throwError} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
@@ -14,6 +14,17 @@ import { JWT_PAYLOAD } from './jwt.const';
 export class RequestsService {
 
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
+
+  //Handle requests errors
+  private handleError(error: HttpErrorResponse){
+    if (error.status === 0){
+      console.log("an error occured");
+    }
+    else {
+      console.log(`Request returned an ${error.status} error`)
+    }
+    return throwError(() => new Error ('Request error!!'));
+  }
 
   //Récupère l'ID de l'utilisateur
   getId(token: string): number | null {
@@ -67,7 +78,7 @@ export class RequestsService {
 
     const hdr = new HttpHeaders().append('authorization', JWT_TOKEN);
 
-    const url = `${NESTJS_URL}/users/me`
+    const url = `${NESTJS_URL}/users/me`;
 
     return (this.http.get<UserInterface>(url, { headers: hdr }));
   }
@@ -97,15 +108,17 @@ export class RequestsService {
     }
   }
 
-  updateFriendsStatus(applicant: number, target: number)
+  updateFriendsStatus(applicant: number)
   {
     // getting the request header
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
     const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
 
+    const userId = this.getId(token);
+
     // making the request
-    const url:string = `${NESTJS_URL}/friends/update/${applicant}/${target}`;
-    this.http.patch<string>(url, null, {headers: hdr}).subscribe();
+    const url:string = `${NESTJS_URL}/friends/update/${applicant}/${userId}`;
+    return this.http.patch(url, null, {headers: hdr}).pipe(catchError(this.handleError));
   }
 
   deleteFriends(userId1: number, userId2: number)
