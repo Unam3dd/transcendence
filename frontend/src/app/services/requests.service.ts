@@ -96,4 +96,8 @@ export class RequestsService {
       return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
     }
   }
+
+  async updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean) {
+    console.log(firstname, lastname, nickname, email, a2f);
+  }
 }
