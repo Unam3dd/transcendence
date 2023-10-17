@@ -1,5 +1,3 @@
-import { Timestamp } from "typeorm";
-
 export interface UserSanitize {
   id: number;
   login: string;
