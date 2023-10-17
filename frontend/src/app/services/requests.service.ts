@@ -15,24 +15,24 @@ export class RequestsService {
 
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
-  //Récupère l'ID de l'utilisateur
+  //Get the user's id
   getId(token: string): number | null {
-    //Récupère un tableau de valeurs du JWT (header, payload, signature)
+    //Retrieves an array of JWT values (header, payload, signature)
     const decodeToken = this.jwtService.decode(token);
 
     if (!decodeToken) return (null);
 
-    //Récupère uniquement le payload
+    //Retrieves payload only
     const payloadToken = decodeToken[JWT_PAYLOAD];
 
     try {
-      //Transforme en JSON
+      //Transform on JSON
       const jsonToken = JSON.parse(payloadToken);
 
-      //Si "sub" (id) existe, alors c'est bon
+      //if "sub" (id) exist, then it's good
       if (jsonToken && jsonToken.sub) {
 
-        //Récupération de l'ID de l'utilisateur via JWT
+        //User ID retrieval via JWT
         return jsonToken.sub;
 
       } else {
@@ -44,18 +44,18 @@ export class RequestsService {
     }
   }
 
-  //Récupère les données du user
+  //Recovers user data
   getUserData(): Observable<UserInterface> {
-    //Récupère le Cookie et donne l'authorisation
+    //Recovers Cookie and gives authorization
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
 
-    //Récupération du header
+    //Header recovery
     const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
 
-    //Récupération de l'id
+    //ID recovery
     const userId = this.getId(token);
 
-    //Retour de la récupération des données
+    //Return of data recovery
     return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers: hdr });
   }
 
@@ -72,23 +72,23 @@ export class RequestsService {
     return (this.http.get<UserInterface>(url, { headers: hdr }));
   }
 
-  //Permet de modifier le nickname de l'utilisateur
+  //Change user nickname
   updateUserHomeData(newNickname: string, email: string): Observable<string> {
 
-    //Récupère le Cookie et donne l'authorisation
+    //Recovers Cookie and gives authorization
     const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
 
-    //Récupération de l'id
+    //Recovers ID
     const userId = this.getId(token);
 
-    //Récupération du header
+    //Recovers header
     const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
 
-    if (newNickname.trim() === '') {              //Si newNickname est vide
-      return this.getUserData().pipe(           //Fait appel à getData pour avoir le login
-        switchMap((data: UserInterface) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
+    if (newNickname.trim() === '') {              //if newNickname is empty
+      return this.getUserData().pipe(           //Call getDate to get login
+        switchMap((data: UserInterface) => {         //switchMap to take into account login recovery in a new observable
           const loginValue: string = <string>data.login;
-          return this.updateUserHomeData(loginValue, email); //Récursion avec la valeur du login
+          return this.updateUserHomeData(loginValue, email); //Recursion with login value
         })
       );
     } else {
