@@ -7,11 +7,16 @@ import { Status } from '../enum/status.enum';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
+import { Socket } from 'socket.io-client';
+import {DefaultEventsMap} from "@socket.io/component-emitter";
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
+
+  public client: any;
 
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
@@ -24,6 +29,8 @@ export class WebsocketService {
         return ;
       }
       
+      this.client = io(WS_GATEWAY);
+
       // get client username from JWT token
       const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
       
@@ -33,17 +40,14 @@ export class WebsocketService {
         nickName: payloadJWT.nickName,
         status: Status.ONLINE
       }
-  
-      // Pass the username when connecting to the gateway
-      const client = io(WS_GATEWAY);
 
-      client.emit('join', JSON.stringify(AuthorUser));
+      this.client.emit('join', JSON.stringify(AuthorUser));
 
-      client.on('newArrival', (msg) => {
+      this.client.on('newArrival', (msg: string) => {
         console.log(msg);
       })
   
-      client.on('disconnect', (msg) => {
+      this.client.on('disconnect', (msg: string) => {
         console.log(msg);
         AuthorUser.status = Status.OFFLINE;
       })
@@ -52,4 +56,6 @@ export class WebsocketService {
     initializeWebsocketService() {
       console.log('Websocket service was initialized !');
     }
+
+    getClient() { return (this.client); }
 }

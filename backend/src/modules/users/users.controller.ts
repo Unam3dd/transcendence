@@ -93,6 +93,7 @@ export class UsersController {
     const [header, payload, signature] = await this.usersService.decodeJWT(
       req.headers.authorization,
     );
+    console.log(header, payload, signature);
     const { sub } = JSON.parse(payload);
     return res.status(HttpStatus.OK).send(await this.usersService.findOne(sub));
   }

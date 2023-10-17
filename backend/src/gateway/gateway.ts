@@ -1,4 +1,3 @@
-import { UseGuards } from '@nestjs/common';
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -51,12 +50,11 @@ export class EventsGateway {
   @SubscribeMessage('disconnect')
   disconnectUser(
     @MessageBody() body: string,
-    @ConnectedSocket() client: Socket
+    @ConnectedSocket() client: Socket,
   ) {
     const { login } = JSON.parse(body);
 
-    if (!client.disconnected)
-      client.disconnect()
+    if (!client.disconnected) client.disconnect();
     this.server.emit('newDepart', `${login} has just left the transcendence !`);
   }
 
