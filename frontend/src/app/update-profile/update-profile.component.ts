@@ -31,6 +31,6 @@ export class UpdateProfileComponent implements OnInit{
     const email: string = this.email.value as string;
     const a2f: boolean = this.a2f.value as boolean;
 
-    this.requestService.updateUserDatas(firstname, lastname, nickname, email, a2f).subscribe();
+    this.requestService.updateUserDatas(firstname, lastname, nickname, email, a2f);
   }
 }

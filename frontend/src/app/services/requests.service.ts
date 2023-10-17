@@ -87,7 +87,7 @@ export class RequestsService {
     if (newNickname.trim() === '') {              //Si newNickname est vide
       return this.getUserData().pipe(           //Fait appel à getData pour avoir le login
         switchMap((data: UserInterface) => {         //switchMap pour prendre en conpte la récupération du login dans un nouvel observable
-          const loginValue: string = data.login;
+          const loginValue: string = <string>data.login;
           return this.updateUserHomeData(loginValue, email); //Récursion avec la valeur du login
         })
       );
@@ -119,4 +119,7 @@ export class RequestsService {
     this.http.delete(url, {headers: hdr}).subscribe();
   }
 
+  async updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean) {
+    console.log(firstname, lastname, nickname, email, a2f);
+  }
 }

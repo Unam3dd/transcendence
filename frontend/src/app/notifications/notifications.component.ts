@@ -33,7 +33,7 @@ export class NotificationsComponent{
   acceptFriends()
   {
     // get the userId that receive the notifications
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const [token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
     const userId = this.requestService.getId(token);
 
     if (!userId)
@@ -47,7 +47,7 @@ export class NotificationsComponent{
   rejectFriends()
   {
     // get the userId that receive the notifications
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const [token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
     const userId = this.requestService.getId(token);
 
     if (!userId)
