@@ -15,29 +15,24 @@ export class NotificationsComponent{
     private readonly requestService: RequestsService) {}
 
   // if user click on the accept button
-  accept(){
+  accept() {
     if (this.data.action === Action.friends_request)
       this.acceptFriends();
   }
 
   // if user click on the reject button
-  reject()
-  {
+  reject() {
     if (this.data.action === Action.friends_request)
       this.rejectFriends();
   }
 
-  acceptFriends()
-  {
-    // accept the friends request
+  acceptFriends() {
     this.requestService.updateFriendsStatus(this.data.sender_id).subscribe();
-   // this.friendsService.acceptFriendsRequest(this.data.sender_id);
     this.snackBarRef.dismiss();
   }
 
-  rejectFriends()
-  {
-   // this.friendsService.rejectFriendsRequest(this.data.sender_id);
+  rejectFriends() {
+    this.requestService.deleteFriends(this.data.sender_id).subscribe();
     this.snackBarRef.dismiss();
   }
 }

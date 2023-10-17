@@ -10,7 +10,7 @@ export class NotificationService {
 
   constructor(private readonly snackBar: MatSnackBar) {}
 
-  friend_notification(name: string, id: number) {
+  custom_notification(name: string, id: number) {
 
     const notifications_info: notificationsInterface = {
       sender_name: name,
@@ -25,5 +25,12 @@ export class NotificationService {
       horizontalPosition: 'right',
       duration: 5000
     });
+  }
+
+  basic_notification(message: string) {
+    this.snackBar.open(message, undefined, { 
+      verticalPosition: 'top',
+      horizontalPosition: 'right',
+      duration: 5000});
   }
 }

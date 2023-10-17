@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { NotificationService } from '../services/notifications.service';
 import { io } from "socket.io-client";
 import { WS_GATEWAY } from '../env';
 import { CookiesService } from '../services/cookies.service';
@@ -15,8 +14,7 @@ import { OnInit } from '@angular/core';
 export class ChatComponent implements OnInit {
 
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService,
-    private readonly snackBar: NotificationService) {}
+    private readonly jwtService: JwtService){}
 
   ngOnInit() {
     const [ type, token] = this.cookieService.getCookie('authorization')?.split(
@@ -37,8 +35,6 @@ export class ChatComponent implements OnInit {
     const test = { test: name, aurevoir: name}
     console.log(test);
     console.table(test);
-
-   this.snackBar.friend_notification("chjoie", 2); // ici pour test, mais la fonction doit être appelé lorsque l'on recoit l'evenement dans les websockets
 
     socket.on('response', (msg) => {
       const { sub, login, nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
