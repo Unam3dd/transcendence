@@ -5,9 +5,9 @@ export interface UserSanitize {
 }
 
 export interface JWTPayload {
-  sub: number,
-  login: string,
-  nickName: string,
-  iat: number,
-  exp: number
+  sub: number;
+  login: string;
+  nickName: string;
+  iat: number;
+  exp: number;
 }

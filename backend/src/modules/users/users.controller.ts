@@ -148,7 +148,7 @@ export class UsersController {
 
       const payload: JWTPayload = <JWTPayload>this.jwtService.decode(token);
 
-      if (id !== payload.sub) return (res.status(401).send());
+      if (id !== payload.sub) return res.status(401).send();
 
       await this.usersService.deleteUser(id);
       return res.status(HttpStatus.OK).send();
