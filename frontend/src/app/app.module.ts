@@ -24,7 +24,8 @@ import { WebsocketService } from './websocket/websocket.service';
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
-    console.log('Starting Websocket service !');
+    ws.initializeWebsocketService();
+    return (ws);
   }
 }
 

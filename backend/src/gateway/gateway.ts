@@ -1,3 +1,4 @@
+import { UseGuards } from '@nestjs/common';
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -24,6 +25,16 @@ export class EventsGateway {
     this.server.emit('response', 'A new client just connect');
   }
 
+  @SubscribeMessage('join')
+  newArrival(@MessageBody() msg: string) {
+    try {
+      const { login } = JSON.parse(msg);
+      this.server.emit('newArrival', `${login} has joined the transcendence !`);
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   // Define actions when receiving an event, 'message' event in this case
   @SubscribeMessage('message')
   receiveNewMessage(
@@ -37,11 +48,20 @@ export class EventsGateway {
     client.emit('response', 'hello');
   }
 
+  @SubscribeMessage('disconnect')
+  disconnectUser(
+    @MessageBody() body: string,
+    @ConnectedSocket() client: Socket
+  ) {
+    const { login } = JSON.parse(body);
+
+    if (!client.disconnected)
+      client.disconnect()
+    this.server.emit('newDepart', `${login} has just left the transcendence !`);
+  }
+
   //Detect clients disconnection
   handleDisconnect() {
-    console.log('Client disconnected');
-
-    // send message to all clients
-    this.server.emit('response', 'A new client just disconnect');
+    console.log('new Client disconnected');
   }
 }

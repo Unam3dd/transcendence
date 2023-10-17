@@ -36,15 +36,20 @@ export class WebsocketService {
   
       // Pass the username when connecting to the gateway
       const client = io(WS_GATEWAY);
-  
-      client.on('message', (msg) => {
+
+      client.emit('join', JSON.stringify(AuthorUser));
+
+      client.on('newArrival', (msg) => {
         console.log(msg);
-        console.log(AuthorUser.status);
       })
   
       client.on('disconnect', (msg) => {
         console.log(msg);
         AuthorUser.status = Status.OFFLINE;
       })
+    }
+
+    initializeWebsocketService() {
+      console.log('Websocket service was initialized !');
     }
 }
