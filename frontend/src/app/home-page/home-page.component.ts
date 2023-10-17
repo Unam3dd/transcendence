@@ -52,7 +52,8 @@ export class HomePageComponent implements OnInit {
     const newEmail: string = this.email.value as string;
     this.requestsService.updateUserHomeData(newNickname, newEmail).subscribe((data) => {
 
-      const { token } = JSON.parse(data);
+      console.log(data);
+      const { token } = JSON.parse(JSON.stringify(data));
 
       document.cookie = `authorization=${encodeURI(`Bearer ${token}`)}`;
 
