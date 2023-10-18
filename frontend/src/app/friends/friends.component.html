@@ -1,0 +1,13 @@
+<section class="friends">
+    <div *ngIf="showContent">
+        <p>Pending Friends:</p>
+        <div *ngFor="let user of pendingFriends"> 
+            {{user.nickName}}
+        </div>
+        <p>Approved Friends:</p>
+        <div *ngFor="let user of approvedFriends"> 
+            {{user.nickName}}
+        </div> 
+    </div>
+    <button (click)="toggleContent()">Toggle Content</button>
+</section>
