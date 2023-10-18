@@ -16,6 +16,9 @@ import { ChatComponent } from './chat/chat.component';
 import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {MatButtonModule} from "@angular/material/button";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { NotificationsComponent } from './notifications/notifications.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { MatListModule } from '@angular/material/list';
@@ -40,6 +43,7 @@ function initializeWebSocket(ws: WebsocketService) {
     FooterComponent,
     ChatComponent,
     UpdateProfileComponent,
+    NotificationsComponen
   ],
   imports: [
     BrowserModule,
@@ -52,8 +56,10 @@ function initializeWebSocket(ws: WebsocketService) {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
-    MatDialogModule,
-    WebsocketModule
+    WebsocketModule,
+    MatSnackBarModule,
+    MatIconModule,
+    MatDialogModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
