@@ -9,17 +9,18 @@ import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { Socket } from 'socket.io-client';
 import {DefaultEventsMap} from "@socket.io/component-emitter";
-
+import { WsClient } from './websocket.type';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WebsocketService {
 
-  public client: any;
+  public client: any
 
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
+
       const [ type, token] = this.cookieService.getCookie('authorization')?.split(
         this.cookieService.getCookie('authorization')?.includes('%20') ? '%20' : ' '
       ) ?? [];
@@ -29,7 +30,7 @@ export class WebsocketService {
         return ;
       }
       
-      this.client = io(WS_GATEWAY);
+      this.client = <Socket<DefaultEventsMap, DefaultEventsMap>>io(WS_GATEWAY);
 
       // get client username from JWT token
       const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
@@ -57,5 +58,5 @@ export class WebsocketService {
       console.log('Websocket service was initialized !');
     }
 
-    getClient() { return (this.client); }
+    getClient(): WsClient { return (this.client); }
 }

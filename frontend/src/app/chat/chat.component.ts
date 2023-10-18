@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { WebsocketService } from '../websocket/websocket.service';
 import { Socket } from 'socket.io-client';
 import { DefaultEventsMap } from '@socket.io/component-emitter';
+import { WsClient } from '../websocket/websocket.type';
 
 @Component({
   selector: 'app-chat',
@@ -15,7 +16,7 @@ export class ChatComponent implements OnInit {
 
   ngOnInit() {
     console.log('hello chat !');
-    const client: Socket<DefaultEventsMap, DefaultEventsMap> = this.ws.getClient();
+    const client: WsClient = this.ws.getClient();
 
     client.emit('message', 'hello chat !');
   }
