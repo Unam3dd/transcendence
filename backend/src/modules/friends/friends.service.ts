@@ -3,6 +3,7 @@ import { User } from '../users/entities/user.entity';
 import { Repository } from 'typeorm';
 import { Friends } from './entities/friends.entity';
 import { CreateFriendsDto } from './dto/create-friends.dto';
+import { UsersService } from '../users/users.service';
 
 export class FriendsService {
   constructor(
@@ -10,6 +11,7 @@ export class FriendsService {
     private usersRepository: Repository<User>,
     @InjectRepository(Friends)
     private friendsRepository: Repository<Friends>,
+    private readonly userService: UsersService
   ) {}
 
   async addFriends(payload: CreateFriendsDto): Promise<Friends> {
@@ -67,5 +69,9 @@ export class FriendsService {
     await this.friendsRepository.delete(f2);
 
     return [f1, f2];
+  }
+
+  async getJWTToken(authorization: string): Promise<string[] | null> {
+    return (await this.userService.decodeJWT(authorization));
   }
 }

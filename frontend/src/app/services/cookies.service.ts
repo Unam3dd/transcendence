@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TokenInterface } from '../interfaces/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,16 @@ export class CookiesService {
       const [key, value] = cookie.split('=');
       if (key === name) return (value);
     }
-    return ('');
+    return (null);
+  }
+
+  getToken(): TokenInterface | null {
+    if (this.getCookie('authorization') === null) return (null);
+
+    const [type, token] = this.getCookie('authorization')?.split(
+        this.getCookie('authorization')?.includes('%20') ? '%20' : ' '
+      ) ?? [];
+
+    return (<TokenInterface>{type: type, token: token});
   }
 }

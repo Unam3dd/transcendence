@@ -1,5 +1,3 @@
-import { Status } from "../enum/status.enum";
-
 export interface UserInterface {
     id: number;
     login?: string;
@@ -31,7 +29,6 @@ export interface UserInformation {
     id: number;
     login: string;
     nickName: string;
-    status: Status
 }
 
 export interface Message {
