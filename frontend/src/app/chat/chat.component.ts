@@ -14,7 +14,7 @@ import { OnInit } from '@angular/core';
 export class ChatComponent implements OnInit {
 
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService) {}
+    private readonly jwtService: JwtService){}
 
   ngOnInit() {
     const [ type, token] = this.cookieService.getCookie('authorization')?.split(
@@ -30,6 +30,11 @@ export class ChatComponent implements OnInit {
     const socket = io(WS_GATEWAY, { query: {"username": nickName} });
 
     socket.emit('message', 'hello world !');
+
+    const name: string = 'salut';
+    const test = { test: name, aurevoir: name}
+    console.log(test);
+    console.table(test);
 
     socket.on('response', (msg) => {
       const { sub, login, nickName } = JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
