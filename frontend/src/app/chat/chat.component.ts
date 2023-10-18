@@ -15,7 +15,6 @@ export class ChatComponent implements OnInit {
   constructor (private ws: WebsocketService) {}
 
   ngOnInit() {
-    console.log('hello chat !');
     const client: WsClient = this.ws.getClient();
 
     client.emit('message', 'hello chat !');

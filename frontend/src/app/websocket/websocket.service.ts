@@ -30,7 +30,7 @@ export class WebsocketService {
         return ;
       }
       
-      this.client = <Socket<DefaultEventsMap, DefaultEventsMap>>io(WS_GATEWAY);
+      this.client = <WsClient>io(WS_GATEWAY);
 
       // get client username from JWT token
       const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
