@@ -95,7 +95,7 @@ export class UsersController {
     const [header, payload, signature] = await this.usersService.decodeJWT(
       req.headers.authorization
     );
-    if (!header || !signature) return (res.status(HttpStatus.UNAUTHORIZED).send());
+    if (!header || !payload || !signature) return (res.status(HttpStatus.UNAUTHORIZED).send());
     const { sub } = JSON.parse(payload);
     return res.status(HttpStatus.OK).send(await this.usersService.findOne(sub));
   }
