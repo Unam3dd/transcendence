@@ -7,8 +7,6 @@ import { Status } from '../enum/status.enum';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
-import { Socket } from 'socket.io-client';
-import {DefaultEventsMap} from "@socket.io/component-emitter";
 import { WsClient } from './websocket.type';
 
 @Injectable({

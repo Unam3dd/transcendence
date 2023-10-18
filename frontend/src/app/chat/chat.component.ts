@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
 import { WebsocketService } from '../websocket/websocket.service';
-import { Socket } from 'socket.io-client';
-import { DefaultEventsMap } from '@socket.io/component-emitter';
 import { WsClient } from '../websocket/websocket.type';
 
 @Component({

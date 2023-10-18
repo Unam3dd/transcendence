@@ -43,7 +43,7 @@ function initializeWebSocket(ws: WebsocketService) {
     FooterComponent,
     ChatComponent,
     UpdateProfileComponent,
-    NotificationsComponen
+    NotificationsComponent
   ],
   imports: [
     BrowserModule,
