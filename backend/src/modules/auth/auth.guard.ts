@@ -30,6 +30,12 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(req: Request): string | undefined {
+    if (
+      !req.headers.authorization?.includes('%20') &&
+      !req.headers.authorization?.includes(' ')
+    )
+      return undefined;
+
     const [type, token] =
       req.headers.authorization?.split(
         req.headers.authorization?.includes('%20') ? '%20' : ' ',
