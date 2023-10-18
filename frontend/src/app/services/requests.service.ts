@@ -4,7 +4,7 @@ import {Observable, catchError, switchMap, throwError} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
-import { UserInterface } from '../interfaces/user.interface'
+import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 @Injectable({
@@ -109,6 +109,18 @@ export class RequestsService {
   
   async updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean) {
     console.log(firstname, lastname, nickname, email, a2f);
+  }
+
+  // Get sanitazed informations about one user
+  getUserInfo(userId: number) : Observable<UserSanitizeInterface>
+  {
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
+    const url:string = `${NESTJS_URL}/users/${userId}`;
+
+    return this.http.get<UserSanitizeInterface>(url, {headers: hdr}).pipe(catchError(this.handleError));
   }
 
 
