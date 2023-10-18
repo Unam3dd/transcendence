@@ -1,6 +1,5 @@
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -23,6 +22,15 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import {MatDialogModule} from "@angular/material/dialog";
 import { MatListModule } from '@angular/material/list';
+import { WebsocketModule } from './websocket/websocket.module';
+import { WebsocketService } from './websocket/websocket.service';
+
+function initializeWebSocket(ws: WebsocketService) {
+  return async () => {
+    ws.initializeWebsocketService();
+    return (ws);
+  }
+}
 
 @NgModule({
   declarations: [
@@ -34,8 +42,8 @@ import { MatListModule } from '@angular/material/list';
     ProfilePageComponent,
     FooterComponent,
     ChatComponent,
-    NotificationsComponent,
-    UpdateProfileComponent
+    UpdateProfileComponent,
+    NotificationsComponen
   ],
   imports: [
     BrowserModule,
@@ -48,11 +56,17 @@ import { MatListModule } from '@angular/material/list';
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatButtonModule,
+    WebsocketModule,
     MatSnackBarModule,
     MatIconModule,
     MatDialogModule
   ],
-  providers: [],
+  providers: [{
+    provide: APP_INITIALIZER,
+    useFactory: initializeWebSocket,
+    deps: [WebsocketService],
+    multi: true
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

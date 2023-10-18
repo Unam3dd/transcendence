@@ -15,8 +15,6 @@ export class ApiService {
       redirect_uri: process.env.REDIRECT_URI,
     };
 
-    console.log(payload);
-
     try {
       const { data } = await axios.post<TokensFrom42API>(
         process.env.AUTH_URL,
