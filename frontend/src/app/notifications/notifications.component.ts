@@ -27,12 +27,12 @@ export class NotificationsComponent{
   }
 
   acceptFriends() {
-    this.requestService.updateFriendsStatus(this.data.sender_id).subscribe();
+    this.requestService.updateFriendsStatus()?.subscribe();
     this.snackBarRef.dismiss();
   }
 
   rejectFriends() {
-    this.requestService.deleteFriends(this.data.sender_id).subscribe();
+    this.requestService.deleteFriends(this.data.sender_id)?.subscribe();
     this.snackBarRef.dismiss();
   }
 }
