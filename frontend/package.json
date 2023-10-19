@@ -40,6 +40,8 @@
     "@types/jasmine": "~4.3.0",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "5.62.0",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.0",
     "eslint": "^8.49.0",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.0",
@@ -47,6 +49,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "reflect-metadata": "^0.1.13",
     "socket.io-client": "^4.7.2",
     "typescript": "~5.1.3"
   }

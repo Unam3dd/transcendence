@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isJWT } from 'class-validator';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,18 @@ export class CookiesService {
       const [key, value] = cookie.split('=');
       if (key === name) return (value);
     }
-    return ('');
+    return (null);
+  }
+
+  getToken(): string | null {
+    const authorization = this.getCookie('authorization');
+
+    if (!authorization) return (null);
+
+    const [type, token] = decodeURI(authorization).split(' ') ?? [];
+
+      if (type !== 'Bearer' || !isJWT(token)) return (null);
+
+    return (token);
   }
 }

@@ -24,6 +24,7 @@ import {MatDialogModule} from "@angular/material/dialog";
 import { MatListModule } from '@angular/material/list';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
+import { FriendsComponent } from './friends/friends.component';
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -43,7 +44,8 @@ function initializeWebSocket(ws: WebsocketService) {
     FooterComponent,
     ChatComponent,
     UpdateProfileComponent,
-    NotificationsComponent
+    NotificationsComponent,
+    FriendsComponent
   ],
   imports: [
     BrowserModule,
