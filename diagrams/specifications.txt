@@ -87,3 +87,18 @@ SHOW Conversation
 SHOW MessageBox
 
 SHOW RoomUsers (icon + name + menu icon)
+
+
+
+=============================
+
+New version :
+
+Structure :
+
+1. GLOBAL CHAT BUTTON      | 3. Channel title
+                           |_______________________________________________________
+2. list of mp channel      |                     |
+ex player 2                | 4. Msg list         | 6. member list of active channel
+ex player 3                |                     |
+ex player 4                | 5. Msg InputBox     |

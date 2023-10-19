@@ -10,6 +10,7 @@
     "prettier": "^3.0.3"
   },
   "dependencies": {
+    "class-validator": "^0.14.0",
     "format": "^0.2.2",
     "lint": "^0.8.19"
   }
