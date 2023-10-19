@@ -105,15 +105,14 @@ export class RequestsService {
   }
 
   // Get sanitazed informations about one user
-  getUserInfo(userId: number) : Observable<UserSanitizeInterface>
-  {
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+  getUserInfo(userId: number) : Observable<UserSanitizeInterface> | null {
+    const token = this.cookieService.getToken();
 
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
-
-    const url:string = `${NESTJS_URL}/users/${userId}`;
-
-    return this.http.get<UserSanitizeInterface>(url, {headers: hdr}).pipe(catchError(this.handleError));
+    if (!token) return (null);
+  
+    return this.http.get<UserSanitizeInterface>(`${NESTJS_URL}/users/${userId}`, {headers: 
+      new HttpHeaders().append('authorization', `Bearer ${token}`)})
+      .pipe(catchError(this.handleError));
   }
 
 
