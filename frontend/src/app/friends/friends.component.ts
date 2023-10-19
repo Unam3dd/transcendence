@@ -50,6 +50,7 @@ export class FriendsComponent implements OnInit {
     user.showOpt = !user.showOpt;
   }
 
+  //approve a friend request, remove user from pending array then adding the user in the approved array
   approvedFriendsRequest(user: UserFriendsInfo) {
     this.requestsService.updateFriendsStatus(user.id).subscribe(() => {
       this.pendingFriends = this.pendingFriends.filter((element) => {
@@ -69,5 +70,4 @@ export class FriendsComponent implements OnInit {
     });
     user.showOpt = !user.showOpt;
   }
-  
 }
