@@ -6,7 +6,6 @@ import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
-import { TokenInterface } from '../interfaces/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -53,12 +52,12 @@ export class WebsocketService {
     }
 
     getUserInformation(): UserSanitizeInterface | null {
-      const Token: TokenInterface | null = this.cookieService.getToken();
+      const token: string | null = this.cookieService.getToken();
   
-      if (!Token || Token?.type != 'Bearer') return (null);
+      if (!token) return (null);
 
       // get client username from JWT token
-      const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(Token.token)[JWT_PAYLOAD]);
+      const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
       
       const AuthorUser: UserSanitizeInterface = {
         id: payloadJWT.sub,
