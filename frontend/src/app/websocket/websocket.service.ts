@@ -1,13 +1,12 @@
 import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
-import { JWTPayload } from '../interfaces/user.interface';
-import { UserInformation } from '../interfaces/user.interface';
-import { Status } from '../enum/status.enum';
+import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
+import { TokenInterface } from '../interfaces/token.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -19,28 +18,16 @@ export class WebsocketService {
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
 
-      const [ type, token] = this.cookieService.getCookie('authorization')?.split(
-        this.cookieService.getCookie('authorization')?.includes('%20') ? '%20' : ' '
-      ) ?? [];
-  
-      if (type != 'Bearer') {
-        console.error('You are not connected !');
+      const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
+
+      if (!AuthUser) {
+        console.error('You are not connected !')
         return ;
       }
       
       this.client = <WsClient>io(WS_GATEWAY);
 
-      // get client username from JWT token
-      const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
-      
-      const AuthorUser: UserInformation = {
-        id: payloadJWT.sub,
-        login: payloadJWT.login,
-        nickName: payloadJWT.nickName,
-        status: Status.ONLINE
-      }
-
-      this.client.emit('join', JSON.stringify(AuthorUser));
+      this.client.emit('join', JSON.stringify(AuthUser));
 
       this.client.on('newArrival', (msg: string) => {
         console.log(msg);
@@ -48,7 +35,6 @@ export class WebsocketService {
   
       this.client.on('disconnect', (msg: string) => {
         console.log(msg);
-        AuthorUser.status = Status.OFFLINE;
       })
     }
 
@@ -57,4 +43,30 @@ export class WebsocketService {
     }
 
     getClient(): WsClient { return (this.client); }
+
+    sendHelloChat(client: WsClient): void {
+      const user = this.getUserInformation()
+
+      if (!user) return ;
+
+      client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
+    }
+
+    getUserInformation(): UserSanitizeInterface | null {
+      const Token: TokenInterface | null = this.cookieService.getToken();
+  
+      if (!Token || Token?.type != 'Bearer') return (null);
+
+      // get client username from JWT token
+      const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(Token.token)[JWT_PAYLOAD]);
+      
+      const AuthorUser: UserSanitizeInterface = {
+        id: payloadJWT.sub,
+        login: payloadJWT.login,
+        nickName: payloadJWT.nickName,
+        avatar: payloadJWT.avatar
+      }
+
+      return (AuthorUser);
+    }
 }

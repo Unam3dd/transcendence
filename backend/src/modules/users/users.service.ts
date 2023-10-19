@@ -30,6 +30,7 @@ export class UsersService {
         id: u.id,
         login: u.login,
         nickName: u.nickName,
+        avatar: u.avatar,
       });
     });
 
@@ -48,6 +49,7 @@ export class UsersService {
       id: user.id,
       login: user.login,
       nickName: user.nickName,
+      avatar: user.avatar,
     };
   }
 
