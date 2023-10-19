@@ -104,62 +104,51 @@ export class RequestsService {
     console.log(firstname, lastname, nickname, email, a2f);
   }
 
-
   /* Friends Resquests */
 
-
   addFriends(targetId: number) {
-    // getting the request header
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const token = this.cookieService.getToken();
 
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+    if (!token) return ;
 
     const userId = this.getId(token);
 
-    // making the request
-    const url:string = `${NESTJS_URL}/friends/add`;
-
-    const addFriendsBody = { user1: userId, user2: targetId};
-
-    return this.http.post(url, addFriendsBody, {headers: hdr}).pipe(catchError(this.handleError));
+    return this.http.post(`${NESTJS_URL}/friends/add`, {
+      user1: userId, user2: targetId
+    }, {headers:
+      new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
   updateFriendsStatus(applicant: number) {
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const token = this.cookieService.getToken();
 
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+    if (!token) return ;
 
     const userId = this.getId(token);
 
-    const url:string = `${NESTJS_URL}/friends/update/${applicant}/${userId}`;
-
-    return this.http.patch(url, null, {headers: hdr}).pipe(catchError(this.handleError));
+    return this.http.patch(`${NESTJS_URL}/friends/update`, null, {headers: 
+      new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
-  listFriends(approved: boolean): Observable<Friends[]> {
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+  listFriends(approved: boolean): Observable<Friends[]> | undefined {
+    const token = this.cookieService.getToken();
 
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
-
-    const userId = this.getId(token);
+    if (!token) return ;
 
     //Setting request param, print all friends on false, print only approved friends on true
     const param = new HttpParams().set('approved', approved);
 
-    const url:string = `${NESTJS_URL}/friends/list/${userId}`;
-
-    return this.http.get<Friends[]>(url, {headers: hdr, params: param}).pipe(catchError(this.handleError));
+    return this.http.get<Friends[]>(`${NESTJS_URL}/friends/list/`, 
+    {headers: new HttpHeaders().append('authorization', `Bearer ${token}`),
+    params: param}).pipe(catchError(this.handleError));
   }
 
   deleteFriends(friendId: number) {
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const token = this.cookieService.getToken();
 
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+    if (!token) return ;
 
-    const userId = this.getId(token);
-
-    const url:string = `${NESTJS_URL}/friends/delete/${userId}/${friendId}`;
-
-    return this.http.delete(url, {headers: hdr}).pipe(catchError(this.handleError));
+    return this.http.delete(`${NESTJS_URL}/friends/delete/${friendId}`, {headers: 
+    new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 }
