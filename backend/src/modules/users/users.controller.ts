@@ -32,7 +32,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
-import { JWTPayload, UserSanitize } from 'src/interfaces/user.interfaces';
+import { UserSanitize } from 'src/interfaces/user.interfaces';
 import { User } from './entities/user.entity';
 import { AuthService } from '../auth/auth.service';
 import { JwtService } from '@nestjs/jwt';
@@ -131,25 +131,15 @@ export class UsersController {
   @ApiNoContentResponse({ description: 'User not found' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  async deleteUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Req() req: Request,
-    @Res() res: Response,
-  ) {
+  async deleteUser(@Req() req: Request, @Res() res: Response) {
     try {
-      const separator = req.headers.authorization?.includes('%20')
-        ? '%20'
-        : ' ';
+      const data = await this.usersService.decodeJWT(req.headers.authorization);
 
-      const [type, token] = req.headers.authorization?.split(separator);
+      if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 
-      if (type != 'Bearer') return res.status(401).send();
+      const { sub } = JSON.parse(data[1]);
 
-      const payload: JWTPayload = <JWTPayload>this.jwtService.decode(token);
-
-      if (id !== payload.sub) return res.status(401).send();
-
-      await this.usersService.deleteUser(id);
+      await this.usersService.deleteUser(sub);
       return res.status(HttpStatus.OK).send();
     } catch (e) {
       return res.status(HttpStatus.NO_CONTENT).send();

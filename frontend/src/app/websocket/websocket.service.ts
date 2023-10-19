@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
-import { JWTPayload } from '../interfaces/user.interface';
-import { UserInformation } from '../interfaces/user.interface';
+import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
@@ -19,7 +18,7 @@ export class WebsocketService {
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
 
-      const AuthUser: UserInformation | null = this.getUserInformation();
+      const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
       if (!AuthUser) {
         console.error('You are not connected !')
@@ -53,7 +52,7 @@ export class WebsocketService {
       client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
     }
 
-    getUserInformation(): UserInformation | null {
+    getUserInformation(): UserSanitizeInterface | null {
       const Token: TokenInterface | null = this.cookieService.getToken();
   
       if (!Token || Token?.type != 'Bearer') return (null);
@@ -61,10 +60,11 @@ export class WebsocketService {
       // get client username from JWT token
       const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(Token.token)[JWT_PAYLOAD]);
       
-      const AuthorUser: UserInformation = {
+      const AuthorUser: UserSanitizeInterface = {
         id: payloadJWT.sub,
         login: payloadJWT.login,
-        nickName: payloadJWT.nickName
+        nickName: payloadJWT.nickName,
+        avatar: payloadJWT.avatar
       }
 
       return (AuthorUser);
