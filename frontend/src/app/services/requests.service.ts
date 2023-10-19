@@ -104,6 +104,19 @@ export class RequestsService {
     console.log(firstname, lastname, nickname, email, a2f);
   }
 
+  // Get sanitazed informations about one user
+  getUserInfo(userId: number) : Observable<UserSanitizeInterface>
+  {
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
+    const url:string = `${NESTJS_URL}/users/${userId}`;
+
+    return this.http.get<UserSanitizeInterface>(url, {headers: hdr}).pipe(catchError(this.handleError));
+  }
+
+
   /* Friends Resquests */
 
   addFriends(targetId: number) {
