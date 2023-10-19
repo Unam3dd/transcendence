@@ -1,30 +1,41 @@
 <section class="friends">
     <div *ngIf="showContent">
 
-        <p>Pending Friends:</p>
-        <div *ngFor="let user of pendingFriends"> 
+        <content *ngIf="pendingFriends.length !== 0" >
+            <h5>Pending Friends:</h5>
+            <div *ngFor="let user of pendingFriends"> 
 
-            <div (click)="togglePendingOption()" (keyup)="togglePendingOption()" tabindex="0">{{user.nickName}}</div>
+                <div (click)="toggleOption(user)" (keyup)="toggleOption(user)" tabindex="0" class="userInfo">
+                    <img class="avatar" [src]="user.avatar" alt="avatar picture"> <p class="username">{{user.nickName}}</p>
+                </div>
 
-            <div *ngIf="showPendingOptions">
-                <!-- Additional information or options -->
-                <button (click)="approvedFriendsRequest(user)">Approve Friends</button>
-                <button (click)="deleteFriends(user)">Delete Friends</button>
-                <!-- Add other options as needed -->
-              </div>
-        </div>
+                <div *ngIf="user.showOpt" class="option">
+                    <!-- Additional information or options -->
+                    <div>
+                        <button (click)="approvedFriendsRequest(user)">Approve Friends</button>
+                    </div>
+                    <div>
+                        <button (click)="deleteFriends(user)">Delete Friends</button>
+                    </div>
+                    <!-- Add other options as needed -->
+                </div>
+            </div>
+        </content>
+        <content>
+            <h5>Approved Friends:</h5>
+            <div *ngFor="let user of approvedFriends">
 
-        <p>Approved Friends:</p>
-        <div *ngFor="let user of approvedFriends">
+                <div (click)="toggleOption(user)" (keyup)="toggleOption(user)" tabindex="0" class="userInfo">
+                    <img class="avatar" [src]="user.avatar" alt="avatar picture"> <p class="username">{{user.nickName}}</p>
+                </div>
 
-            <div (click)="toggleOption()" (keyup)="togglePendingOption()" tabindex="0" >{{user.nickName}}</div>
+                <div *ngIf="user.showOpt" class="option">
 
-            <div *ngIf="showOptions">
+                    <button (click)="deleteFriends(user)">Delete Friends</button>
 
-                <button (click)="deleteFriends(user)">Delete Friends</button>
-
-              </div>
-        </div>
+                </div>
+            </div>
+        </content>
 
     </div>
     <button (click)="toggleContent()">Toggle Content</button>

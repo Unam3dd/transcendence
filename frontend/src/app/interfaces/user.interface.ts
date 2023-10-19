@@ -37,3 +37,7 @@ export interface Message {
 export interface PrivateMessage extends Message {
     recipient: UserSanitizeInterface;
 }
+
+export interface UserFriendsInfo extends UserSanitizeInterface {
+    showOpt: boolean;
+}
