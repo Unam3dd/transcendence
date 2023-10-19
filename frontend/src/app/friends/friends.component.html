@@ -1,13 +1,31 @@
 <section class="friends">
     <div *ngIf="showContent">
+
         <p>Pending Friends:</p>
         <div *ngFor="let user of pendingFriends"> 
-            {{user.nickName}}
+
+            <div (click)="togglePendingOption()" (keyup)="togglePendingOption()" tabindex="0">{{user.nickName}}</div>
+
+            <div *ngIf="showPendingOptions">
+                <!-- Additional information or options -->
+                <button (click)="approvedFriendsRequest(user)">Approve Friends</button>
+                <button (click)="deleteFriends(user)">Delete Friends</button>
+                <!-- Add other options as needed -->
+              </div>
         </div>
+
         <p>Approved Friends:</p>
-        <div *ngFor="let user of approvedFriends"> 
-            {{user.nickName}}
-        </div> 
+        <div *ngFor="let user of approvedFriends">
+
+            <div (click)="toggleOption()" (keyup)="togglePendingOption()" tabindex="0" >{{user.nickName}}</div>
+
+            <div *ngIf="showOptions">
+
+                <button (click)="deleteFriends(user)">Delete Friends</button>
+
+              </div>
+        </div>
+
     </div>
     <button (click)="toggleContent()">Toggle Content</button>
 </section>
