@@ -93,9 +93,10 @@ export class UsersController {
   @ApiInternalServerErrorResponse({ description: 'Internal server error' })
   async GetMyInformation(@Req() req: Request, @Res() res: Response) {
     const [header, payload, signature] = await this.usersService.decodeJWT(
-      req.headers.authorization
+      req.headers.authorization,
     );
-    if (!header || !payload || !signature) return (res.status(HttpStatus.UNAUTHORIZED).send());
+    if (!header || !payload || !signature)
+      return res.status(HttpStatus.UNAUTHORIZED).send();
     const { sub } = JSON.parse(payload);
     return res.status(HttpStatus.OK).send(await this.usersService.findOne(sub));
   }

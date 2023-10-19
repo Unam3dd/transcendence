@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "@angular-devkit/architect": "^0.1602.6",
+    "@angular-eslint/builder": "^16.2.0",
+    "@angular-eslint/eslint-plugin": "^16.2.0",
+    "@angular-eslint/eslint-plugin-template": "^16.2.0",
+    "@angular-eslint/template-parser": "^16.2.0",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "prettier": "^3.0.3"
+  },
+  "dependencies": {
+    "format": "^0.2.2",
+    "lint": "^0.8.19"
+  }
+}
