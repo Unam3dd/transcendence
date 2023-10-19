@@ -28,7 +28,7 @@ export class EventsGateway {
   newArrival(@MessageBody() msg: string) {
     try {
       const { login } = JSON.parse(msg);
-      this.server.emit('newArrival', `${login} has joined the transcendence !`);
+      this.server.emit('newArrival', `${login} has join the transcendence !`);
     } catch (e) {
       console.error(e);
     }
@@ -56,6 +56,11 @@ export class EventsGateway {
 
     if (!client.disconnected) client.disconnect();
     this.server.emit('newDepart', `${login} has just left the transcendence !`);
+  }
+
+  @SubscribeMessage('newJoinChat')
+  JoinChat(@MessageBody() body: string) {
+    this.server.emit('newJoinChat', body);
   }
 
   //Detect clients disconnection

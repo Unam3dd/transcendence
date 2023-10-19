@@ -50,7 +50,7 @@ export class HomePageComponent implements OnInit {
   updateNickname() {
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
-    this.requestsService.updateUserHomeData(newNickname, newEmail).subscribe((data) => {
+    this.requestsService.updateUserHomeData(newNickname, newEmail)?.subscribe((data) => {
 
       const { token } = JSON.parse(JSON.stringify(data));
 
