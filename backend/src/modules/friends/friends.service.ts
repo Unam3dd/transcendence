@@ -11,7 +11,7 @@ export class FriendsService {
     private usersRepository: Repository<User>,
     @InjectRepository(Friends)
     private friendsRepository: Repository<Friends>,
-    private readonly userService: UsersService
+    private readonly userService: UsersService,
   ) {}
 
   async addFriends(payload: CreateFriendsDto): Promise<Friends> {
@@ -72,6 +72,6 @@ export class FriendsService {
   }
 
   async getJWTToken(authorization: string): Promise<string[] | null> {
-    return (await this.userService.decodeJWT(authorization));
+    return await this.userService.decodeJWT(authorization);
   }
 }
