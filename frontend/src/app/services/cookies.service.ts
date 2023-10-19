@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { TokenInterface } from '../interfaces/token.interface';
+import { isJWT } from 'class-validator';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,15 @@ export class CookiesService {
     return (null);
   }
 
-  getToken(): TokenInterface | null {
-    if (this.getCookie('authorization') === null) return (null);
+  getToken(): string | null {
+    const authorization = this.getCookie('authorization');
 
-    const [type, token] = this.getCookie('authorization')?.split(
-        this.getCookie('authorization')?.includes('%20') ? '%20' : ' '
-      ) ?? [];
+    if (!authorization) return (null);
 
-    return (<TokenInterface>{type: type, token: token});
+    const [type, token] = decodeURI(authorization).split(' ') ?? [];
+
+      if (type !== 'Bearer' || !isJWT(token)) return (null);
+
+    return (token);
   }
 }
