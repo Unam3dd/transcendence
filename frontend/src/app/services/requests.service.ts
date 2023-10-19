@@ -79,7 +79,7 @@ export class RequestsService {
     const url = `${NESTJS_URL}/users/me`;
 
     return (this.http.get<UserInterface>(url, { 
-      headers: new HttpHeaders().append('authorization', JWT_TOKEN) }));
+      headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }));
   }
 
   //Change user nickname

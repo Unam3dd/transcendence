@@ -20,7 +20,7 @@ export class FriendsComponent implements OnInit {
 
   ngOnInit() {
     //Get all friends, then stocks pending / approved friends in two diffrents arrays
-    this.requestsService.listFriends(false).subscribe((friends) => {
+    this.requestsService.listFriends(false)?.subscribe((friends) => {
       this.friendsList = friends;
       this.createList();
     });
@@ -30,12 +30,12 @@ export class FriendsComponent implements OnInit {
   createList() {
     this.friendsList.forEach((element) => {
       if (element.status === false) {
-        this.requestsService.getUserInfo(element.user2).subscribe((user) => {
+        this.requestsService.getUserInfo(element.user2)?.subscribe((user) => {
           this.pendingFriends.push(user as UserFriendsInfo);
         });
       }
       else {
-        this.requestsService.getUserInfo(element.user2).subscribe((user) => {
+        this.requestsService.getUserInfo(element.user2)?.subscribe((user) => {
           this.approvedFriends.push(user as UserFriendsInfo);
         });
       }
@@ -52,7 +52,7 @@ export class FriendsComponent implements OnInit {
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
   approvedFriendsRequest(user: UserFriendsInfo) {
-    this.requestsService.updateFriendsStatus(user.id).subscribe(() => {
+    this.requestsService.updateFriendsStatus()?.subscribe(() => {
       this.pendingFriends = this.pendingFriends.filter((element) => {
         return element !== user
       });
@@ -63,7 +63,7 @@ export class FriendsComponent implements OnInit {
 
   //delete a friend in the friends lists, then refresh the array of friends with the removed element
   deleteFriends(user: UserFriendsInfo) {
-    this.requestsService.deleteFriends(user.id).subscribe(() => {
+    this.requestsService.deleteFriends(user.id)?.subscribe(() => {
       this.approvedFriends = this.approvedFriends.filter((element) => {
         return element !== user
       });
