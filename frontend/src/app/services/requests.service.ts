@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from "@angular/common/http";
-import {Observable, catchError, switchMap, throwError} from "rxjs";
+import {Observable, catchError, switchMap, throwError, Subscription} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
@@ -11,6 +11,9 @@ import { Friends } from '../interfaces/friends.interface';
   providedIn: 'root'
 })
 export class RequestsService {
+
+  //Used for updateUserDatas
+  private updateSubscription: Subscription | undefined;
 
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
@@ -106,9 +109,44 @@ export class RequestsService {
       return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers: hdr});
     }
   }
-  
+
   async updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean) {
-    console.log(firstname, lastname, nickname, email, a2f);
+
+    //unsubscribe for avoid memory leaks
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
+    }
+
+    //Recovers Cookie and gives authorization
+    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+
+    //Recovers ID
+    const userId = this.getId(token);
+
+    //Recovers header
+    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
+
+    //Prepare object for the http update
+    const  update: UserInterface = { id: userId! };
+
+    //Check if the param is empty, if not, change the value
+    if (firstname) {
+      update.firstName = firstname;
+    }
+    if (lastname) {
+      update.lastName = lastname;
+    }
+    if (nickname) {
+      update.nickName = nickname;
+    }
+    if (email) {
+      update.email = email;
+    }
+    update.a2f = a2f;
+
+    if (Object.keys(update).length > 1) {
+      this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update, {headers: hdr}).subscribe();
+    }
   }
 
 
