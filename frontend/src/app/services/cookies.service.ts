@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { TokenInterface } from '../interfaces/token.interface';
 import { isJWT } from 'class-validator';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from "@angular/common/http";
-import {Observable, catchError, switchMap, throwError} from "rxjs";
+import {Observable, catchError, throwError} from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
@@ -119,12 +119,10 @@ export class RequestsService {
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
-  updateFriendsStatus(applicant: number) {
+  updateFriendsStatus() {
     const token = this.cookieService.getToken();
 
     if (!token) return ;
-
-    const userId = this.getId(token);
 
     return this.http.patch(`${NESTJS_URL}/friends/update`, null, {headers: 
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
