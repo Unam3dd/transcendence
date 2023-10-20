@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from "@angular/common/http";
-import {Observable, catchError, throwError, Subscription} from "rxjs";
+import {Observable, catchError, throwError, Subscription } from "rxjs";
 
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
@@ -112,35 +112,29 @@ export class RequestsService {
     }
 
     //Recovers Cookie and gives authorization
-    const [type, token] = this.cookieService.getCookie('authorization')?.split('%20') ?? [];
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
 
     //Recovers ID
     const userId = this.getId(token);
 
-    //Recovers header
-    const hdr = new HttpHeaders().append('authorization', `${type} ${token}`);
-
     //Prepare object for the http update
-    const  update: UserInterface = { id: userId! };
+    const  update: UserInterface = { 
+      id: userId!, 
+      firstName: firstname ? firstname : '',
+      lastName: lastname ? lastname : '',
+      nickName: nickname ? nickname : '',
+      email: email ? email : '',
+      a2f: a2f
+    };
+    
+    this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
+    {
+      headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
+    }).subscribe();
 
-    //Check if the param is empty, if not, change the value
-    if (firstname) {
-      update.firstName = firstname;
-    }
-    if (lastname) {
-      update.lastName = lastname;
-    }
-    if (nickname) {
-      update.nickName = nickname;
-    }
-    if (email) {
-      update.email = email;
-    }
-    update.a2f = a2f;
-
-    if (Object.keys(update).length > 1) {
-      this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update, {headers: hdr}).subscribe();
-    }
+    return (this.updateSubscription);
   }
 
   // Get sanitazed informations about one user
