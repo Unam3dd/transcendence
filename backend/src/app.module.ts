@@ -10,6 +10,7 @@ import { UsersController } from './modules/users/users.controller';
 import { AuthController } from './modules/auth/auth.controller';
 import { GatewayModule } from './gateway/events.module';
 import { FriendsModule } from './modules/friends/friends.module';
+import { BlockModule } from './modules/block/block.module';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ dotenv.config();
     LoggerModule,
     GatewayModule,
     FriendsModule,
+    BlockModule,
   ],
   controllers: [],
   providers: [],
