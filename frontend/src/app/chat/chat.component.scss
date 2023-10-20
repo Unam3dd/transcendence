@@ -1,7 +1,6 @@
 
 // #rooms-list {
 //   display: inline-block;
-//   background-color: yellow;
 //   width: 64px;
 //   height: 100%;
 // }
@@ -20,52 +19,65 @@
 //   height: 100%;
 // }
 
-.column {
-  width: 100vw;
-  height: 85vh;
+.global {
+  // width: calc(100vw);
+  // height: calc(85vh);
+  background-color: blue;  
 }
 
-// .channel-list {
+.left-column {
+  width: 50px;
+  // height: calc(85vh);
+  background-color: yellow;
+}
 
-// }
+.right-column {
+  width: 50px;
+  // height: calc(85vh);
+  background-color: orange;
+}
 
-// .channel {
+.channel-list {
+  background-color: #ff23aa;
+}
 
-// }
+.channel {
+  background-color: #bb33bb;
+}
 
-// .channel-title {
+.channel-title {
+  background-color: #30ff30;
+}
 
-// }
+.conversation-column {
+  background-color: green;
+}
 
-// .conversation-column {
+.conversation {
+  background-color: #404060;
+}
 
-// }
+.messages {
+  background-color: #707070;
+}
 
-// .conversation {
+.message {
+  background-color: #909090;
+}
 
-// }
+.send-message {
+  background-color: #FFAAAA;
+}
 
-// .messages {
+.members {
+  background-color: #00FFFF;
+}
 
-// }
+.users {
+  background-color: #DDBB40;
+}
 
-// .message {
-
-// }
-
-// .send-message {
-
-// }
-
-// .members {
-
-// }
-
-// .users {
-
-// }
-
-// .user {
-
-// }
+.user {
+  background-color: #154080;
+}
 
