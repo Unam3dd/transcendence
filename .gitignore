@@ -1,3 +1,4 @@
+.env
 *.tar.gz
 volumes
 .vscode
