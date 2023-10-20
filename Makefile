@@ -11,6 +11,8 @@ all:
 	@echo "	format                 \t| reformat NestJS backend"
 	@echo "	re                     \t| stop + down + rm + lint + up_dev"
 	@echo "	snyk_<backend/frontend>\t| Check Vulnerabilities backend/frontend"
+	@echo " update				   \t| Update Package.JSON backend/frontend"
+	@echo " update_interactive     \t| Update Package.JSON with interactive mode backend/frontend"
 
 up: lint format front_lint
 	@docker compose -f docker-compose.yml up --build
