@@ -1,7 +1,5 @@
 #!/bin/sh
 
-echo "$HOSTNAME hello world"
-
 chmod -R 777 /project/
 npm install
 exec ${@}

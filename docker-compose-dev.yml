@@ -34,8 +34,6 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_INITDB_ARGS: --no-locale --encoding=UTF-8
       PG_DATA: /var/lib/postgresql/data
-    depends_on:
-      - updater
     volumes:
       - type: bind
         source: ./volumes/db

@@ -75,7 +75,18 @@ update_backend:
 	@cd backend && ncu && ncu -u && npm install --save
 
 update_frontend:
-	@cd frontend && ncu && ncu -u && npm install --save --legacy-peer-deps
+	@cd frontend && ncu && ncu -u && npm install --save
+
+update_manualy:
+	@cd frontend && npm install --save --legacy-peer-deps
+
+update_interactive_frontend:
+	@cd frontend && ncu -i --format group && npm install --save --legacy-peer-deps
+
+update_interactive_backend:
+	@cd backend && ncu -i --format group && npm install --save
+
+update_interactive: update_interactive_frontend update_interactive_backend
 
 update: update_backend update_frontend
 
