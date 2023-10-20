@@ -68,4 +68,15 @@ snyk_frontend:
 	@docker compose -f ./snyk.yaml stop
 	@docker compose -f ./snyk.yaml down
 
+ncu:
+	@npm install -g npm-check-updates
+
+update_backend:
+	@cd backend && ncu && ncu -u && npm install --save
+
+update_frontend:
+	@cd frontend && ncu && ncu -u && npm install --save --legacy-peer-deps
+
+update: update_backend update_frontend
+
 .PHONY: all dev stop down build build_dev lint format test re snyk
