@@ -25,6 +25,7 @@ import { MatListModule } from '@angular/material/list';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
+import { ChatPageComponent } from './chat-page/chat-page.component';
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -45,7 +46,8 @@ function initializeWebSocket(ws: WebsocketService) {
     ChatComponent,
     UpdateProfileComponent,
     NotificationsComponent,
-    FriendsComponent
+    FriendsComponent,
+    ChatPageComponent
   ],
   imports: [
     BrowserModule,

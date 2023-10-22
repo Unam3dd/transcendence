@@ -1,62 +1,25 @@
 .global {
-  display: flex;
-  width: 100vw;
+  width: 100%;
   // header height is 80px - footer height is 50px
   height: calc(100vh - 80px - 50px);
   background-color: blue;  
 }
 
-
-
-.left-column {
-  height: 100%;
-  width: 15%;
-  min-width: 200px;
-  background-color: yellow;
-}
-
-.channel-list {
-  background-color: #ff23aa;
-}
-
-.channel {
-  background-color: #bb33bb;
-}
-
-
-
-.right-column {
-  height: 100%;
-  width: 85%;
-  background-color: orange;
-}
-
-.channel-title {
+.title {
   height: 50px;
   width: 100%;
   background-color: #30ff30;
 }
 
-.channel-content {
-  display: flex;
-  width: 100%;
-  // channel title height is 50px
-  height: calc(100% - 50px);
-  background-color: #30ffe3;
-}
-
-.conversation-column {
-  height: 100%;
-  width: 80%;
-  background-color: green;
-}
-
 .conversation {
-  height: calc(100% - 80px);
+  // title height is 50px
+  height: calc(100% - 50px);
   background-color: #404060;
 }
 
 .messages {
+  // send-message height is 80px
+  height: calc(100% - 80px);
   background-color: #707070;
 }
 
@@ -68,20 +31,3 @@
   min-height: 80px;
   background-color: #FFAAAA;
 }
-
-.members {
-  height: 100%;
-  width: 20%;
-  min-width: 200px;
-  background-color: #00FFFF;
-}
-
-.users {
-  background-color: #DDBB40;
-}
-
-.user {
-  background-color: #154080;
-}
-
-
