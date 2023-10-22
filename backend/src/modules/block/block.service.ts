@@ -18,9 +18,9 @@ export class BlockService {
     return await this.blockRepository.save({ ...payload });
   }
 
-  async findBlock(id: number, targetId: number): Promise<Block> {
-    return await this.blockRepository.findOne({
-      where: { user1: id, user2: targetId },
+  async listBlock(id: number): Promise<Block[]> {
+    return await this.blockRepository.find({
+      where: { user1: id },
     });
   }
 

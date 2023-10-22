@@ -21,26 +21,21 @@ export class BlockController {
 
   @Post('/add/')
   async add_block(@Body() body: CreateBlockDto, @Res() res: Response) {
-    console.log('heho0');
     await this.blockService.addBlock(body);
     res.status(HttpStatus.OK).send();
   }
 
-  @Get('/exists/:id')
-  async checkIfBlocked(
-    @Param('id', ParseIntPipe) targetId: number,
-    @Req() req: Request,
-    @Res() res: Response,
-  ): Promise<boolean> {
+  @Get('/list/')
+  async checkIfBlocked(@Req() req: Request, @Res() res: Response) {
     const data = await this.blockService.getJWTToken(req.headers.authorization);
 
     if (!data) res.status(HttpStatus.UNAUTHORIZED).send();
 
     const { sub } = JSON.parse(data[1]);
 
-    if (await this.blockService.findBlock(sub, targetId)) return true;
-
-    return false;
+    return res
+      .status(HttpStatus.OK)
+      .send(await this.blockService.listBlock(sub));
   }
 
   @Delete('/delete/:id')
