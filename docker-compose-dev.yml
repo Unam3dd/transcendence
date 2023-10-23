@@ -109,6 +109,7 @@ services:
         target: /project/
         bind:
           create_host_path: true
+      - ./.env:/project/.env
     depends_on:
       postgresql:
         condition: service_healthy

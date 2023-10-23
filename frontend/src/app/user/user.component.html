@@ -1,0 +1,14 @@
+<!-- If user doesn't exist show an error-->
+<section *ngIf="user.login">
+    <p>No user exist for this id</p>
+</section>
+
+<!-- Else show the user information -->
+<section *ngIf="user.login">
+    <img class="avatar" [src]="user.avatar" alt="avatar picture">
+    <p>Login: {{user.login}}</p>
+    <p>Nickname: {{user.nickName}}</p>
+    <section>
+        <a href="#">Show Match History Component</a>
+    </section>
+</section>

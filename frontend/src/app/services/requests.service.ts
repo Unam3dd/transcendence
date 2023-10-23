@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from "@angular/common/http";
-import {Observable, catchError, throwError} from "rxjs";
+import {Observable, catchError, throwError, Subscription } from "rxjs";
+
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
@@ -12,6 +13,9 @@ import { Friends } from '../interfaces/friends.interface';
   providedIn: 'root'
 })
 export class RequestsService {
+
+  //Used for updateUserDatas
+  private updateSubscription: Subscription | undefined;
 
   constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
 
@@ -66,7 +70,7 @@ export class RequestsService {
     const userId = this.getId(token);
 
     //Return of data recovery
-    return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers: 
+    return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers:
       new HttpHeaders().append('authorization', token) });
   }
 
@@ -78,7 +82,7 @@ export class RequestsService {
 
     const url = `${NESTJS_URL}/users/me`;
 
-    return (this.http.get<UserInterface>(url, { 
+    return (this.http.get<UserInterface>(url, {
       headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }));
   }
 
@@ -95,13 +99,42 @@ export class RequestsService {
         return this.updateUserHomeData(login, email);
     } else {
       const updateData = {id: id, nickName: newNickname, email: email};
-      return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers: 
+      return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)});
     }
   }
-  
+
   async updateUserDatas(firstname: string, lastname: string, nickname: string, email: string, a2f: boolean) {
-    console.log(firstname, lastname, nickname, email, a2f);
+
+    //unsubscribe for avoid memory leaks
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
+    }
+
+    //Recovers Cookie and gives authorization
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
+
+    //Recovers ID
+    const userId = this.getId(token);
+
+    //Prepare object for the http update
+    const  update: UserInterface = { 
+      id: userId!, 
+      firstName: firstname ? firstname : '',
+      lastName: lastname ? lastname : '',
+      nickName: nickname ? nickname : '',
+      email: email ? email : '',
+      a2f: a2f
+    };
+    
+    this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
+    {
+      headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
+    }).subscribe();
+
+    return (this.updateSubscription);
   }
 
   // Get sanitazed informations about one user
@@ -109,8 +142,8 @@ export class RequestsService {
     const token = this.cookieService.getToken();
 
     if (!token) return (null);
-  
-    return this.http.get<UserSanitizeInterface>(`${NESTJS_URL}/users/${userId}`, {headers: 
+
+    return this.http.get<UserSanitizeInterface>(`${NESTJS_URL}/users/${userId}`, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)})
       .pipe(catchError(this.handleError));
   }
@@ -136,7 +169,7 @@ export class RequestsService {
 
     if (!token) return ;
 
-    return this.http.patch(`${NESTJS_URL}/friends/update`, null, {headers: 
+    return this.http.patch(`${NESTJS_URL}/friends/update`, null, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
@@ -148,7 +181,7 @@ export class RequestsService {
     //Setting request param, print all friends on false, print only approved friends on true
     const param = new HttpParams().set('approved', approved);
 
-    return this.http.get<Friends[]>(`${NESTJS_URL}/friends/list/`, 
+    return this.http.get<Friends[]>(`${NESTJS_URL}/friends/list/`,
     {headers: new HttpHeaders().append('authorization', `Bearer ${token}`),
     params: param}).pipe(catchError(this.handleError));
   }
@@ -158,7 +191,7 @@ export class RequestsService {
 
     if (!token) return ;
 
-    return this.http.delete(`${NESTJS_URL}/friends/delete/${friendId}`, {headers: 
+    return this.http.delete(`${NESTJS_URL}/friends/delete/${friendId}`, {headers:
     new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 }
