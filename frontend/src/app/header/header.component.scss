@@ -1,9 +1,12 @@
 header {
   background-color: #232323;
-  padding: 10px;
+  height: 80px;
 }
 
 h1 {
+  position: relative;
+  top: 20px;
   text-align: center;
   color: white;
+  margin: 0;
 }

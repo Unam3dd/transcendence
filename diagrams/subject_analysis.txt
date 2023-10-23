@@ -1,0 +1,95 @@
+Subjects analysis :
+
+{ MAJ for Major Module }
+{ Min for Minor Module }
+
+Tech :
+- BackEnd (optional) : Ruby (or Django. 1 MAJ)
+- Database (optional) : (or fully use PostgresSQL. 1 Min)
+- FrontEnd : JavaScript vanilla (or a framework, with Bootstrap toolkit. 1 Min)
+
+Spec :
+- single page application
+- browser buttons backward and forward must work
+- compatible latest stable chrome version
+- no errors, no warning allowed
+- everything must be ok by only one Docker command (!)
+
+Game :
+- 3 ways to do it : JavaScript vanilla, or the same FrontEnd Tech, or see Graphics module
+- 1972 Pong-like for game mechanics
+- 2 players on 1 keyboard mode (or see Remote players module)
+- tournament mode
+    > registration system by aliases (or see Standard User Management module)
+    > matchmaking system
+    > next fight announcement
+- rules are always the same for all players, even AI
+
+Security :
+- Passwords in database have to be hashed before storage
+- No SQL injections/XSS allowed
+- https connections (use of wss instead of ws...)
+- strong password hashing algorithm
+- no API keys publicly in the repo
+
+Modules:
+- 2 Min = 1 MAJ
+- 7 EqMAJ are mandatory
+- Bonus reward : 1 MAJ = 10 points, 1 Min = 5 points
+
+- Overview :
+
+[vote] { put your initial on .... to vote (ex : CNSZ , .NS. , C... ) }
+
+        > Web
+[...Z]      MAJ: Use a Framework as backend.
+[...Z]          Min: Use a front-end framework or toolkit.
+[...Z]          Min: Use a database for the backend.
+[...Z]      MAJ: Store the score of a tournament in the Blockchain.
+        > User Management
+[...Z]      MAJ: Standard user management, authentication, users across tournaments.
+[....]      MAJ: Implementing a remote authentication.
+        > Gameplay and user experience
+[...Z]      MAJ: Remote players
+[...Z]      MAJ: Multiplayers (more than 2 in the same game).
+[....]      MAJ: Add Another Game with User History and Matchmaking.
+[....]          Min: Game Customization Options.
+[...Z]      MAJ: Live chat.
+        > IA-Algo
+[....]      MAJ: Introduce an AI Opponent.
+[...Z]          Min: User and Game Stats Dashboards
+        > Cybersecurity
+[....]      MAJ: Implement WAF/ModSecurity with Hardened Configuration and HashiCorp Vault for Secrets Management.
+[....]          Min: GDPR Compliance Options with User Anonymization, Local Data Management, and Account Deletion.
+[...Z]      MAJ: Implement Two-Factor Authentication (2FA) and JWT.
+        > Devops
+[....]      MAJ: Infrastructure Setup for Log Management.
+[....]          Min: Monitoring system.
+[...Z]      MAJ: Designing the Backend as Microservices.
+        > Graphics
+[....]      MAJ: Use of advanced 3D techniques.
+        > Accessibility
+[....]          Min: Support on all devices.
+[....]          Min: Expanding Browser Compatibility.
+[...Z]          Min: Multiple language supports.
+[...Z]          Min: Add accessibility for Visually Impaired Users.
+[...Z]          Min: Server-Side Rendering (SSR) Integration.
+        > Object oriented
+[....]      MAJ: Replacing Basic Pong with Server-Side Pong and Implementing an API.
+[....]      MAJ: Enabling Pong Gameplay via CLI against Web Users with API Integration.
+        > Total : 16 MAJ + 11 Min (= ~21 MAJ)
+
+Please, make your own votes.
+Keep in mind these key points to make better choices. A better module is a mix of :
+    - an opportunity to learn new things, even more if companies are desperately looking for them
+    - time-efficiency
+    - personal dispositions
+    - suitability with other parts of the project
+    - fun
+
+The idea is to shape the project as it fits to all of us.
+
+Once the votes done, let's go for an easy repartition of the work.
+It will be easier to work on modules just like we worked on stand-alone projects, just like we did before.
+And if someone have done all of his contract, he can work on more free-modules during this time.
+

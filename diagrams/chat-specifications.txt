@@ -1,0 +1,28 @@
+Subject statements :
+
+You have to create a chat for your users in this module:
+    - The user should be able to send direct messages to other users.
+    - The user should be able to block other users. This way, they will see no more messages from the account they blocked.
+    - The user should be able to invite other users to play a Pong game through the chat interface.
+    - The tournament system should be able to warn users expected for the next game.
+    - The user should be able to access other players profiles through the chat interface.
+
+----------------------
+
+short :
+
+- block other users
+- send direct messages
+- invite other users to play a Pong game
+- access other players profiles
+- (once game ready : The tournament system should be able to warn users expected for the next game)
+- (nothing is said for friends)
+
+----------------------
+
+Database structure needed :
+
+User has a list of blocked people.
+User has a list of conversations he had with a particular user.
+Each conversation points to a table which stock for each message the timestamp, the emitter, the message.
+
