@@ -27,7 +27,7 @@ export class NotificationsComponent{
   }
 
   acceptFriends() {
-    this.requestService.updateFriendsStatus()?.subscribe();
+    this.requestService.updateFriendsStatus(this.data.sender_id)?.subscribe();
     this.snackBarRef.dismiss();
   }
 

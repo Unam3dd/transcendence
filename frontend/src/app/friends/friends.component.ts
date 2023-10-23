@@ -52,7 +52,7 @@ export class FriendsComponent implements OnInit {
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
   approvedFriendsRequest(user: UserFriendsInfo) {
-    this.requestsService.updateFriendsStatus()?.subscribe(() => {
+    this.requestsService.updateFriendsStatus(user.id)?.subscribe(() => {
       this.pendingFriends = this.pendingFriends.filter((element) => {
         return element !== user
       });
@@ -69,5 +69,16 @@ export class FriendsComponent implements OnInit {
       });
     });
     user.showOpt = !user.showOpt;
+  }
+
+  blockFriends(user: UserFriendsInfo) {
+    this.requestsService.blockUser(user.id)?.subscribe(() => {
+      this.approvedFriends = this.approvedFriends.filter((element) => {
+        return element !== user
+      });
+      this.pendingFriends = this.pendingFriends.filter((element) => {
+        return element !== user
+      });
+    });
   }
 }

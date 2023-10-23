@@ -17,11 +17,14 @@
                     <div>
                         <button (click)="deleteFriends(user)">Delete Friends</button>
                     </div>
+                    <div>
+                        <button (click)="blockFriends(user)">Block Friends</button>
+                    </div>
                     <!-- Add other options as needed -->
                 </div>
             </div>
         </content>
-        <content>
+        <content *ngIf="approvedFriends.length !== 0">
             <h5>Approved Friends:</h5>
             <div *ngFor="let user of approvedFriends">
 
@@ -31,10 +34,19 @@
 
                 <div *ngIf="user.showOpt" class="option">
 
-                    <button (click)="deleteFriends(user)">Delete Friends</button>
+                    <div>
+                        <button (click)="deleteFriends(user)">Delete Friends</button>
+                    </div>
+                    <div>
+                        <button (click)="blockFriends(user)">Block Friends</button>
+                    </div>
 
                 </div>
             </div>
+        </content>
+
+        <content *ngIf="approvedFriends.length === 0 && pendingFriends.length === 0">
+           <p>You have no friends! :(</p>
         </content>
 
     </div>
