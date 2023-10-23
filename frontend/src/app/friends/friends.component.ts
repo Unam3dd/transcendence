@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
 import { Friends } from '../interfaces/friends.interface';
 import { UserFriendsInfo } from '../interfaces/user.interface';
+import { NavigationEnd, Router } from '@angular/router'
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.component.html',
@@ -10,15 +11,25 @@ import { UserFriendsInfo } from '../interfaces/user.interface';
 
 export class FriendsComponent implements OnInit {
 
-  constructor(private readonly requestsService: RequestsService) {}
+  constructor(private readonly requestsService: RequestsService, private readonly router: Router) {}
 
   friendsList: Friends[] = [];
   approvedFriends: UserFriendsInfo[] = [];
   pendingFriends: UserFriendsInfo[] = [];
 
   showContent: boolean = false;
+  display: boolean = true;
 
   ngOnInit() {
+  
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        console.log(event.url);
+        if (event.url === '/')
+         this.display = false;
+      }
+    });
+  
     //Get all friends, then stocks pending / approved friends in two diffrents arrays
     this.requestsService.listFriends(false)?.subscribe((friends) => {
       this.friendsList = friends;
@@ -40,14 +51,6 @@ export class FriendsComponent implements OnInit {
         });
       }
     });
-  }
-
-  toggleContent() {
-    this.showContent = !this.showContent;
-  }
-
-  toggleOption(user: UserFriendsInfo) {
-    user.showOpt = !user.showOpt;
   }
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
@@ -80,5 +83,13 @@ export class FriendsComponent implements OnInit {
         return element !== user
       });
     });
+  }
+
+  toggleContent() {
+    this.showContent = !this.showContent;
+  }
+
+  toggleOption(user: UserFriendsInfo) {
+    user.showOpt = !user.showOpt;
   }
 }
