@@ -1,25 +1,33 @@
-.column {
-    width: 100vw;
-    height: 85vh;
+.global {
+  width: 100%;
+  // header height is 80px - footer height is 50px
+  height: calc(100vh - 80px - 50px);
+  background-color: blue;  
 }
 
-#rooms-list {
-    display: inline-block;
-    background-color: yellow;
-    width: 64px;
-    height: 100%;
+.title {
+  height: 50px;
+  width: 100%;
+  background-color: #30ff30;
 }
 
-#room-users {
-    display: inline-block;
-    width: 320px;
-    background-color: green;
-    height: 100%;
+.conversation {
+  // title height is 50px
+  height: calc(100% - 50px);
+  background-color: #404060;
 }
 
-#conversation {
-    display: inline-block;
-    width: calc(100% - 384px);
-    background-color: blue;
-    height: 100%;
+.messages {
+  // send-message height is 80px
+  height: calc(100% - 80px);
+  background-color: #707070;
+}
+
+.message {
+  background-color: #909090;
+}
+
+.send-message {
+  min-height: 80px;
+  background-color: #FFAAAA;
 }
