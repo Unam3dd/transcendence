@@ -10,22 +10,14 @@ import { GamePageComponent } from './game-page/game-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import {HttpClientModule} from "@angular/common/http";
 import { FooterComponent } from './footer/footer.component';
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
-import {MatInputModule} from "@angular/material/input";
-import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatButtonModule} from "@angular/material/button";
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatIconModule } from '@angular/material/icon';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import { MatListModule } from '@angular/material/list';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
 import { UserComponent } from './user/user.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -53,17 +45,9 @@ function initializeWebSocket(ws: WebsocketService) {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatSlideToggleModule,
-    FormsModule,
-    MatInputModule,
-    MatListModule,
-    ReactiveFormsModule,
-    BrowserAnimationsModule,
-    MatButtonModule,
     WebsocketModule,
-    MatSnackBarModule,
-    MatIconModule,
-    MatDialogModule
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

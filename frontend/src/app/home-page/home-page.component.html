@@ -1,30 +1,34 @@
 <div *ngIf="userData$ | async as userData">
   <ng-container *ngIf="userData.nickName && userData.email; else columnEmpty">
-    <button class="profile" (click)="moveToProfile()">Profile</button>
-    <button class="game" (click)="moveToGame()">Game</button>
-    <button class="chat" (click)="moveToChat()">Chat</button>
+    <button class="btn btn-primary profile" (click)="moveToProfile()">Profile</button>
+    <button class="btn btn-primary game" (click)="moveToGame()">Game</button>
+    <button class="btn btn-primary chat" (click)="moveToChat()">Chat</button>
   </ng-container>
 </div>
 
+
 <ng-template #columnEmpty>
-  <form (ngSubmit)="updateNickname()">
+<!--  <form (ngSubmit)="updateNickname()">
     <div class="form">
       <p>Welcome</p>
       <p>Enter your nickname and your email</p>
       <p>(Your nickname will be your login by default)</p>
-      <mat-form-field appearance="outline">
-        <mat-label>Enter your nickname</mat-label>
-        <input matInput placeholder="Nickname" [formControl]="nickname">
-      </mat-form-field>
-      <mat-form-field appearance="outline">
+      <div>
+        <span>Nickname</span>
+        <input type="text" class="form-control" [formControl]="nickname">
+      </div>
+      <div>
         <mat-label>Enter your email</mat-label>
-        <input matInput placeholder="example@example.com" [formControl]="email" required>
-        <mat-error *ngIf="email.invalid">{{getEmptyErrorMessage()}}</mat-error>
-      </mat-form-field>
+        <input type="text" class="form-control" [formControl]="email" required>
+      </div>
     </div>
     <div class="button">
       <button type="submit" *ngIf="email.value && email.valid" mat-raised-button>Confirm</button>
       <button type="submit" *ngIf="!email.value || email.invalid" mat-raised-button disabled>Confirm</button>
     </div>
   </form>
+  -->
 </ng-template>
+
+
+
