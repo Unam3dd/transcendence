@@ -1,5 +1,5 @@
 <!-- If user doesn't exist show an error-->
-<section *ngIf="user.login">
+<section *ngIf="!user.login">
     <p>No user exist for this id</p>
 </section>
 

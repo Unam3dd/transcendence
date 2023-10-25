@@ -5,3 +5,8 @@ export interface Friends{
     status: boolean,
     applicant: boolean
   }
+
+  export interface Block {
+    user1: number,
+    user2: number
+  }
