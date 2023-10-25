@@ -42,26 +42,26 @@ Modules:
 [vote] { put your initial on .... to vote (ex : CNSZ , .NS. , C... ) }
 
         > Web
-[...Z]      MAJ: Use a Framework as backend.
-[...Z]          Min: Use a front-end framework or toolkit.
-[...Z]          Min: Use a database for the backend.
-[...Z]      MAJ: Store the score of a tournament in the Blockchain.
+[C..Z]      MAJ: Use a Framework as backend.
+[C..Z]          Min: Use a front-end framework or toolkit.
+[C..Z]          Min: Use a database for the backend.
+[C..Z]      MAJ: Store the score of a tournament in the Blockchain.
         > User Management
-[...Z]      MAJ: Standard user management, authentication, users across tournaments.
-[....]      MAJ: Implementing a remote authentication.
+[C..Z]      MAJ: Standard user management, authentication, users across tournaments.
+[C...]      MAJ: Implementing a remote authentication.
         > Gameplay and user experience
-[...Z]      MAJ: Remote players
+[C..Z]      MAJ: Remote players
 [...Z]      MAJ: Multiplayers (more than 2 in the same game).
 [....]      MAJ: Add Another Game with User History and Matchmaking.
 [....]          Min: Game Customization Options.
-[...Z]      MAJ: Live chat.
+[C..Z]      MAJ: Live chat.
         > IA-Algo
 [....]      MAJ: Introduce an AI Opponent.
 [...Z]          Min: User and Game Stats Dashboards
         > Cybersecurity
 [....]      MAJ: Implement WAF/ModSecurity with Hardened Configuration and HashiCorp Vault for Secrets Management.
 [....]          Min: GDPR Compliance Options with User Anonymization, Local Data Management, and Account Deletion.
-[...Z]      MAJ: Implement Two-Factor Authentication (2FA) and JWT.
+[C..Z]      MAJ: Implement Two-Factor Authentication (2FA) and JWT.
         > Devops
 [....]      MAJ: Infrastructure Setup for Log Management.
 [....]          Min: Monitoring system.

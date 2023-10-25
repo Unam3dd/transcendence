@@ -58,7 +58,6 @@ export class FriendsController {
     const data = await this.friendsService.getJWTToken(
       req.headers.authorization,
     );
-
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 
     const { sub } = JSON.parse(data[1]);
