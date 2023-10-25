@@ -21,12 +21,13 @@ export class FriendsComponent implements OnInit {
   display: boolean = true;
 
   ngOnInit() {
-  
+    //Display this component only on the /home page
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
-        console.log(event.url);
-        if (event.url === '/')
+        if ((event.url !== '/home'))
          this.display = false;
+        else
+        this.display = true;
       }
     });
   
@@ -83,6 +84,7 @@ export class FriendsComponent implements OnInit {
         return element !== user
       });
     });
+    this.requestsService.deleteFriends(user.id)?.subscribe();
   }
 
   toggleContent() {
