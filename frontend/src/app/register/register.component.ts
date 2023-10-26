@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { UserInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
+import { NotificationService } from '../services/notifications.service';
+import { TimerService } from '../services/timer.service';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +11,9 @@ import { RequestsService } from '../services/requests.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  constructor (private formBuilder: FormBuilder, private req: RequestsService) {}
+  responseData: any;
+
+  constructor (private formBuilder: FormBuilder, private req: RequestsService, private timerService: TimerService, private notif: NotificationService) {}
 
   form = this.formBuilder.group({
     login: '',
@@ -34,6 +38,6 @@ export class RegisterComponent {
       a2f: a2f
     }
 
-    this.req.registerUser(userData)?.subscribe();
+    this.req.registerUser(userData).subscribe();
   }
 }

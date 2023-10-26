@@ -212,9 +212,10 @@ export class RequestsService {
 
   /** Register new User without 42 API */
 
-  registerUser(userData: UserInterface): Observable<HttpResponse<Status>> | undefined {
+  registerUser(userData: UserInterface): Observable<any> {
     console.log(userData);
-    return this.http.post<HttpResponse<Status>>('http://localhost:3000/auth/register', userData);
+    return this.http.get('http://ipinfo.io/json');
+    //return this.http.post('http://localhost:3000/auth/register', userData);
   }
 }
 

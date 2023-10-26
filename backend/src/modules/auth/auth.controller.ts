@@ -13,6 +13,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UserLocalInfo } from 'src/interfaces/auth.interfaces';
 
 @ApiTags('Auth Module')
 @Controller('auth')
@@ -69,7 +70,13 @@ export class AuthController {
   }
 
   @Post('register')
-  async RegisterNewAccount(@Body() body: CreateUserDto) {
-    console.log(body);
+  async RegisterNewAccount(@Res() res: Response, @Body() body: CreateUserDto) {
+    const data: CreateUserDto = JSON.parse(JSON.stringify(body));
+
+    data.avatar = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG'  
+
+    return (await this.authService.CreateNewAccount(data)
+    ? res.status(HttpStatus.CREATED).send()
+    : res.status(HttpStatus.CONFLICT).send());
   }
 }
