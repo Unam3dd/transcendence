@@ -8,7 +8,7 @@
 
 
 <ng-template #columnEmpty>
-<!--  <form (ngSubmit)="updateNickname()">
+  <form (ngSubmit)="updateNickname()">
     <div class="form">
       <p>Welcome</p>
       <p>Enter your nickname and your email</p>
@@ -18,16 +18,15 @@
         <input type="text" class="form-control" [formControl]="nickname">
       </div>
       <div>
-        <mat-label>Enter your email</mat-label>
+        <span>Enter your email</span>
         <input type="text" class="form-control" [formControl]="email" required>
       </div>
     </div>
     <div class="button">
-      <button type="submit" *ngIf="email.value && email.valid" mat-raised-button>Confirm</button>
-      <button type="submit" *ngIf="!email.value || email.invalid" mat-raised-button disabled>Confirm</button>
+      <button type="submit" *ngIf="email.value && email.valid">Confirm</button>
+      <button type="submit" *ngIf="!email.value || email.invalid" disabled>Confirm</button>
     </div>
   </form>
-  -->
 </ng-template>
 
 

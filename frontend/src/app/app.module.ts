@@ -10,14 +10,17 @@ import { GamePageComponent } from './game-page/game-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import {HttpClientModule} from "@angular/common/http";
 import { FooterComponent } from './footer/footer.component';
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NotificationsComponent } from './notifications/notifications.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
 import { UserComponent } from './user/user.component';
-import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -45,9 +48,12 @@ function initializeWebSocket(ws: WebsocketService) {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    WebsocketModule,
     FormsModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
+    WebsocketModule,
+    MatSnackBarModule,
+    NgbModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
