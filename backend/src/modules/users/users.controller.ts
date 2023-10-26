@@ -2,7 +2,6 @@ import {
   Body,
   Controller,
   Get,
-  Post,
   Put,
   Param,
   ParseIntPipe,
@@ -13,7 +12,6 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { Response, Request } from 'express';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
@@ -21,7 +19,6 @@ import { AuthGuard } from '../auth/auth.guard';
 import { UserSchema } from './schemas/user.schema';
 import {
   ApiBody,
-  ApiConflictResponse,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
   ApiNoContentResponse,

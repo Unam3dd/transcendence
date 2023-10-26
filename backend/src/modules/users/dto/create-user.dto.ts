@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsEmail,
   Length,
-  IsUrl
+  IsUrl,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -29,7 +29,7 @@ export class CreateUserDto {
   @Length(8, 120, {
     message: 'password must be between 8 and 120 characters',
   })
-  @IsString({ message: 'password must be a string'})
+  @IsString({ message: 'password must be a string' })
   password: string | null;
 
   @IsOptional()
@@ -52,6 +52,6 @@ export class CreateUserDto {
   avatar: string;
 
   @IsOptional()
-  @IsBoolean({ message: 'Boolean is required !'})
+  @IsBoolean({ message: 'Boolean is required !' })
   is42: boolean;
 }
