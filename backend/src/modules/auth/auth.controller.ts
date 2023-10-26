@@ -1,9 +1,10 @@
 import { Controller, HttpStatus, Query, Req, Res } from '@nestjs/common';
-import { Get } from '@nestjs/common';
+import { Get, Post} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
+import { Body } from '@nestjs/common';
 
 import {
   ApiInternalServerErrorResponse,
@@ -11,6 +12,7 @@ import {
   ApiQuery,
   ApiTags,
 } from '@nestjs/swagger';
+import { CreateUserDto } from '../users/dto/create-user.dto';
 
 @ApiTags('Auth Module')
 @Controller('auth')
@@ -54,7 +56,7 @@ export class AuthController {
       return;
     }
 
-    if (!(await this.authService.CreateNewAccount(UserInfo))) {
+    if (!(await this.authService.CreateNewAccountFrom42API(UserInfo))) {
       res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
       return;
     }
@@ -64,5 +66,10 @@ export class AuthController {
       `Bearer ${await this.authService.generateJwt(UserInfo.login)}`,
     );
     res.redirect(redirectURI);
+  }
+
+  @Post('register')
+  async RegisterNewAccount(@Body() body: CreateUserDto) {
+    console.log(body);
   }
 }

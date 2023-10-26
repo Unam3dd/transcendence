@@ -24,15 +24,17 @@ export class AuthService {
     return (await this.userService.findOneByLogin(user.login)) ? true : false;
   }
 
-  public async CreateNewAccount(user: UserInfoAPI): Promise<boolean> {
+  public async CreateNewAccountFrom42API(user: UserInfoAPI): Promise<boolean> {
     const NewAccountDTO: CreateUserDto = {
       login: user.login,
       firstName: user.first_name,
       lastName: user.last_name,
+      password: null,
       nickName: user.login,
       a2f: false,
       email: null,
       avatar: user.image.versions.medium,
+      is42: true
     };
 
     try {

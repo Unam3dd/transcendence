@@ -1,3 +1,16 @@
 <div>
-  <button (click)="connection()">42</button>
+  <div class="connection42API">
+    <button (click)="connection42API()">42</button>
+  </div>
+  <div class="connection">
+    <form [formGroup]="form" (ngSubmit)="connection()">
+      <input id="username" type="text" placeholder="UserName" formControlName="username" minlength="3" maxlength="120">
+      <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
+      <button class="login-button" type="submit">Login</button>
+    </form>
+  </div>
+
+  <div class="registration">
+    <a id="link" [routerLink]="['/register']">Not Registered ? Go</a>
+  </div>
 </div>

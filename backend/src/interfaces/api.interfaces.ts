@@ -7,10 +7,10 @@ export interface TokensFrom42API extends Error {
 }
 
 export interface UserInfoAPI {
-  login: string;
-  first_name: string;
-  last_name: string;
-  image: {
+  login?: string;
+  first_name?: string;
+  last_name?: string;
+  image?: {
     link: string;
     versions: {
       large: string;

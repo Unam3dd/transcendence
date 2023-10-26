@@ -35,7 +35,6 @@ import {
 import { UserSanitize } from 'src/interfaces/user.interfaces';
 import { User } from './entities/user.entity';
 import { AuthService } from '../auth/auth.service';
-import { JwtService } from '@nestjs/jwt';
 
 @UseGuards(AuthGuard)
 @ApiTags('Users Module')
@@ -44,25 +43,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    private jwtService: JwtService,
   ) {}
-
-  // Recieving a POST request to create a new user
-  @Post()
-  @ApiOperation({ summary: 'Register a new user' })
-  @ApiCreatedResponse({ description: 'User Created' })
-  @ApiConflictResponse({ description: 'User Already Exists' })
-  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @ApiInternalServerErrorResponse({ description: 'Internal server error' })
-  @ApiBody({ type: UserSchema })
-  async RegisterNewUser(@Body() User: CreateUserDto, @Res() res: Response) {
-    try {
-      await this.usersService.registerUser(User);
-      return res.status(HttpStatus.CREATED).send();
-    } catch (e) {
-      return res.status(HttpStatus.CONFLICT).send();
-    }
-  }
 
   // Recieving a PUT request to update informations about an user
   @Put()

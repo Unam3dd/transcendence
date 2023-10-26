@@ -27,6 +27,7 @@ import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
+import { RegisterComponent } from './register/register.component';
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -49,7 +50,8 @@ function initializeWebSocket(ws: WebsocketService) {
     NotificationsComponent,
     FriendsComponent,
     ChatPageComponent,
-    UserComponent
+    UserComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

@@ -210,5 +210,11 @@ export class RequestsService {
         new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
+  /** Register new User without 42 API */
+
+  registerUser(userData: UserInterface): Observable<HttpResponse<Status>> | undefined {
+    console.log(userData);
+    return this.http.post<HttpResponse<Status>>('http://localhost:3000/auth/register', userData);
+  }
 }
 
