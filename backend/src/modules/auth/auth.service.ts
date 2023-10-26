@@ -5,7 +5,6 @@ import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
-import { UserLocalInfo } from 'src/interfaces/auth.interfaces';
 
 @Injectable()
 export class AuthService {
@@ -48,7 +47,6 @@ export class AuthService {
   }
 
   public async CreateNewAccount(user: CreateUserDto): Promise<boolean> {
-
     try {
       await this.userService.registerUser(user);
     } catch (err) {

@@ -4,6 +4,7 @@ import { UserInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
 import { NotificationService } from '../services/notifications.service';
 import { TimerService } from '../services/timer.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -37,7 +38,5 @@ export class RegisterComponent {
       password: password,
       a2f: a2f
     }
-
-    this.req.registerUser(userData).subscribe();
   }
 }
