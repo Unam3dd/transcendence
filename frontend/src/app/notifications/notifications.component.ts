@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+/*import { Component, Inject } from '@angular/core';
 import { MAT_SNACK_BAR_DATA, MatSnackBarRef } from '@angular/material/snack-bar';
 import { notificationsInterface, Action } from '../interfaces/notifications.interface';
 import { RequestsService } from '../services/requests.service';
@@ -10,7 +10,7 @@ import { RequestsService } from '../services/requests.service';
 })
 export class NotificationsComponent{
 
-  constructor(private readonly snackBarRef: MatSnackBarRef<NotificationsComponent>, 
+  constructor(private readonly snackBarRef: MatSnackBarRef<NotificationsComponent>,
     @Inject(MAT_SNACK_BAR_DATA) public readonly data: notificationsInterface,
     private readonly requestService: RequestsService) {}
 
@@ -35,4 +35,4 @@ export class NotificationsComponent{
     this.requestService.deleteFriends(this.data.sender_id)?.subscribe();
     this.snackBarRef.dismiss();
   }
-}
+}*/

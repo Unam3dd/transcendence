@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+/*import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NotificationsComponent } from '../notifications/notifications.component';
 import { notificationsInterface, Action } from '../interfaces/notifications.interface';
@@ -28,9 +28,10 @@ export class NotificationService {
   }
 
   basic_notification(message: string) {
-    this.snackBar.open(message, undefined, { 
+    this.snackBar.open(message, undefined, {
       verticalPosition: 'top',
       horizontalPosition: 'right',
       duration: 5000});
   }
 }
+*/

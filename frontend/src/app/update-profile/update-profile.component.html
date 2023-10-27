@@ -1,41 +1,28 @@
-<div class="modal fade" id="modal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="exampleModalLabel">Profile update</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<form (ngSubmit)="updateDatas()">
+  <div *ngIf="userData$ | async as userData">
+    <div>
+      <div>
+        <label for="firstname">Firstname</label>
+        <input placeholder="{{userData.firstName}}" id="firstname" [formControl]="firstname">
       </div>
-      <div class="modal-body">
-        <form (ngSubmit)="updateDatas()">
-          <div *ngIf="userData$ | async as userData">
-            <div>
-              <div>
-                <label for="firstname">Firstname</label>
-                <input placeholder="{{userData.firstName}}" id="firstname" [formControl]="firstname">
-              </div>
-              <div>
-                <label for="lastname">Lastname</label>
-                <input placeholder="{{userData.lastName}}" id="lastname" [formControl]="lastname">
-              </div>
-              <div>
-                <label for="nickname">Nickname</label>
-                <input placeholder="{{userData.nickName}}" id="nickname" [formControl]="nickname">
-              </div>
-              <div>
-                <label for="login">Email</label>
-                <input placeholder="{{userData.email}}" id="login" [formControl]="email">
-              </div>
-            </div>
-            <div>
-              A2F
-            </div>
-            <div>
-              <button type="submit">Confirm</button>
-              <button>Cancel</button>
-            </div>
-          </div>
-        </form>
+      <div>
+        <label for="lastname">Lastname</label>
+        <input placeholder="{{userData.lastName}}" id="lastname" [formControl]="lastname">
+      </div>
+      <div>
+        <label for="nickname">Nickname</label>
+        <input placeholder="{{userData.nickName}}" id="nickname" [formControl]="nickname">
+      </div>
+      <div>
+        <label for="login">Email</label>
+        <input placeholder="{{userData.email}}" id="login" [formControl]="email">
       </div>
     </div>
+    <div>
+      A2F
+    </div>
+    <div>
+      <button type="submit">Confirm</button>
+    </div>
   </div>
-</div>
+</form>

@@ -1,9 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {RequestsService} from "../services/requests.service";
-import {UpdateProfileComponent} from "../update-profile/update-profile.component";
 import { UserInterface } from '../interfaces/user.interface';
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-profile-page',
@@ -14,7 +13,7 @@ export class ProfilePageComponent implements OnInit{
 
   userData$!: Observable<UserInterface> | null;
   constructor(private requestService: RequestsService,
-              private modalService: NgbModal) {}
+              private router: Router) {}
 
 
   // Get data of user has been logged from backend service (NestJS)
@@ -22,7 +21,7 @@ export class ProfilePageComponent implements OnInit{
     this.userData$ = this.requestService.getLoggedUserInformation();
   }
 
-  openDialog() {
-    this.modalService.open(UpdateProfileComponent, {size: "lg"});
+  moveToUpdate() {
+    this.router.navigateByUrl('profile/update');
   }
 }
