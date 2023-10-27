@@ -6,6 +6,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { UserSanitize } from 'src/interfaces/user.interfaces';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
@@ -61,6 +62,14 @@ export class EventsGateway {
   @SubscribeMessage('newJoinChat')
   JoinChat(@MessageBody() body: string) {
     this.server.emit('newJoinChat', body);
+  }
+
+  /** Matchmaking events **/
+
+  @SubscribeMessage('joinGame')
+  JoinGame(@MessageBody() body: string) {
+    console.log(body);
+    this.server.emit('matchFound', body);
   }
 
   //Detect clients disconnection

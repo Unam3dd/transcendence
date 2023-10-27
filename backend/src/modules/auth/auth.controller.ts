@@ -1,5 +1,5 @@
 import { Controller, HttpStatus, Query, Req, Res } from '@nestjs/common';
-import { Get, Post} from '@nestjs/common';
+import { Get, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';

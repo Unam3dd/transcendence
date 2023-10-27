@@ -65,7 +65,15 @@ export class WebsocketService {
         nickName: payloadJWT.nickName,
         avatar: payloadJWT.avatar
       }
-
       return (AuthorUser);
     }
+
+    /** Matchmaking function **/
+    searchGame(client: WsClient): void {
+      const user = this.getUserInformation()
+
+      if (!user) return ;
+      client.emit('joinGame', user);
+    }
+  
 }
