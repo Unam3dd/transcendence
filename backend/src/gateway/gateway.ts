@@ -6,7 +6,6 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { UserSanitize } from 'src/interfaces/user.interfaces';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {

@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
-import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-game-page',
