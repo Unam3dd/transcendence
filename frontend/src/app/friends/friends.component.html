@@ -10,10 +10,11 @@
                 </div>
 
                 <div *ngIf="user.showOpt" class="option">
-             <!--           <mat-icon class="svg-icon-check" fontIcon="check" (click)="approvedFriendsRequest(user)"></mat-icon>
-                        <mat-icon class="svg-icon-close" fontIcon="close" (click)="deleteFriends(user)"></mat-icon>
-                        <mat-icon class="svg-icon-block" fontIcon="block" (click)="blockFriends(user)"></mat-icon>-->
+                    <i class="bi-person-add" style="font-size: 1.2rem; color: rgb(37, 209, 75);" tabindex="0" (click)="approvedFriendsRequest(user)" (keyup)="approvedFriendsRequest(user)"></i>
+                    <i class="bi-person-fill-x" style="font-size: 1.2rem; color: rgb(216, 84, 52);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
+                    <i class="bi-person-fill-slash" style="font-size: 1.2rem; color: rgb(110, 109, 103);" tabindex="0" (click)="blockFriends(user)" (keyup)="blockFriends(user)"></i>
                 </div>
+    
             </content>
         </section>
 
@@ -26,10 +27,11 @@
                 </div>
 
                 <div *ngIf="user.showOpt" class="option">
-                <!-- <mat-icon class="svg-icon-message" fontIcon="message" (click)="deleteFriends(user)"></mat-icon>
-                    <mat-icon class="svg-icon-close" fontIcon="close" (click)="deleteFriends(user)"></mat-icon>
-                    <mat-icon class="svg-icon-block" fontIcon="block" (click)="blockFriends(user)"></mat-icon> -->
+                    <i class="bi-messager" style="font-size: 1.2rem; color: rgb(86, 95, 228);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
+                    <i class="bi-person-fill-x" style="font-size: 1.2rem; color: rgb(216, 84, 52);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
+                    <i class="bi-person-fill-slash" style="font-size: 1.2rem; color: rgb(110, 109, 103);" tabindex="0" (click)="blockFriends(user)" (keyup)="blockFriends(user)"></i>
                 </div>
+    
             </content>
         </section>
 

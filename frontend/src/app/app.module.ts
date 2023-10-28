@@ -13,8 +13,6 @@ import { FooterComponent } from './footer/footer.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-/*import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { NotificationsComponent } from './notifications/notifications.component';*/
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
@@ -43,7 +41,6 @@ function initializeWebSocket(ws: WebsocketService) {
     FooterComponent,
     ChatComponent,
     UpdateProfileComponent,
-    //NotificationsComponent,
     FriendsComponent,
     ChatPageComponent,
     UserComponent,
@@ -57,7 +54,6 @@ function initializeWebSocket(ws: WebsocketService) {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     WebsocketModule,
-    //MatSnackBarModule,
     NgbModule
   ],
   providers: [{
