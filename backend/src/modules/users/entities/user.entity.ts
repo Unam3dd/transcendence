@@ -77,6 +77,9 @@ export class User {
   @IsUrl({}, { message: 'avatar must be an url !' })
   avatar: string;
 
+  @IsBoolean({ message: 'is42Account must be a boolean !' })
+  is42: boolean;
+
   @CreateDateColumn()
   @IsDate({ message: 'createdAt must be a Date' })
   createdAt: Date;

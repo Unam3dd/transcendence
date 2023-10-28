@@ -1,0 +1,33 @@
+.global {
+    display: flex;
+    width: 100vw;
+    // header height is 80px - footer height is 50px
+    height: calc(100vh - 80px - 50px);
+    background-color: blue;  
+  }
+  
+  .left-column {
+    height: 100%;
+    width: 300px;
+    background-color: yellow;
+  }
+  
+  .channel-list {
+    background-color: #ff23aa;
+  }
+  
+  .channel {
+    background-color: #bb33bb;
+  }
+  
+  
+  .right-column {
+    height: 100%;
+    width: 85%;
+    background-color: orange;
+  }
+  
+  app-chat {
+    display: block;
+    // waiting for chat component css being full setup to update this
+  }

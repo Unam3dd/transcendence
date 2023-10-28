@@ -19,8 +19,11 @@ import { UpdateProfileComponent } from './update-profile/update-profile.componen
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
+import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import { RegisterComponent } from './register/register.component';
+
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -42,7 +45,9 @@ function initializeWebSocket(ws: WebsocketService) {
     UpdateProfileComponent,
     //NotificationsComponent,
     FriendsComponent,
-    UserComponent
+    ChatPageComponent,
+    UserComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

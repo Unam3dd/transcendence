@@ -10,12 +10,7 @@ import { RequestsService } from '../services/requests.service';
 })
 export class UserComponent implements OnInit {
 
-  user: UserSanitizeInterface = {
-    id: 0,
-    login: '',
-    nickName: '',
-    avatar: ''
-  }
+  user = {} as UserSanitizeInterface;
 
   constructor(private readonly route: ActivatedRoute,
     private readonly requestServices: RequestsService) {}
@@ -26,8 +21,6 @@ export class UserComponent implements OnInit {
 
     this.requestServices.getUserInfo(userIdFromRoute)?.subscribe((user) => {
       this.user = user;
-      console.log(this.user);
     });
   }
-
 }

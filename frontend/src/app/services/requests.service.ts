@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams, HttpResponse } from "@angular/common/http";
 import {Observable, catchError, throwError, Subscription } from "rxjs";
 
 import {CookiesService} from "./cookies.service";
@@ -9,6 +9,7 @@ import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interfa
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
+import { Status } from '../enum/status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -192,12 +193,12 @@ export class RequestsService {
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
-  updateFriendsStatus() {
+  updateFriendsStatus(userId: number) {
     const token = this.cookieService.getToken();
 
     if (!token) return ;
 
-    return this.http.patch(`${NESTJS_URL}/friends/update`, null, {headers:
+    return this.http.patch(`${NESTJS_URL}/friends/update/${userId}`, null, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
@@ -222,4 +223,26 @@ export class RequestsService {
     return this.http.delete(`${NESTJS_URL}/friends/delete/${friendId}`, {headers:
     new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
+
+/** Block Requests */
+
+  blockUser(targetId: number): Observable<HttpResponse<Status>> | undefined {
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
+
+    const userId = this.getId(token);
+
+    return this.http.post<HttpResponse<Status>>(`${NESTJS_URL}/block/add`, {
+      user1: userId, user2: targetId }, { headers: 
+        new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
+  }
+
+  /** Register new User without 42 API */
+
+  registerUser(userData: UserInterface): Observable<HttpResponse<Status>> | undefined {
+    console.log(userData);
+    return this.http.post<HttpResponse<Status>>('http://localhost:3000/auth/register', userData);
+  }
 }
+

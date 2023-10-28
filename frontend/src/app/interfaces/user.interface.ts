@@ -1,12 +1,13 @@
 export interface UserInterface {
-    id: number;
-    login?: string;
-    firstName?: string;
-    lastName?: string;
-    nickName?: string;
-    email?: string;
-    a2f?: boolean;
-    avatar?: string;
+    id?: number;
+    login?: string | null;
+    firstName?: string | null;
+    lastName?: string | null;
+    nickName?: string | null;
+    email?: string | null;
+    password?: string | null;
+    a2f?: boolean | null;
+    avatar?: string | null;
     createdAt?: Date;
     updatedAt?: Date;
 }

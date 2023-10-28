@@ -26,6 +26,13 @@ export class CreateUserDto {
   lastName?: string | null;
 
   @IsOptional()
+  @Length(8, 120, {
+    message: 'password must be between 8 and 120 characters',
+  })
+  @IsString({ message: 'password must be a string' })
+  password: string | null;
+
+  @IsOptional()
   @Length(3, 120, {
     message: 'nickName must be between 3 and 120 characters',
   })
@@ -43,4 +50,8 @@ export class CreateUserDto {
   @IsOptional()
   @IsUrl({}, { message: 'URL is required !' })
   avatar: string;
+
+  @IsOptional()
+  @IsBoolean({ message: 'Boolean is required !' })
+  is42: boolean;
 }

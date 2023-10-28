@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
 import { Friends } from '../interfaces/friends.interface';
 import { UserFriendsInfo } from '../interfaces/user.interface';
+import { NavigationEnd, Router } from '@angular/router'
 @Component({
   selector: 'app-friends',
   templateUrl: './friends.component.html',
@@ -10,15 +11,26 @@ import { UserFriendsInfo } from '../interfaces/user.interface';
 
 export class FriendsComponent implements OnInit {
 
-  constructor(private readonly requestsService: RequestsService) {}
+  constructor(private readonly requestsService: RequestsService, private readonly router: Router) {}
 
   friendsList: Friends[] = [];
   approvedFriends: UserFriendsInfo[] = [];
   pendingFriends: UserFriendsInfo[] = [];
 
   showContent: boolean = false;
+  display: boolean = true;
 
   ngOnInit() {
+    //Display this component only on the /home page
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        if ((event.url !== '/home'))
+         this.display = false;
+        else
+        this.display = true;
+      }
+    });
+  
     //Get all friends, then stocks pending / approved friends in two diffrents arrays
     this.requestsService.listFriends(false)?.subscribe((friends) => {
       this.friendsList = friends;
@@ -42,17 +54,9 @@ export class FriendsComponent implements OnInit {
     });
   }
 
-  toggleContent() {
-    this.showContent = !this.showContent;
-  }
-
-  toggleOption(user: UserFriendsInfo) {
-    user.showOpt = !user.showOpt;
-  }
-
   //approve a friend request, remove user from pending array then adding the user in the approved array
   approvedFriendsRequest(user: UserFriendsInfo) {
-    this.requestsService.updateFriendsStatus()?.subscribe(() => {
+    this.requestsService.updateFriendsStatus(user.id)?.subscribe(() => {
       this.pendingFriends = this.pendingFriends.filter((element) => {
         return element !== user
       });
@@ -68,6 +72,26 @@ export class FriendsComponent implements OnInit {
         return element !== user
       });
     });
+    user.showOpt = !user.showOpt;
+  }
+
+  blockFriends(user: UserFriendsInfo) {
+    this.requestsService.blockUser(user.id)?.subscribe(() => {
+      this.approvedFriends = this.approvedFriends.filter((element) => {
+        return element !== user
+      });
+      this.pendingFriends = this.pendingFriends.filter((element) => {
+        return element !== user
+      });
+    });
+    this.requestsService.deleteFriends(user.id)?.subscribe();
+  }
+
+  toggleContent() {
+    this.showContent = !this.showContent;
+  }
+
+  toggleOption(user: UserFriendsInfo) {
     user.showOpt = !user.showOpt;
   }
 }

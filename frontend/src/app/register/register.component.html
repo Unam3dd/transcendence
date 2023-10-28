@@ -1,0 +1,14 @@
+<div>
+    <div class="register">
+      <form [formGroup]="form" (ngSubmit)="register()">
+        <input id="login" type="text" placeholder="login" formControlName="login" minlength="3" maxlength="120">
+        <input id="firstname" type="text" placeholder="firstName" formControlName="firstName" maxlength="120">
+        <input id="lastname" type="text" placeholder="lastName" formControlName="lastName" maxlength="120">
+        <input id="nickname" type="text" placeholder="nickName" formControlName="nickName" maxlength="120">
+        <input id="email" type="email" placeholder="email" formControlName="email">
+        <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
+        <p>Two Factor</p><input id="a2f" type="checkbox" placeholder="A2F" formControlName="a2f">
+        <button type="submit">Login</button>
+      </form>
+    </div>
+  </div>
