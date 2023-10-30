@@ -17,7 +17,8 @@ export class ChatComponent implements OnInit {
     const client: WsClient = this.ws.getClient();
 
     client.on('newJoinChat', (msg) => {
-      this.notificationService.basic_notification(msg);
+      const text: string = msg;
+      this.notificationService.showNotification(text);
     })
 
     client.emit('message', 'hello chat !');

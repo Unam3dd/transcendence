@@ -1,36 +1,31 @@
 import { Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { NotificationsComponent } from '../notifications/notifications.component';
-import { notificationsInterface, Action } from '../interfaces/notifications.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(private readonly snackBar: MatSnackBar) {}
+  showNotification(message: string)
+  {
+    const toast = document.createElement('div');
 
-  custom_notification(name: string, id: number) {
+    toast.classList.add('toast');
+    toast.classList.add('show');
+    toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
 
-    const notifications_info: notificationsInterface = {
-      sender_name: name,
-      text: " send you a friend request",
-      action: Action.friends_request,
-      sender_id: id
-    }
+    const toastBody = document.createElement('div');
 
-    this.snackBar.openFromComponent(NotificationsComponent, {
-      data: notifications_info,
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
-      duration: 5000
-    });
-  }
+    toastBody.classList.add('toast-body');
+    toastBody.innerText = message;
 
-  basic_notification(message: string) {
-    this.snackBar.open(message, undefined, { 
-      verticalPosition: 'top',
-      horizontalPosition: 'right',
-      duration: 5000});
+    toast.appendChild(toastBody);
+
+    document.body.appendChild(toast);
+
+    setTimeout(() => {
+      toast.remove();
+    }, 5000);
   }
 }
