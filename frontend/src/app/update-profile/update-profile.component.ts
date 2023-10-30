@@ -15,7 +15,7 @@ export class UpdateProfileComponent implements OnInit{
   lastname = new FormControl('');
   nickname = new FormControl('');
   email = new FormControl('');
-  a2f = new FormControl(false);
+  a2f = new FormControl(true);
 
   constructor(private requestService: RequestsService) {}
 

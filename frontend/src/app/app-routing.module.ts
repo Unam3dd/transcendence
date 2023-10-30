@@ -6,12 +6,14 @@ import {ProfilePageComponent} from "./profile-page/profile-page.component";
 import {GamePageComponent} from "./game-page/game-page.component";
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
+import {UpdateProfileComponent} from "./update-profile/update-profile.component";
 import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {path: '', component: ConnectionComponent},
   {path: 'home', component: HomePageComponent},
   {path: 'profile', component: ProfilePageComponent},
+  {path: 'profile/update', component: UpdateProfileComponent},
   {path: 'game', component: GamePageComponent},
   {path: 'chat', component: ChatPageComponent},
   {path: 'user/:userId', component: UserComponent},
