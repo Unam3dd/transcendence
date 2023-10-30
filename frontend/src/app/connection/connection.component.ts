@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CLIENT_ID, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
+import { RequestsService } from '../services/requests.service';
 
 @Component({
   selector: 'app-connection',
@@ -10,10 +11,10 @@ import { isEmpty } from 'class-validator';
 })
 export class ConnectionComponent {
 
-  constructor(private formsBuilder: FormBuilder) {}
+  constructor(private formsBuilder: FormBuilder, private req: RequestsService) {}
 
   form = this.formsBuilder.group({
-    username: '',
+    login: '',
     password: ''
   });
 
@@ -22,8 +23,12 @@ export class ConnectionComponent {
   }
 
   connection() {
-    const { username, password } = this.form.value;
+    const { login, password } = this.form.value;
 
-    if (isEmpty(username) || isEmpty(password)) return ;
+    if (isEmpty(login) || isEmpty(password)) return ;
+
+    this.req.loginUser(<string>login, <string>password).subscribe((token) => {
+      console.log(token);
+    })
   }
 }

@@ -4,7 +4,7 @@
   </div>
   <div class="connection">
     <form [formGroup]="form" (ngSubmit)="connection()">
-      <input id="username" type="text" placeholder="UserName" formControlName="username" minlength="3" maxlength="120">
+      <input id="login" type="text" placeholder="Login" formControlName="login" minlength="3" maxlength="120">
       <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
       <button class="login-button" type="submit">Login</button>
     </form>

@@ -4,7 +4,7 @@ import { UserInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
 import { NotificationService } from '../services/notifications.service';
 import { TimerService } from '../services/timer.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { LOGIN_PAGE } from '../env';
 
 @Component({
   selector: 'app-register',
@@ -36,7 +36,14 @@ export class RegisterComponent {
       nickName: nickName,
       email: email,
       password: password,
-      a2f: a2f
-    }
+      a2f: a2f,
+      is42: false
+    };
+
+    this.req.registerUser(userData).subscribe(async () => {
+      this.notif.basic_notification(`Your account has been created successfully !`);
+      await this.timerService.sleep(5000);
+      window.location.href = `${LOGIN_PAGE}`
+    });
   }
 }
