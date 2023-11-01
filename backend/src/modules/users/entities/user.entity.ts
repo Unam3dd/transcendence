@@ -48,7 +48,7 @@ export class User {
 
   @Column({
     type: 'varchar',
-    nullable: true
+    nullable: true,
   })
   @Length(8, 120, {
     message: 'password must be between 8 and 120 characters',

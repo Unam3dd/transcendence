@@ -22,7 +22,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly apiService: ApiService,
-    private readonly userService: UsersService
+    private readonly userService: UsersService,
   ) {}
 
   @ApiOperation({ summary: 'Authentication with the 42 Api' })
@@ -89,10 +89,11 @@ export class AuthController {
 
     const user = await this.userService.findOneByLogin(login);
 
-    if (isEmpty(user)) return (res.status(401).send());
+    if (isEmpty(user) || user.is42 || password != user.password)
+      return res.status(401).send();
 
-    if (password != user.password) return (res.status(401).send());
-
-    return (res.status(200).send({ token: await this.authService.generateJwt(user.login) }));
+    return res
+    .status(200)
+    .send({ token: `Bearer ${await this.authService.generateJwt(user.login)}`});
   }
 }

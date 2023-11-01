@@ -1,8 +1,11 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, REDIRECT_URI } from '../env';
+import { CLIENT_ID, LOGIN_PAGE, PROFILE_PAGE, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
+import { NotificationService } from '../services/notifications.service';
+import { TimerService } from '../services/timer.service';
+import { CookiesService } from '../services/cookies.service';
 
 @Component({
   selector: 'app-connection',
@@ -11,7 +14,11 @@ import { RequestsService } from '../services/requests.service';
 })
 export class ConnectionComponent {
 
-  constructor(private formsBuilder: FormBuilder, private req: RequestsService) {}
+  constructor(private formsBuilder: FormBuilder, 
+    private req: RequestsService,
+    private readonly notif: NotificationService,
+    private readonly timeService: TimerService,
+    private cookieServcie: CookiesService) {}
 
   form = this.formsBuilder.group({
     login: '',
@@ -27,8 +34,22 @@ export class ConnectionComponent {
 
     if (isEmpty(login) || isEmpty(password)) return ;
 
-    this.req.loginUser(<string>login, <string>password).subscribe((token) => {
-      console.log(token);
+    this.req.loginUser(<string>login, <string>password).subscribe(async (res) => {
+
+      if (res.status != 200) {
+        this.notif.basic_notification('Error Your login or password is not correct !');
+        await this.timeService.sleep(3000);
+        window.location.href = LOGIN_PAGE;
+        return ;
+      }
+
+      const { token } = JSON.parse(JSON.stringify(res.body));
+
+      this.cookieServcie.setCookie('authorization', token);
+
+      this.notif.basic_notification(`You are connected with ${login} !`);
+      await this.timeService.sleep(3000);
+      window.location.href = PROFILE_PAGE;
     })
   }
 }

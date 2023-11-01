@@ -213,7 +213,7 @@ export class RequestsService {
   }
 
   loginUser(login: string, password: string) {
-    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response'}).pipe(catchError(this.handleError));
+    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' }).pipe(catchError(this.handleError));
   }
 }
 
