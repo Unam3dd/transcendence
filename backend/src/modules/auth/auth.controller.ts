@@ -92,8 +92,8 @@ export class AuthController {
     if (isEmpty(user) || user.is42 || password != user.password)
       return res.status(401).send();
 
-    return res
-    .status(200)
-    .send({ token: `Bearer ${await this.authService.generateJwt(user.login)}`});
+    return res.status(200).send({
+      token: `Bearer ${await this.authService.generateJwt(user.login)}`,
+    });
   }
 }

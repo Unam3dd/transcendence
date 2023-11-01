@@ -48,7 +48,7 @@ export class ConnectionComponent {
       this.cookieServcie.setCookie('authorization', token);
 
       this.notif.basic_notification(`You are connected with ${login} !`);
-      await this.timeService.sleep(3000);
+      await this.timeService.sleep(2000);
       window.location.href = PROFILE_PAGE;
     })
   }
