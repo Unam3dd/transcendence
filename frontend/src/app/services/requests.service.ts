@@ -8,6 +8,7 @@ import { NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
+import {Router} from "@angular/router";
 import { Status } from '../enum/status.enum';
 
 @Injectable({
@@ -18,7 +19,10 @@ export class RequestsService {
   //Used for updateUserDatas
   private updateSubscription: Subscription | undefined;
 
-  constructor(private http: HttpClient, private readonly cookieService: CookiesService, private jwtService: JwtService) {}
+  constructor(private http: HttpClient,
+              private readonly cookieService: CookiesService,
+              private jwtService: JwtService,
+              private router: Router) {}
 
   //Handle requests errors
   private handleError(error: HttpErrorResponse){
@@ -115,7 +119,7 @@ export class RequestsService {
     const userId = this.getId(token);
 
     //Prepare object for the http update
-    const  update: UserInterface = { 
+    const  update: UserInterface = {
       id: userId!,
       firstName: firstname ? firstname : '',
       lastName: lastname ? lastname : '',
@@ -124,12 +128,14 @@ export class RequestsService {
       email: email ? email : '',
       a2f: a2f,
       is42: false
-    };
-    
+    };*/
+
     this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
     {
       headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
-    }).subscribe();
+    }).subscribe(() => {
+      this.router.navigateByUrl('profile');
+    });
 
     return (this.updateSubscription);
   }

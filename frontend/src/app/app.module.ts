@@ -10,24 +10,18 @@ import { GamePageComponent } from './game-page/game-page.component';
 import { ProfilePageComponent } from './profile-page/profile-page.component';
 import {HttpClientModule} from "@angular/common/http";
 import { FooterComponent } from './footer/footer.component';
-import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
-import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import {MatButtonModule} from "@angular/material/button";
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatIconModule } from '@angular/material/icon';
-import { NotificationsComponent } from './notifications/notifications.component';
 import { UpdateProfileComponent } from './update-profile/update-profile.component';
-import {MatDialogModule} from "@angular/material/dialog";
-import { MatListModule } from '@angular/material/list';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
+
 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
@@ -47,7 +41,6 @@ function initializeWebSocket(ws: WebsocketService) {
     FooterComponent,
     ChatComponent,
     UpdateProfileComponent,
-    NotificationsComponent,
     FriendsComponent,
     ChatPageComponent,
     UserComponent,
@@ -57,17 +50,11 @@ function initializeWebSocket(ws: WebsocketService) {
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    MatSlideToggleModule,
     FormsModule,
-    MatInputModule,
-    MatListModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
-    MatButtonModule,
     WebsocketModule,
-    MatSnackBarModule,
-    MatIconModule,
-    MatDialogModule
+    NgbModule
   ],
   providers: [{
     provide: APP_INITIALIZER,
