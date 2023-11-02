@@ -15,7 +15,7 @@ export class WebsocketService {
   public client: any
 
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService) {
+    private readonly jwtService: JwtService,) {
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
@@ -69,11 +69,20 @@ export class WebsocketService {
     }
 
     /** Matchmaking function **/
-    searchGame(client: WsClient): void {
+
+   /* searchGame(client: WsClient): void {
       const user = this.getUserInformation()
 
       if (!user) return ;
       client.emit('joinGame', user);
+    }*/
+
+    enterLobby(client: WsClient): void {
+      client.emit('joinGame', 2);
+    }
+
+    endGame(client: WsClient, button: string): void {
+      client.emit('endGame', button);
     }
   
 }

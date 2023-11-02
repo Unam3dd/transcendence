@@ -1,3 +1,8 @@
 <div class="game">Game part</div>
 <div class="chat">Chat part</div>
-<button (click)="search_game()">Find Game</button>
+<button (click)="findGame()">Find Game</button>
+<div *ngIf="display">
+    <button (click)="endGame('A')" >End Game first</button>
+    <button (click)="endGame('B')" >End Game second</button>
+</div>
+

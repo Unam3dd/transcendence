@@ -11,19 +11,38 @@ export class GamePageComponent implements OnInit{
 
   client: WsClient = this.ws.getClient();
 
+  display: boolean = false;
+
+  player1: string = '';
+  player2: string = '';
+
   constructor(private ws: WebsocketService) {}
   
   ngOnInit(): void {
-    console.log('game')
+
+    this.client.on('newPlayer', (data) => {
+      console.log(data);
+    })
 
     this.client.on('matchFound', (data) => {
       console.log('match found vs', data.login)
     });
-  }
 
-  search_game(): void {
-    this.ws.searchGame(this.client);
-    console.log('searching for opponent'); 
+    this.client.on('display', () => {
+      this.display = true;
+    })
+
+    this.client.on('endGame', () => {
+      this.display = false;
+    });
+  } 
+
+  findGame(): void {
+    this.ws.enterLobby(this.client);
+  }
+  
+  endGame(button: string): void {
+    this.ws.endGame(this.client, button);
   }
 
 }

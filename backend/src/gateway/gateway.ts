@@ -6,9 +6,11 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { LobbyManager } from 'src/game/lobbiesManager';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
+  constructor(private readonly lobbyManager: LobbyManager) {}
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
   server: Server;
@@ -63,16 +65,25 @@ export class EventsGateway {
     this.server.emit('newJoinChat', body);
   }
 
-  /** Matchmaking events **/
-
   @SubscribeMessage('joinGame')
-  JoinGame(@MessageBody() body: string) {
-    console.log(body);
-    this.server.emit('matchFound', body);
+  CreateLobby(@MessageBody() body: number, @ConnectedSocket() client: Socket) {
+    this.lobbyManager.findLobby(client, body);
   }
 
+  @SubscribeMessage('endGame')
+  endGame(@ConnectedSocket() client: Socket, @MessageBody() body: string) {
+    const lobby = this.lobbyManager.findLobbyByClient(client);
+
+    if (lobby && lobby.clients.length === 2) {
+      if (client.id === lobby.clients[0].id && body == 'A')
+        this.lobbyManager.destroyLobby(lobby);
+      else if (client.id === lobby.clients[1].id && body == 'B')
+        this.lobbyManager.destroyLobby(lobby);
+    }
+  }
   //Detect clients disconnection
-  handleDisconnect() {
+  handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('new Client disconnected');
+    this.lobbyManager.leaveLobby(client);
   }
 }
