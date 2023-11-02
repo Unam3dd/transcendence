@@ -29,6 +29,8 @@ export class GamePageComponent implements AfterViewInit {
   scoreP1: number = 0;
   scoreP2: number = 0;
 
+  gameInterval: number = 0;
+
   gameMode: GameMode = GameMode.TWO_PLAYERS;
 
   ngAfterViewInit() {
@@ -71,7 +73,14 @@ export class GamePageComponent implements AfterViewInit {
     }
 
     if (event.key === 'Enter') {
-      this.startGame();
+      if (this.scoreP1 === 10 || this.scoreP2 === 10) {
+        this.scoreP1 = 0;
+        this.scoreP2 = 0;
+        this.initPosition();
+        this.startGame();
+      } else {
+        this.startGame();
+      }
     }
   }
 
@@ -113,7 +122,7 @@ export class GamePageComponent implements AfterViewInit {
     }
 
     //Rackets hit box
-    const leftHit = this.ballX + this.ballRadius >= 40 && this.ballX + this.ballRadius <= 40 + this.barWidth;
+    const leftHit = this.ballX >= 40 && this.ballX <= 40 + this.barWidth;
     const rightHit = this.ballX + this.ballRadius <= this.canvas.nativeElement.width - 40 && this.ballX + this.ballRadius >= this.canvas.nativeElement.width - 40 - this.barWidth;
 
     if ((leftHit && this.ballY >= this.barLeftY && this.ballY <= this.barLeftY + this.barHeight) ||
@@ -137,24 +146,33 @@ export class GamePageComponent implements AfterViewInit {
       this.randomDirection();
     }
 
+    //stop the game
+    if (this.scoreP1 === 10 || this.scoreP2 === 10) {
+      clearInterval(this.gameInterval);
+    }
+
     this.drawElements();
   }
 
   startGame() {
-    setInterval(() => {
+    this.gameInterval = setInterval(() => {
       this.moveBall();
     }, 20);
   }
 
   randomDirection() {
-    const randomAngle = Math.random() * Math.PI * 2;
-    this.ballSpeedX = Math.cos(randomAngle) * this.ballSpeed;
-    this.ballSpeedY = Math.sin(randomAngle) * this.ballSpeed;
+    const randomAngle = (Math.random() * (2 * 70)) - 70;
+    const angle = randomAngle * Math.PI / 180;
+    const initialSide = Math.random() < 0.5 ? -1 : 1;
+
+    this.ballSpeedX = initialSide * Math.cos(angle) * this.ballSpeed;
+    this.ballSpeedY = Math.sin(angle) * this.ballSpeed;
   }
 
   drawElements() {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
+    const centerX: number = canvas.width / 2;
 
     if (context) {
       context.clearRect(0, 0, canvas.width, canvas.height);
@@ -168,16 +186,31 @@ export class GamePageComponent implements AfterViewInit {
       context.strokeStyle = 'white';
       context.setLineDash([20, 15]);  //Height and space between lines
       context.lineWidth = 2;  //Width of the line
-
       context.beginPath();
-      const centerX: number = canvas.width / 2;
       context.moveTo(centerX, 0);
       context.lineTo(centerX, canvas.height);
       context.stroke();
 
       //draw the ball
       context.fillStyle = 'white';
-      context.fillRect(this.ballX, this.ballY, this.ballRadius, this.ballRadius)
+      context.fillRect(this.ballX, this.ballY, this.ballRadius, this.ballRadius);
+
+      //draw scores
+      context.fillStyle = 'white';
+      context.font = '80px Courier New, monospace';
+      context.fillText(`${this.scoreP1}`, centerX / 2, 100);
+      context.fillText(`${this.scoreP2}`, 3 * (canvas.width / 4), 100);
+
+      //Win message
+      if (this.scoreP1 == 10) {
+        context.fillStyle = 'white';
+        context.font = '80px Courier New, monospace';
+        context.fillText('Win', centerX / 2, 200);
+      } else if (this.scoreP2 == 10) {
+        context.fillStyle = 'white';
+        context.font = '80px Courier New, monospace';
+        context.fillText('Win', 3 * (canvas.width / 4), 200);
+      }
     }
   }
 }
