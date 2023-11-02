@@ -46,6 +46,16 @@ export class AuthService {
     return true;
   }
 
+  public async CreateNewAccount(user: CreateUserDto): Promise<boolean> {
+    try {
+      await this.userService.registerUser(user);
+    } catch (err) {
+      return false;
+    }
+
+    return true;
+  }
+
   async generateJwt(login: string) {
     const user = await this.userService.findOneByLogin(login);
 

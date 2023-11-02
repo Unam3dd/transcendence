@@ -5,6 +5,7 @@ import { Request, Response } from 'express';
 import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
 import { Body } from '@nestjs/common';
+import { isEmpty } from 'class-validator';
 
 import {
   ApiInternalServerErrorResponse,
@@ -13,6 +14,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
+import { UsersService } from '../users/users.service';
 
 @ApiTags('Auth Module')
 @Controller('auth')
@@ -20,6 +22,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly apiService: ApiService,
+    private readonly userService: UsersService,
   ) {}
 
   @ApiOperation({ summary: 'Authentication with the 42 Api' })
@@ -69,7 +72,28 @@ export class AuthController {
   }
 
   @Post('register')
-  async RegisterNewAccount(@Body() body: CreateUserDto) {
-    console.log(body);
+  async RegisterNewAccount(@Res() res: Response, @Body() body: CreateUserDto) {
+    const data: CreateUserDto = JSON.parse(JSON.stringify(body));
+
+    data.avatar =
+      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
+
+    return (await this.authService.CreateNewAccount(data))
+      ? res.status(HttpStatus.CREATED).send()
+      : res.status(HttpStatus.CONFLICT).send();
+  }
+
+  @Post('login')
+  async LoginAccount(@Res() res: Response, @Body() body: CreateUserDto) {
+    const { login, password } = JSON.parse(JSON.stringify(body));
+
+    const user = await this.userService.findOneByLogin(login);
+
+    if (isEmpty(user) || user.is42 || password != user.password)
+      return res.status(401).send();
+
+    return res.status(200).send({
+      token: `Bearer ${await this.authService.generateJwt(user.login)}`,
+    });
   }
 }

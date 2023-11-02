@@ -26,13 +26,7 @@ export class RequestsService {
 
   //Handle requests errors
   private handleError(error: HttpErrorResponse){
-    if (error.status === 0){
-      console.error("an error occured");
-    }
-    else {
-      console.error(`Request returned an ${error.status} error`)
-    }
-    return throwError(() => new Error ('Request error!!'));
+    return throwError(() => new Error (`Error response ${error.status}`));
   }
 
   //Get the user's id
@@ -125,36 +119,16 @@ export class RequestsService {
     const userId = this.getId(token);
 
     //Prepare object for the http update
-    /*const  update: UserInterface = {
+    const  update: UserInterface = {
       id: userId!,
       firstName: firstname ? firstname : '',
       lastName: lastname ? lastname : '',
+      password: '',
       nickName: nickname ? nickname : '',
       email: email ? email : '',
-      a2f: a2f
+      a2f: a2f,
+      is42: false
     };*/
-
-    const update: UserInterface = {
-      id: userId!,
-    };
-
-    if (firstname) {
-      update.firstName = firstname;
-    }
-
-    if (lastname) {
-      update.lastName = lastname;
-    }
-
-    if (nickname) {
-      update.nickName = nickname;
-    }
-
-    if (email) {
-      update.email = email;
-    }
-
-    update.a2f = a2f;
 
     this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
     {
@@ -240,9 +214,12 @@ export class RequestsService {
 
   /** Register new User without 42 API */
 
-  registerUser(userData: UserInterface): Observable<HttpResponse<Status>> | undefined {
-    console.log(userData);
-    return this.http.post<HttpResponse<Status>>('http://localhost:3000/auth/register', userData);
+  registerUser(userData: UserInterface) {
+    return this.http.post(`${NESTJS_URL}/auth/register`, userData, { observe: 'response'}).pipe(catchError(this.handleError));
+  }
+
+  loginUser(login: string, password: string) {
+    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' }).pipe(catchError(this.handleError));
   }
 }
 
