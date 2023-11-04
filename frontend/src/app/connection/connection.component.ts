@@ -37,7 +37,7 @@ export class ConnectionComponent {
     this.req.loginUser(<string>login, <string>password).subscribe(async (res) => {
 
       if (res.status != 200) {
-        this.notif.basic_notification('Error Your login or password is not correct !');
+        this.notif.showNotification('Error Your login or password is not correct !');
         await this.timeService.sleep(3000);
         window.location.href = LOGIN_PAGE;
         return ;
@@ -47,7 +47,7 @@ export class ConnectionComponent {
 
       this.cookieServcie.setCookie('authorization', token);
 
-      this.notif.basic_notification(`You are connected with ${login} !`);
+      this.notif.showNotification(`You are connected with ${login} !`);
       await this.timeService.sleep(2000);
       window.location.href = PROFILE_PAGE;
     })
