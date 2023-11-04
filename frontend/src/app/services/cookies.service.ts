@@ -22,6 +22,10 @@ export class CookiesService {
     return (null);
   }
 
+  setCookie(key: string, value: string) {
+    document.cookie = `${key}=${encodeURI(value)}`;
+  }
+
   getToken(): string | null {
     const authorization = this.getCookie('authorization');
 

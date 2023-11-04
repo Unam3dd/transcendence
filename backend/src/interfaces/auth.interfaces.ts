@@ -5,3 +5,14 @@ export interface AuthTo42Data {
   code: string;
   redirect_uri: string;
 }
+
+export interface UserLocalInfo {
+  login: string;
+  firstName: string | null;
+  lastName: string | null;
+  nickName: string;
+  email: string | null;
+  password: string;
+  a2f: boolean;
+  avatar: string;
+}

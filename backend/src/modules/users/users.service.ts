@@ -60,11 +60,11 @@ export class UsersService {
 
   // Adding in the database a new user with all informations collected with the CreateUserDto
   public async registerUser(user: CreateUserDto): Promise<User> {
-    const { id } = user;
+    const { login } = user;
 
-    const uinfo = await this.usersRepository.findOne({ where: { id } });
+    const uinfo = await this.usersRepository.findOne({ where: { login } });
 
-    if (isEmpty(id) && uinfo) throw new UserError('User already exist');
+    if (isEmpty(login) && uinfo) throw new UserError('User already exist');
 
     return await this.usersRepository.save({ ...user });
   }
