@@ -41,7 +41,7 @@ export class RegisterComponent {
     };
 
     this.req.registerUser(userData).subscribe(async () => {
-      this.notif.basic_notification(`Your account has been created successfully !`);
+      this.notif.showNotification(`Your account has been created successfully !`);
       await this.timerService.sleep(5000);
       window.location.href = `${LOGIN_PAGE}`
     });

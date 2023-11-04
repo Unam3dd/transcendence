@@ -128,7 +128,7 @@ export class RequestsService {
       email: email ? email : '',
       a2f: a2f,
       is42: false
-    };*/
+    };
 
     this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
     {
