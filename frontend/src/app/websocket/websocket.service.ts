@@ -68,21 +68,17 @@ export class WebsocketService {
       return (AuthorUser);
     }
 
-    /** Matchmaking function **/
+    /* Game and Matchmaking functions */
 
-   /* searchGame(client: WsClient): void {
-      const user = this.getUserInformation()
-
-      if (!user) return ;
-      client.emit('joinGame', user);
-    }*/
-
-    enterLobby(client: WsClient): void {
-      client.emit('joinGame', 2);
+    enterLobby(client: WsClient, size:number): void {
+      const payload = {
+        "size": size,
+      }
+      client.emit('joinGame', payload);
     }
 
     endGame(client: WsClient, button: string): void {
-      client.emit('endGame', button);
+      client.emit('pressButton', button);
     }
   
 }

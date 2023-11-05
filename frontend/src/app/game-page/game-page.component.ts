@@ -10,37 +10,34 @@ import { WsClient } from '../websocket/websocket.type';
 export class GamePageComponent implements OnInit{
 
   client: WsClient = this.ws.getClient();
-
   display: boolean = false;
-
-  player1: string = '';
-  player2: string = '';
 
   constructor(private ws: WebsocketService) {}
   
   ngOnInit(): void {
 
-    this.client.on('newPlayer', (data) => {
+    this.client.on('gameMessage', (data) => {
       console.log(data);
     })
-
-    this.client.on('matchFound', (data) => {
-      console.log('match found vs', data.login)
-    });
 
     this.client.on('display', () => {
       this.display = true;
     })
 
     this.client.on('endGame', () => {
+      console.log("Game has finished");
       this.display = false;
     });
   } 
 
   findGame(): void {
-    this.ws.enterLobby(this.client);
+    this.ws.enterLobby(this.client, 2);
   }
   
+  findTournament(): void {
+    this.ws.enterLobby(this.client, 3);
+  }
+
   endGame(button: string): void {
     this.ws.endGame(this.client, button);
   }

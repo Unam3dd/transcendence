@@ -8,6 +8,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { LobbyManager } from 'src/game/lobbiesManager';
 
+export interface game {
+  size: number;
+  mode: string;
+}
+
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
   constructor(private readonly lobbyManager: LobbyManager) {}
@@ -65,25 +70,22 @@ export class EventsGateway {
     this.server.emit('newJoinChat', body);
   }
 
+  /** Remote games functions */
+
   @SubscribeMessage('joinGame')
-  CreateLobby(@MessageBody() body: number, @ConnectedSocket() client: Socket) {
-    this.lobbyManager.findLobby(client, body);
+  CreateLobby(@MessageBody() body: game, @ConnectedSocket() client: Socket) {
+    this.lobbyManager.findLobby(client, body.size);
   }
 
-  @SubscribeMessage('endGame')
+  @SubscribeMessage('pressButton')
   endGame(@ConnectedSocket() client: Socket, @MessageBody() body: string) {
     const lobby = this.lobbyManager.findLobbyByClient(client);
-
-    if (lobby && lobby.clients.length === 2) {
-      if (client.id === lobby.clients[0].id && body == 'A')
-        this.lobbyManager.destroyLobby(lobby);
-      else if (client.id === lobby.clients[1].id && body == 'B')
-        this.lobbyManager.destroyLobby(lobby);
-    }
+    lobby.gameInstance.pressButton(client, body);
   }
+
   //Detect clients disconnection
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('new Client disconnected');
-    this.lobbyManager.leaveLobby(client);
+    this.lobbyManager.clientDisconnect(client);
   }
 }
