@@ -163,3 +163,14 @@ services:
       - ${NGINX_PORT}:443
     networks:
       - transcendence
+
+  portainer:
+      hostname: portainer-dev
+      container_name: portainer
+      image: portainer/portainer-ce
+      restart: on-failure
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - "8080:8080"
+        - "9443:9443"
