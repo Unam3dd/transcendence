@@ -18,7 +18,7 @@ export class ChatComponent implements OnInit {
 
     client.on('newJoinChat', (msg) => {
       const text: string = msg;
-      this.notificationService.basic_notification(text);
+      this.notificationService.showNotification(text);
     })
 
     client.emit('message', 'hello chat !');

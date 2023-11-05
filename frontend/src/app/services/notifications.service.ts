@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 })
 export class NotificationService {
 
-  basic_notification(message: string)
+  showNotification(message: string)
   {
     const toast = document.createElement('div');
 
