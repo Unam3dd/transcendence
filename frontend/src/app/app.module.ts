@@ -21,6 +21,7 @@ import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
+import { GameMenuComponent } from './game-menu/game-menu.component';
 
 
 function initializeWebSocket(ws: WebsocketService) {
@@ -44,7 +45,8 @@ function initializeWebSocket(ws: WebsocketService) {
     FriendsComponent,
     ChatPageComponent,
     UserComponent,
-    RegisterComponent
+    RegisterComponent,
+    GameMenuComponent
   ],
   imports: [
     BrowserModule,
