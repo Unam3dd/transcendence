@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, LOGIN_PAGE, PROFILE_PAGE, REDIRECT_URI } from '../env';
+import { CLIENT_ID, PROFILE_PAGE, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
