@@ -10,6 +10,7 @@ import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
 import { Status } from '../enum/status.enum';
+import { NotificationService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root'
@@ -219,7 +220,7 @@ export class RequestsService {
   }
 
   loginUser(login: string, password: string) {
-    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' }).pipe(catchError(this.handleError));
+    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' })
   }
 }
 

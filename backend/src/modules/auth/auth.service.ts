@@ -5,6 +5,7 @@ import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
+import * as argon2 from "argon2";
 
 @Injectable()
 export class AuthService {
@@ -48,6 +49,7 @@ export class AuthService {
 
   public async CreateNewAccount(user: CreateUserDto): Promise<boolean> {
     try {
+      user.password = await argon2.hash(user.password);
       await this.userService.registerUser(user);
     } catch (err) {
       return false;
