@@ -94,9 +94,8 @@ export class UsersService {
   }
 
   public async decodeJWT(token: string): Promise<string[] | null> {
-    const separator = token.includes('%20') ? '%20' : ' ';
 
-    const [type, jwt] = token.split(separator);
+    const [type, jwt] = decodeURI(token)?.split(' ');
 
     if (type !== 'Bearer') return null;
 

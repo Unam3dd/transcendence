@@ -6,6 +6,7 @@ import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
 import { Body } from '@nestjs/common';
 import { isEmpty } from 'class-validator';
+import * as argon2 from "argon2";
 
 import {
   ApiInternalServerErrorResponse,
@@ -89,7 +90,7 @@ export class AuthController {
 
     const user = await this.userService.findOneByLogin(login);
 
-    if (isEmpty(user) || user.is42 || password != user.password)
+    if (isEmpty(user) || user.is42 || !(await argon2.verify(user.password, password)))
       return res.status(401).send();
 
     return res.status(200).send({

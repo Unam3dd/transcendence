@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, LOGIN_PAGE, PROFILE_PAGE, REDIRECT_URI } from '../env';
+import { CLIENT_ID, PROFILE_PAGE, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
@@ -36,13 +36,6 @@ export class ConnectionComponent {
 
     this.req.loginUser(<string>login, <string>password).subscribe(async (res) => {
 
-      if (res.status != 200) {
-        this.notif.showNotification('Error Your login or password is not correct !');
-        await this.timeService.sleep(3000);
-        window.location.href = LOGIN_PAGE;
-        return ;
-      }
-
       const { token } = JSON.parse(JSON.stringify(res.body));
 
       this.cookieServcie.setCookie('authorization', token);
@@ -50,6 +43,9 @@ export class ConnectionComponent {
       this.notif.showNotification(`You are connected with ${login} !`);
       await this.timeService.sleep(2000);
       window.location.href = PROFILE_PAGE;
+    }, async () => {
+      this.notif.showNotification('Error Your login or password is not correct !');
+      return ;
     })
   }
 }
