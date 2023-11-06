@@ -42,8 +42,10 @@ export class RegisterComponent {
 
     this.req.registerUser(userData).subscribe(async () => {
       this.notif.showNotification(`Your account has been created successfully !`);
-      await this.timerService.sleep(5000);
+      await this.timerService.sleep(3000);
       window.location.href = `${LOGIN_PAGE}`
+    }, () => {
+      this.notif.showNotification(`Error You not respect the expected answer to perform registration !`)
     });
   }
 }
