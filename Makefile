@@ -12,10 +12,10 @@ all:
 	@echo "	re                     \t| stop + down + rm + lint + up_dev"
 	@echo "	snyk_<backend/frontend>\t| Check Vulnerabilities backend/frontend"
 
-up: lint format front_lint
+up:
 	@docker compose -f docker-compose.yml up --build
 
-up_dev: lint format front_lint
+up_dev:
 	@docker compose -f docker-compose-dev.yml up --build
 	@echo "Transcandance has been stopped !"
 
@@ -32,28 +32,11 @@ rm:
 	@rm -rf frontend/dist
 	@rm -rf volumes
 
-build: lint format front_lint
+build:
 	@docker compose -f docker-compose.yml build
 
-build_dev: lint format front_lint
+build_dev:
 	@docker compose -f docker-compose-dev.yml build
-
-lint:
-	@cd backend && npm run lint
-
-format:
-	@cd backend && npm run format
-
-front_lint:
-	@cd frontend && npm run lint
-
-front_fix:
-	@cd frontend && npm run lintfix
-
-test:
-	@docker compose -f docker-compose-test.yml up --build
-	@docker compose -f docker-compose-test.yml stop
-	@docker compose -f docker-compose-test.yml down
 
 re:
 	@sudo make stop down rm format lint up_dev
@@ -68,4 +51,4 @@ snyk_frontend:
 	@docker compose -f ./snyk.yaml stop
 	@docker compose -f ./snyk.yaml down
 
-.PHONY: all dev stop down build build_dev lint format test re snyk
+.PHONY: all up up_dev stop down build build_dev re snyk

@@ -20,7 +20,7 @@ export class GameMenuComponent implements OnInit{
     this.userData$ = this.requestsService.getLoggedUserInformation();
   }
 
-  moveToGame() {
-    this.router.navigateByUrl('game');
+  moveToGame(mode: string) {
+    this.router.navigate(['game'], {queryParams: {mode: mode}});
   }
 }

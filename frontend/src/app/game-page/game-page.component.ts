@@ -1,12 +1,44 @@
-import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
+import {ActivatedRoute} from "@angular/router";
+import {Subject, takeUntil} from "rxjs";
+
+enum GameMode {
+  SOLO = 'solo',
+  LOCAL = 'local',
+  REMOTE = 'remote',
+  TOURNAMENT_LOCAL = 'tournament_local',
+  TOURNAMENT_REMOTE = 'tournament_remote'
+}
 
 @Component({
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
   styleUrls: ['./game-page.component.scss']
 })
-export class GamePageComponent implements AfterViewInit {
+export class GamePageComponent implements AfterViewInit, OnDestroy {
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
+  private unsubscribe: Subject<void> = new Subject<void>();
+
+  constructor(private route: ActivatedRoute) {
+    //change the game mode with the button return in the game menu
+    this.route.queryParams
+      .pipe(takeUntil(this.unsubscribe))
+      .subscribe(params => {
+      const mode = params['mode'];
+
+      if (mode === GameMode.SOLO) {
+        this.gameMode = GameMode.SOLO;
+      } else if (mode === GameMode.LOCAL) {
+        this.gameMode = GameMode.LOCAL;
+      } else if (mode === GameMode.REMOTE) {
+        this.gameMode = GameMode.REMOTE;
+      } else if (mode === GameMode.TOURNAMENT_LOCAL) {
+        this.gameMode = GameMode.TOURNAMENT_LOCAL;
+      } else if (mode === GameMode.TOURNAMENT_REMOTE) {
+        this.gameMode = GameMode.TOURNAMENT_REMOTE;
+      }
+    })
+  }
 
   //Rackets config variables
   barLeftY: number = 0;
@@ -31,6 +63,9 @@ export class GamePageComponent implements AfterViewInit {
   //This variable checks whether the game is running
   gameStart: boolean = false;
 
+  //Game mode variable
+  gameMode!: GameMode;
+
   //init game
   ngAfterViewInit() {
     this.adjustCanvasDPI();
@@ -41,7 +76,7 @@ export class GamePageComponent implements AfterViewInit {
 
   //Key management
   @HostListener('window:keydown', ['$event'])
-  keyEvent(event: KeyboardEvent) {
+  localKeyEvent(event: KeyboardEvent) {
     if (event.key === 'ArrowUp' && this.barRightY - this.barSpeed >= 0) {
       this.barRightY -= this.barSpeed;
     } else if (event.key === 'ArrowDown' && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
@@ -64,6 +99,21 @@ export class GamePageComponent implements AfterViewInit {
         this.gameStart = true;
         this.startGame();
       }
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (this.gameMode === GameMode.SOLO) {
+      console.log('Mode solo activated');
+    } else if (this.gameMode === GameMode.LOCAL) {
+      this.localKeyEvent(event);
+    } else if (this.gameMode === GameMode.REMOTE) {
+      console.log('Mode remote activated');
+    } else if (this.gameMode === GameMode.TOURNAMENT_LOCAL) {
+      console.log('Mode local tournament activated');
+    } else if (this.gameMode === GameMode.TOURNAMENT_REMOTE) {
+      console.log('Mode remote tournament activated');
     }
   }
 
@@ -196,6 +246,16 @@ export class GamePageComponent implements AfterViewInit {
         context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
         this.gameStart = false;
       }
+    }
+  }
+
+  //Destructor
+  ngOnDestroy() {
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+
+    if (this.gameInterval) {
+      clearInterval(this.gameInterval);
     }
   }
 }

@@ -102,7 +102,7 @@ services:
     build:
       context: ./containers/nodejs
       dockerfile: Dockerfile
-    command: ["npm", "run", "start:dev" ]
+    command: ["npm", "run", "start:dev"]
     volumes:
       - type: bind
         source: ./backend
@@ -125,3 +125,15 @@ services:
     restart: on-failure
     networks:
       - transcendence
+
+  # Other alternative is harbor but the techstack is too big  
+  portainer:
+      hostname: portainer-dev
+      container_name: portainer
+      image: portainer/portainer-ce
+      restart: on-failure
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+      ports:
+        - "9000:9000"
+        - "9443:9443"

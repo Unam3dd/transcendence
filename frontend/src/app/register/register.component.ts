@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { UserInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
+import { NotificationService } from '../services/notifications.service';
+import { TimerService } from '../services/timer.service';
+import { LOGIN_PAGE } from '../env';
 
 @Component({
   selector: 'app-register',
@@ -9,7 +12,9 @@ import { RequestsService } from '../services/requests.service';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent {
-  constructor (private formBuilder: FormBuilder, private req: RequestsService) {}
+  responseData: any;
+
+  constructor (private formBuilder: FormBuilder, private req: RequestsService, private timerService: TimerService, private notif: NotificationService) {}
 
   form = this.formBuilder.group({
     login: '',
@@ -31,9 +36,14 @@ export class RegisterComponent {
       nickName: nickName,
       email: email,
       password: password,
-      a2f: a2f
-    }
+      a2f: a2f,
+      is42: false
+    };
 
-    this.req.registerUser(userData)?.subscribe();
+    this.req.registerUser(userData).subscribe(async () => {
+      this.notif.showNotification(`Your account has been created successfully !`);
+      await this.timerService.sleep(5000);
+      window.location.href = `${LOGIN_PAGE}`
+    });
   }
 }

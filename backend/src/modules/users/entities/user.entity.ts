@@ -49,6 +49,16 @@ export class User {
   @Column({
     type: 'varchar',
     nullable: true,
+  })
+  @Length(8, 120, {
+    message: 'password must be between 8 and 120 characters',
+  })
+  @IsString({ message: 'password must be a string' })
+  password: string | null;
+
+  @Column({
+    type: 'varchar',
+    nullable: true,
     unique: true,
   })
   @Length(3, 120, {
@@ -77,6 +87,10 @@ export class User {
   @IsUrl({}, { message: 'avatar must be an url !' })
   avatar: string;
 
+  @Column({
+    type: 'boolean',
+    nullable: true,
+  })
   @IsBoolean({ message: 'is42Account must be a boolean !' })
   is42: boolean;
 

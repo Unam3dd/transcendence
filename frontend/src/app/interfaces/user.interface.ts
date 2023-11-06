@@ -8,6 +8,7 @@ export interface UserInterface {
     password?: string | null;
     a2f?: boolean | null;
     avatar?: string | null;
+    is42: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }
