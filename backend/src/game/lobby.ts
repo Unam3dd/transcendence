@@ -1,18 +1,13 @@
-import { Socket } from 'socket.io';
 import { v4 } from 'uuid';
 import { gameInstance } from './game';
 import { LobbyManager } from './lobbiesManager';
-
-export enum gameState {
-  waiting = 1,
-  playing,
-  finish,
-}
+import { PlayerInfo } from 'src/interfaces/game.interfaces';
+import { gameState } from 'src/enum/gameState.enum';
 
 export class Lobby {
   public id: string;
 
-  public clients: Socket[] = [];
+  public players: PlayerInfo[] = [];
 
   public readonly gameInstance = new gameInstance(this);
 
@@ -31,27 +26,27 @@ export class Lobby {
     if (maxSize === 2) console.log('Lobby created : ', this.id);
   }
 
-  public addClient(client: Socket): void {
-    if (this.clients.length >= this.maxSize) return;
+  public addClient(player: PlayerInfo): void {
+    if (this.players.length >= this.maxSize) return;
 
-    this.clients.push(client);
+    this.players.push(player);
     this.sendToAll('gameMessage', 'Someone joined the lobby');
 
-    if (this.clients.length === this.maxSize) this.gameInstance.launchGame();
+    if (this.players.length === this.maxSize) this.gameInstance.launchGame();
   }
 
-  public removeClient(client: Socket): void {
-    const index = this.clients.indexOf(client);
-    if (index !== -1) this.clients.splice(index, 1);
+  public removeClient(player: PlayerInfo): void {
+    const index = this.players.indexOf(player);
+    if (index !== -1) this.players.splice(index, 1);
 
     this.sendToAll('gameMessage', 'Someone has leave the lobby');
   }
 
-  public playerDisconnect(client: Socket): void {
+  public playerDisconnect(player: PlayerInfo): void {
     this.state = gameState.finish;
     this.sendToAll(
       'gameMessage',
-      `Game is over becaune ${client.id} has disconnected`,
+      `Game is over becaune ${player.login} has disconnected`,
     );
     this.finishGame();
   }
@@ -62,8 +57,8 @@ export class Lobby {
   }
 
   public sendToAll(event: string, msg: string): void {
-    this.clients.forEach((client) => {
-      client.emit(event, msg);
+    this.players.forEach((player) => {
+      player.socket.emit(event, msg);
     });
   }
 }

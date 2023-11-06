@@ -71,14 +71,28 @@ export class WebsocketService {
     /* Game and Matchmaking functions */
 
     enterLobby(client: WsClient, size:number): void {
+      const user = this.getUserInformation();
+
+      if (!user) return ;
+
       const payload = {
+        "login": user.login,
         "size": size,
       }
       client.emit('joinGame', payload);
     }
 
     endGame(client: WsClient, button: string): void {
-      client.emit('pressButton', button);
+
+      const user = this.getUserInformation();
+
+      if (!user) return ;
+
+      const payload = {
+        "login": user.login,
+        "button": button,
+      }
+      client.emit('pressButton', payload);
     }
   
 }

@@ -7,10 +7,12 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { LobbyManager } from 'src/game/lobbiesManager';
+import { PlayerInfo } from 'src/interfaces/game.interfaces';
 
-export interface game {
-  size: number;
-  mode: string;
+export interface GamePayload {
+  login: string,
+  size?: number,
+  button?: string
 }
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
@@ -29,7 +31,7 @@ export class EventsGateway {
 
     // send message to all clients of the server on 'reponse' event using the server instance
     this.server.emit('response', 'A new client just connect');
-  }
+  } 
 
   @SubscribeMessage('join')
   newArrival(@MessageBody() msg: string) {
@@ -73,17 +75,23 @@ export class EventsGateway {
   /** Remote games functions */
 
   @SubscribeMessage('joinGame')
-  CreateLobby(@MessageBody() body: game, @ConnectedSocket() client: Socket) {
-    this.lobbyManager.findLobby(client, body.size);
+  CreateLobby(@MessageBody() body: GamePayload, @ConnectedSocket() client: Socket) {
+    const player: PlayerInfo = { 
+      socket: client,
+      login: body.login,
+    }
+    this.lobbyManager.findLobby(player, body.size);
   }
 
   @SubscribeMessage('pressButton')
-  endGame(@ConnectedSocket() client: Socket, @MessageBody() body: string) {
-    const lobby = this.lobbyManager.findLobbyByClient(client);
-    lobby.gameInstance.pressButton(client, body);
+  endGame(@ConnectedSocket() client: Socket, @MessageBody() body: GamePayload) {
+    const player = this.lobbyManager.findUserBySocket(client);
+    const lobby = this.lobbyManager.findLobbyByPlayer(player);
+    lobby.gameInstance.pressButton(player, body.button);
   }
 
   //Detect clients disconnection
+  
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('new Client disconnected');
     this.lobbyManager.clientDisconnect(client);

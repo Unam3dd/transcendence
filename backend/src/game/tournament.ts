@@ -1,13 +1,14 @@
+import { PlayerInfo } from 'src/interfaces/game.interfaces';
 import { LobbyManager } from './lobbiesManager';
-import { Lobby, gameState } from './lobby';
-import { Socket } from 'socket.io';
+import { Lobby } from './lobby';
+import { gameState } from 'src/enum/gameState.enum';
 
 export class Tournament extends Lobby {
   roundCount: number = 0;
 
   roundTotal: number = 0;
 
-  livePlayers: Socket[];
+  livePlayers: PlayerInfo[];
 
   currentMatch: Lobby[];
 
@@ -20,25 +21,25 @@ export class Tournament extends Lobby {
     console.log('Tournament created : ', this.id);
   }
 
-  public addClient(client: Socket): void {
-    if (this.clients.length >= this.maxSize) return;
+  public addClient(player: PlayerInfo): void {
+    if (this.players.length >= this.maxSize) return;
 
-    this.clients.push(client);
+    this.players.push(player);
     this.sendToAll('gameMessage', 'Someone joined the tournament');
 
-    if (this.clients.length === this.maxSize) this.startTournament();
+    if (this.players.length === this.maxSize) this.startTournament();
   }
 
   public startTournament(): void {
     this.state = gameState.playing;
-    if (this.clients.length < 5) this.roundTotal = 2;
+    if (this.players.length < 5) this.roundTotal = 2;
     else this.roundTotal = 3;
-    this.livePlayers = this.clients;
+    this.livePlayers = this.players;
 
     this.launchMatch(this.livePlayers);
   }
 
-  public launchMatch(players: Socket[]): void {
+  public launchMatch(players: PlayerInfo[]): void {
     let match: Lobby;
     let index = 0;
     this.currentMatch = [];
@@ -62,19 +63,19 @@ export class Tournament extends Lobby {
     }, 5000);
   }
 
-  public handleVictory(client: Socket) {
+  public handleVictory(player: PlayerInfo) {
     let launch: boolean = true;
     this.sendToAll('gameMessage', 'A match just finished');
 
     //If this was the final match then call finishTournament()
     console.log('Round Count before handling victory', this.roundCount);
     if (this.roundCount === this.roundTotal) {
-      this.finishTournament(client);
+      this.finishTournament(player);
       return;
     }
 
     //Adding the winner in the array of livePlayers
-    this.livePlayers.push(client);
+    this.livePlayers.push(player);
 
     //Check if all match of this round are terminated before launching new round
     for (const match of this.currentMatch) {
@@ -82,39 +83,42 @@ export class Tournament extends Lobby {
     }
 
     //Remove loosers from livePlayers array
-    this.ejectFromTournament(client);
+    this.ejectFromTournament(player);
 
     //If launch === true we are ready for next round
     if (launch) this.nextRound();
   }
 
-  public ejectFromTournament(client: Socket): void {
-    const match = this.lobbyManager.findLobbyByClient(client);
+  public ejectFromTournament(player: PlayerInfo): void {
+    const match = this.lobbyManager.findLobbyByPlayer(player);
 
-    for (const player of match.clients) {
-      if (player !== client) this.removeClient(player);
+    for (const player of match.players) {
+      if (player !== player) this.removeClient(player);
     }
     this.lobbyManager.destroyLobby(match);
   }
 
-  public playerDisconnect(client: Socket): void {
+  public playerDisconnect(player: PlayerInfo): void {
     this.state = gameState.finish;
-    for (const match of this.currentMatch)
-      this.lobbyManager.destroyLobby(match);
+
+    if (this.currentMatch) {
+      for (const match of this.currentMatch)
+        this.lobbyManager.destroyLobby(match);
+    }
 
     this.sendToAll(
       'gameMessage',
-      `Tournament is over because ${client.id} has disconnected`,
+      `Tournament is over because ${player.login} has disconnected`,
     );
 
     this.gameInstance.endGame();
     this.lobbyManager.destroyLobby(this);
   }
 
-  public finishTournament(winner: Socket): void {
+  public finishTournament(winner: PlayerInfo): void {
     this.sendToAll(
       'gameMessage',
-      `${winner.id} is the winner of this tournament`,
+      `${winner.login} is the winner of this tournament`,
     );
     this.lobbyManager.destroyLobby(this.currentMatch[0]);
     this.lobbyManager.destroyLobby(this);
