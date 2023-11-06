@@ -1,5 +1,10 @@
 #!/bin/sh
 
 chmod -R 777 /project/
+npm install @angular-eslint/builder --save --legacy-peer-deps
 npm install
+if [ "$HOST" = "nestjs" ] || [ "$HOST" = "nestjs-dev" ]; then
+    npm run lint
+    npm run format
+fi
 exec ${@}

@@ -102,7 +102,7 @@ services:
     build:
       context: ./containers/nodejs
       dockerfile: Dockerfile
-    command: ["npm", "run", "start:dev" ]
+    command: ["npm", "run", "start:dev"]
     volumes:
       - type: bind
         source: ./backend
@@ -135,5 +135,5 @@ services:
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
       ports:
-        - "8080:8080"
+        - "9000:9000"
         - "9443:9443"
