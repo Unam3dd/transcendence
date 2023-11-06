@@ -38,7 +38,7 @@ export class HomePageComponent implements OnInit {
 
   // Move to Game page
   moveToGame() {
-    this.router.navigateByUrl('game');
+    this.router.navigateByUrl('game-menu');
   }
 
   // Move to Chat page
