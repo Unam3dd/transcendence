@@ -69,7 +69,7 @@ export class UsersService {
     return await this.usersRepository.save({ ...user });
   }
 
-  // Updating an user with all informations collected with the UpdateUserDto
+  // Updating a user with all informations collected with the UpdateUserDto
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
     const target = await this.usersRepository.findOne({ where: { id } });
 
@@ -94,9 +94,8 @@ export class UsersService {
   }
 
   public async decodeJWT(token: string): Promise<string[] | null> {
-    const separator = token.includes('%20') ? '%20' : ' ';
 
-    const [type, jwt] = token.split(separator);
+    const [type, jwt] = decodeURI(token)?.split(' ');
 
     if (type !== 'Bearer') return null;
 
