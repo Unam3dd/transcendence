@@ -69,7 +69,7 @@ export class UsersService {
     return await this.usersRepository.save({ ...user });
   }
 
-  // Updating an user with all informations collected with the UpdateUserDto
+  // Updating a user with all informations collected with the UpdateUserDto
   public async updateUser(id: number, user: UpdateUserDto): Promise<User> {
     const target = await this.usersRepository.findOne({ where: { id } });
 

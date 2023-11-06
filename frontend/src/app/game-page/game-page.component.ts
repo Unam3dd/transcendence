@@ -1,10 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, ViewChild} from '@angular/core';
 
-enum GameMode {
-  TWO_PLAYERS = 'twoPlayers',
-  SOLO = 'solo'
-}
-
 @Component({
   selector: 'app-game-page',
   templateUrl: './game-page.component.html',
@@ -13,26 +8,30 @@ enum GameMode {
 export class GamePageComponent implements AfterViewInit {
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
 
+  //Rackets config variables
   barLeftY: number = 0;
   barRightY: number = 0;
   barHeight: number = 50;
   barWidth: number = 10;
   barSpeed: number = 30;
 
+  //Ball config variables
   ballX: number = 0;
   ballY: number = 0;
   ballRadius: number = 10;
   ballSpeedX: number = 0;
   ballSpeedY: number = 0;
   ballSpeed: number = 5;
+  gameInterval: number = 0;
 
+  //Score variables
   scoreP1: number = 0;
   scoreP2: number = 0;
 
-  gameInterval: number = 0;
+  //This variable checks whether the game is running
+  gameStart: boolean = false;
 
-  gameMode: GameMode = GameMode.TWO_PLAYERS;
-
+  //init game
   ngAfterViewInit() {
     this.adjustCanvasDPI();
     this.initPosition();
@@ -40,45 +39,29 @@ export class GamePageComponent implements AfterViewInit {
     this.drawElements();
   }
 
-  changeGameMode(mode: string) {
-    if (mode == 'twoPlayers') {
-      this.gameMode = GameMode.TWO_PLAYERS;
-    } else if (mode == 'solo') {
-      this.gameMode = GameMode.SOLO;
-    }
-  }
-
   //Key management
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
-    if (this.gameMode == GameMode.TWO_PLAYERS) {
-      if (event.key === 'ArrowUp' && this.barRightY - this.barSpeed >= 0) {
-        this.barRightY -= this.barSpeed;
-      } else if (event.key === 'ArrowDown' && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
-        this.barRightY += this.barSpeed;
-      } else if ((event.key === 'w' || event.key === 'W') && this.barLeftY - this.barSpeed >= 0) {
-        this.barLeftY -= this.barSpeed;
-      } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
-        this.barLeftY += this.barSpeed;
-      }
-      this.drawElements();
-    } else if (this.gameMode == GameMode.SOLO) {
-      console.log('Solo mode activated');
-      if (event.key === 'ArrowUp') {
-        this.barLeftY -= this.barSpeed;
-      } else if (event.key === 'ArrowDown') {
-        this.barLeftY += this.barSpeed;
-      }
-      this.drawElements();
+    if (event.key === 'ArrowUp' && this.barRightY - this.barSpeed >= 0) {
+      this.barRightY -= this.barSpeed;
+    } else if (event.key === 'ArrowDown' && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
+      this.barRightY += this.barSpeed;
+    } else if ((event.key === 'z' || event.key === 'Z') && this.barLeftY - this.barSpeed >= 0) {
+      this.barLeftY -= this.barSpeed;
+    } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
+      this.barLeftY += this.barSpeed;
     }
+    this.drawElements();
 
     if (event.key === 'Enter') {
-      if (this.scoreP1 === 10 || this.scoreP2 === 10) {
+      if ((this.scoreP1 === 10 || this.scoreP2 === 10) && !this.gameStart) {
         this.scoreP1 = 0;
         this.scoreP2 = 0;
         this.initPosition();
+        this.gameStart = true;
         this.startGame();
-      } else {
+      } else if (!this.gameStart) {
+        this.gameStart = true;
         this.startGame();
       }
     }
@@ -205,11 +188,13 @@ export class GamePageComponent implements AfterViewInit {
       if (this.scoreP1 == 10) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        context.fillText('Win', centerX / 2, 200);
+        context.fillText('Win', (centerX / 2) - 20, 200);
+        this.gameStart = false;
       } else if (this.scoreP2 == 10) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        context.fillText('Win', 3 * (canvas.width / 4), 200);
+        context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
+        this.gameStart = false;
       }
     }
   }
