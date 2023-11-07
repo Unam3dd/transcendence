@@ -89,11 +89,11 @@ export class Tournament extends Lobby {
     if (launch) this.nextRound();
   }
 
-  public ejectFromTournament(player: PlayerInfo): void {
-    const match = this.lobbyManager.findLobbyByPlayer(player);
+  public ejectFromTournament(winner: PlayerInfo): void {
+    const match = this.lobbyManager.findLobbyByPlayer(winner);
 
     for (const player of match.players) {
-      if (player !== player) this.removeClient(player);
+      if (player !== winner) this.removeClient(player);
     }
     this.lobbyManager.destroyLobby(match);
   }

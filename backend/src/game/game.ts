@@ -21,10 +21,19 @@ export class gameInstance {
 
   public pressButton(player: PlayerInfo, button: string): void {
     if (this && this.lobby.players.length === 2) {
-      if (player === this.lobby.players[0] && button == 'A')
-        this.gameVictory(player);
-      else if (player === this.lobby.players[1] && button == 'B')
-        this.gameVictory(player);
+      if (player === this.lobby.players[0] && button == 'ArrowUp')
+      {
+        this.lobby.players[0].socket.emit('playerMoveUp', player.login);
+        this.lobby.players[1].socket.emit('playerMoveUp', player.login);
+
+        //this.gameVictory(player);
+      }
+      else if (player === this.lobby.players[1] && button == 'ArrowDown')
+      {
+        this.lobby.players[0].socket.emit('playerMoveDown', player.login);
+        this.lobby.players[1].socket.emit('playerMoveDown', player.login);
+        //this.gameVictory(player);
+      }
     }
   }
 

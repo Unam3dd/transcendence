@@ -84,7 +84,7 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('pressButton')
-  endGame(@ConnectedSocket() client: Socket, @MessageBody() body: GamePayload) {
+  pressButton(@ConnectedSocket() client: Socket, @MessageBody() body: GamePayload) {
     const player = this.lobbyManager.findUserBySocket(client);
     const lobby = this.lobbyManager.findLobbyByPlayer(player);
     lobby.gameInstance.pressButton(player, body.button);

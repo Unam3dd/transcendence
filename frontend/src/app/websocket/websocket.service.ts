@@ -15,7 +15,8 @@ export class WebsocketService {
   public client: any
 
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService,) {
+    private readonly jwtService: JwtService,) 
+  {
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
@@ -35,64 +36,63 @@ export class WebsocketService {
       this.client.on('disconnect', (msg: string) => {
         console.log(msg);
       })
-    }
+  }
 
-    initializeWebsocketService() {
-      console.log('Websocket service was initialized !');
-    }
+  initializeWebsocketService() {
+    console.log('Websocket service was initialized !');
+  }
 
-    getClient(): WsClient { return (this.client); }
+  getClient(): WsClient { return (this.client); }
 
-    sendHelloChat(client: WsClient): void {
-      const user = this.getUserInformation()
+  sendHelloChat(client: WsClient): void {
+    const user = this.getUserInformation()
 
-      if (!user) return ;
+    if (!user) return ;
 
-      client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
-    }
+    client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
+  }
 
-    getUserInformation(): UserSanitizeInterface | null {
-      const token: string | null = this.cookieService.getToken();
+  getUserInformation(): UserSanitizeInterface | null {
+    const token: string | null = this.cookieService.getToken();
   
-      if (!token) return (null);
+    if (!token) return (null);
 
       // get client username from JWT token
-      const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
+    const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
       
-      const AuthorUser: UserSanitizeInterface = {
-        id: payloadJWT.sub,
-        login: payloadJWT.login,
-        nickName: payloadJWT.nickName,
-        avatar: payloadJWT.avatar
-      }
-      return (AuthorUser);
+    const AuthorUser: UserSanitizeInterface = {
+      id: payloadJWT.sub,
+      login: payloadJWT.login,
+      nickName: payloadJWT.nickName,
+      avatar: payloadJWT.avatar
     }
+    return (AuthorUser);
+  }
 
-    /* Game and Matchmaking functions */
+  /* Game and Matchmaking functions */
 
-    enterLobby(client: WsClient, size:number): void {
-      const user = this.getUserInformation();
+  enterLobby(client: WsClient, size:number): void {
+    const user = this.getUserInformation();
 
-      if (!user) return ;
+    if (!user) return ;
 
-      const payload = {
-        "login": user.login,
-        "size": size,
-      }
-      client.emit('joinGame', payload);
+    const payload = {
+      "login": user.login,
+      "size": size,
     }
+    client.emit('joinGame', payload);
+  }
 
-    endGame(client: WsClient, button: string): void {
+  pressButton(client: WsClient, button: string): void {
 
-      const user = this.getUserInformation();
+    const user = this.getUserInformation();
 
-      if (!user) return ;
+    if (!user) return ;
 
-      const payload = {
-        "login": user.login,
-        "button": button,
-      }
-      client.emit('pressButton', payload);
+    const payload = {
+      "login": user.login,
+      "button": button,
     }
-  
+    client.emit('pressButton', payload);
+  }
 }

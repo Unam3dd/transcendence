@@ -3,6 +3,7 @@ import { WsClient } from '../websocket/websocket.type';
 import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
+import { RequestsService } from '../services/requests.service';
 
 enum GameMode {
   SOLO = 'solo',
@@ -21,12 +22,13 @@ enum GameMode {
 export class GamePageComponent implements AfterViewInit, OnDestroy {
 
   client: WsClient = this.ws.getClient();
+  userLogin: string = '';
   display: boolean = false;
 
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private ws: WebsocketService) {
+  constructor(private route: ActivatedRoute, private readonly ws: WebsocketService, private readonly requestService: RequestsService) {
     //change the game mode with the button return in the game menu
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe))
@@ -45,31 +47,40 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.gameMode = GameMode.TOURNAMENT_REMOTE;
       }
     })
+ 
+    this.requestService.getLoggedUserInformation()?.subscribe((data) => {
+      this.userLogin = data.login as string;
+    });
 
     this.client.on('gameMessage', (data) => {
       console.log(data);
     })
 
     this.client.on('display', () => {
-      this.display = true;
+      this.launchGame();
     })
-
+/*
     this.client.on('endGame', () => {
       console.log("Game has finished");
       this.display = false;
     });
+*/
+
+    this.client.on('playerMoveUp', (payload) => {
+      if (payload === this.userLogin)
+        this.barRightY -= this.barSpeed;
+      if (payload !== this.userLogin)
+        this.barLeftY -= this.barSpeed;
+    });
+
+    this.client.on('playerMoveDown', (payload) => {
+      console.log(payload);
+    });
   }
 
-  findGame(): void {
-    this.ws.enterLobby(this.client, 2);
-  }
-  
-  findTournament(): void {
-    this.ws.enterLobby(this.client, 3);
-  }
-
-  endGame(button: string): void {
-    this.ws.endGame(this.client, button);
+  //envoie le bouton sur leaquel le joueur a appuyer
+  pressButton(button: string): void {
+    this.ws.pressButton(this.client, button);
   }
 
   //Rackets config variables
@@ -134,6 +145,29 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  launchGame(){
+    if ((this.scoreP1 === 10 || this.scoreP2 === 10) && !this.gameStart) {
+      this.scoreP1 = 0;
+      this.scoreP2 = 0;
+      this.initPosition();
+      this.gameStart = true;
+      this.startGame();
+    } else if (!this.gameStart) {
+      this.gameStart = true;
+      this.startGame();
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  remoteKeyEvent(event: KeyboardEvent) {
+    if (event.key === 'ArrowUp') {
+      this.pressButton(event.key);
+    } else if (event.key === 'ArrowDown') {
+      this.pressButton(event.key);
+    }
+    //this.drawElements();
+  }
+
   @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (this.gameMode === GameMode.SOLO) {
@@ -141,7 +175,8 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     } else if (this.gameMode === GameMode.LOCAL) {
       this.localKeyEvent(event);
     } else if (this.gameMode === GameMode.REMOTE) {
-      console.log('Mode remote activated');
+      this.pressButton(event.key);
+      //this.remoteKeyEvent(event);
     } else if (this.gameMode === GameMode.TOURNAMENT_LOCAL) {
       console.log('Mode local tournament activated');
     } else if (this.gameMode === GameMode.TOURNAMENT_REMOTE) {
