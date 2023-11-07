@@ -15,12 +15,20 @@ export class UpdateProfileComponent implements OnInit{
   lastname = new FormControl('');
   nickname = new FormControl('');
   email = new FormControl('');
-  a2f: FormControl<boolean> = new FormControl();
+  a2f!: FormControl<boolean | null>;
 
   constructor(private requestService: RequestsService) {}
 
   ngOnInit(): void {
     this.userData$ = this.requestService.getLoggedUserInformation();
+
+    this.userData$?.subscribe((userData: UserInterface) => {
+      if (userData && userData.a2f !== undefined && userData.a2f !== null) {
+        const a2fValue: boolean = userData.a2f;
+
+        this.a2f = new FormControl(a2fValue);
+      }
+    });
   }
 
   updateDatas() {

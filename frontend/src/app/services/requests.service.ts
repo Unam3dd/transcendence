@@ -209,7 +209,7 @@ export class RequestsService {
     const userId = this.getId(token);
 
     return this.http.post<HttpResponse<Status>>(`${NESTJS_URL}/block/add`, {
-      user1: userId, user2: targetId }, { headers: 
+      user1: userId, user2: targetId }, { headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 

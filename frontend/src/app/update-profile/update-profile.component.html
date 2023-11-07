@@ -2,24 +2,25 @@
   <div *ngIf="userData$ | async as userData">
     <div>
       <div>
-        <label for="firstname">Firstname</label>
-        <input placeholder="{{userData.firstName}}" id="firstname" [formControl]="firstname">
+        <span>Firstname</span>
+        <input placeholder="{{userData.firstName}}" class="form-control" [formControl]="firstname">
       </div>
       <div>
-        <label for="lastname">Lastname</label>
-        <input placeholder="{{userData.lastName}}" id="lastname" [formControl]="lastname">
+        <span>Lastname</span>
+        <input placeholder="{{userData.lastName}}" class="form-control" [formControl]="lastname">
       </div>
       <div>
-        <label for="nickname">Nickname</label>
-        <input placeholder="{{userData.nickName}}" id="nickname" [formControl]="nickname">
+        <span>Nickname</span>
+        <input placeholder="{{userData.nickName}}" class="form-control" [formControl]="nickname">
       </div>
       <div>
-        <label for="login">Email</label>
-        <input placeholder="{{userData.email}}" id="login" [formControl]="email">
+        <span>Email</span>
+        <input placeholder="{{userData.email}}" class="form-control" [formControl]="email">
       </div>
-    </div>
-    <div>
-      A2F
+      <div class="form-check form-switch">
+        <span>A2F</span>
+        <input class="form-check-input" type="checkbox" role="switch" [formControl]="a2f">
+      </div>
     </div>
     <div>
       <button type="submit">Confirm</button>
