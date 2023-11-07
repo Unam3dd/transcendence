@@ -10,10 +10,29 @@
     <label class="form-check-label" for="a2fCheck">A2F </label>
     <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="userData.a2f" disabled>
   </p>
-  <button (click)="Logout()">Logout</button>
   <p>Friends: my-friends</p>
   <p>History: my-games-history</p>
   <p>(Achievements: my-achievements)</p>
   <button (click)="moveToUpdate()">Change my profile</button>
+  <button type="button" class="btn btn-danger" (click)="openModal(content)">
+    Delete account
+  </button>
 </div>
 
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Delete account</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="mb-3">
+        Are you sure ?
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+    <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete my account</button>
+  </div>
+</ng-template>

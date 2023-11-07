@@ -119,16 +119,14 @@ export class RequestsService {
     const userId = this.getId(token);
 
     //Prepare object for the http update
-    const  update: UserInterface = {
-      id: userId!,
-      firstName: firstname ? firstname : '',
-      lastName: lastname ? lastname : '',
-      password: '',
-      nickName: nickname ? nickname : '',
-      email: email ? email : '',
-      a2f: a2f,
-      is42: false
-    };
+    const  update: Partial<UserInterface> = { id: userId! };
+
+    if (firstname) update.firstName = firstname;
+    if (lastname) update.lastName = lastname;
+    if (nickname) update.nickName = nickname;
+    if (email) update.email = email;
+    update.a2f = a2f;
+    update.is42 = false;
 
     this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
     {
@@ -138,6 +136,15 @@ export class RequestsService {
     });
 
     return (this.updateSubscription);
+  }
+
+  deleteUser(): Observable<UserInterface> | null{
+    const JWT_TOKEN = this.cookieService.getToken();
+
+    if (!JWT_TOKEN) return (null);
+
+    return (this.http.delete<UserInterface>(`${NESTJS_URL}/users`, {
+      headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }));
   }
 
   // Get sanitazed informations about one user
@@ -152,7 +159,7 @@ export class RequestsService {
   }
 
 
-  /* Friends Resquests */
+  /** Friends Resquests **/
 
   addFriends(targetId: number) {
     const token = this.cookieService.getToken();

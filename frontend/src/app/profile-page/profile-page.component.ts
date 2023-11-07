@@ -4,6 +4,7 @@ import {RequestsService} from "../services/requests.service";
 import { UserInterface } from '../interfaces/user.interface';
 import {Router} from "@angular/router";
 import { CookiesService } from '../services/cookies.service';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-profile-page',
@@ -11,12 +12,12 @@ import { CookiesService } from '../services/cookies.service';
   styleUrls: ['./profile-page.component.scss']
 })
 export class ProfilePageComponent implements OnInit{
-
-  userData$!: Observable<UserInterface> | null;
   constructor(private requestService: RequestsService,
               private cookieService: CookiesService,
-              private router: Router) {}
+              private router: Router,
+              private modalService: NgbModal) {}
 
+  userData$!: Observable<UserInterface> | null;
 
   // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
@@ -28,6 +29,15 @@ export class ProfilePageComponent implements OnInit{
   }
 
   Logout() {
+    this.cookieService.removeCookie('authorization');
+  }
+
+  openModal(content: any) {
+    this.modalService.open(content);
+  }
+
+  deleteUser() {
+    this.requestService.deleteUser();
     this.cookieService.removeCookie('authorization');
   }
 }
