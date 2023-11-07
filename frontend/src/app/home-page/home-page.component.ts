@@ -4,7 +4,7 @@ import {RequestsService} from "../services/requests.service";
 import {Observable} from "rxjs";
 import {FormControl, Validators} from "@angular/forms";
 import { UserInterface } from '../interfaces/user.interface';
-import { NotificationService } from '../services/notifications.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-home-page',
@@ -19,7 +19,7 @@ export class HomePageComponent implements OnInit {
 
   constructor(private router: Router,
               private requestsService: RequestsService,
-              private notif: NotificationService) {}
+              private notif: NotificationsService) {}
 
   ngOnInit() {
     this.userData$ = this.requestsService.getLoggedUserInformation();
@@ -50,11 +50,12 @@ export class HomePageComponent implements OnInit {
 
   // Update nickName of user and reload the page
   updateNickname() {
+    this.notif.info('Information', 'You are now register with 42API !');
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
     this.requestsService.updateUserHomeData(newNickname, newEmail)?.subscribe((data) => {
 
-      this.notif.showNotification('Your profile has been updated !');
+      this.notif.success('Success', 'Your profile has been updated !');
 
       const { token } = JSON.parse(JSON.stringify(data));
 
@@ -62,7 +63,7 @@ export class HomePageComponent implements OnInit {
 
       window.location.reload();
     }, () => {
-      this.notif.showNotification('NickName or email is already taken !');
+      this.notif.error('Error', 'Nickname or email is already taken please choose another nickname or email !');
     });
   }
 }
