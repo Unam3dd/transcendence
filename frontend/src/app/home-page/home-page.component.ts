@@ -4,7 +4,8 @@ import {RequestsService} from "../services/requests.service";
 import {Observable} from "rxjs";
 import {FormControl, Validators} from "@angular/forms";
 import { UserInterface } from '../interfaces/user.interface';
-import { NotificationService } from '../services/notifications.service';
+import { NotificationsService } from 'angular2-notifications';
+import { TimerService } from '../services/timer.service';
 
 @Component({
   selector: 'app-home-page',
@@ -15,11 +16,13 @@ export class HomePageComponent implements OnInit {
 
   userData$!: Observable<UserInterface> | null;
   nickname = new FormControl('');
+  count = 0;
   email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/)]);
 
   constructor(private router: Router,
               private requestsService: RequestsService,
-              private notif: NotificationService) {}
+              private notif: NotificationsService,
+              private timer: TimerService) {}
 
   ngOnInit() {
     this.userData$ = this.requestsService.getLoggedUserInformation();
@@ -49,12 +52,14 @@ export class HomePageComponent implements OnInit {
   }
 
   // Update nickName of user and reload the page
-  updateNickname() {
+  async updateNickname() {
+    await this.timer.sleep(1000);
     const newNickname: string = this.nickname.value as string;
     const newEmail: string = this.email.value as string;
-    this.requestsService.updateUserHomeData(newNickname, newEmail)?.subscribe((data) => {
+    this.requestsService.updateUserHomeData(newNickname, newEmail)?.subscribe(async (data) => {
 
-      this.notif.showNotification('Your profile has been updated !');
+      this.notif.success('Success', 'Your profile has been updated !');
+      await this.timer.sleep(3000);
 
       const { token } = JSON.parse(JSON.stringify(data));
 
@@ -62,7 +67,7 @@ export class HomePageComponent implements OnInit {
 
       window.location.reload();
     }, () => {
-      this.notif.showNotification('NickName or email is already taken !');
+      this.notif.error('Error', 'Nickname or email is already taken please choose another nickname or email !');
     });
   }
 }
