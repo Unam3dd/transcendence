@@ -1,4 +1,5 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
+  <button (click)="Logout()">Logout</button>
   <img class="avatar" [src]="userData.avatar" alt="avatar picture">
   <p>Login: {{userData.login}}</p>
   <p>Firstname: {{userData.firstName}}</p>
@@ -9,6 +10,7 @@
     <label class="form-check-label" for="a2fCheck">A2F </label>
     <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="userData.a2f" disabled>
   </p>
+  <button (click)="Logout()">Logout</button>
   <p>Friends: my-friends</p>
   <p>History: my-games-history</p>
   <p>(Achievements: my-achievements)</p>

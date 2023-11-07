@@ -102,9 +102,8 @@ export class UsersController {
   }
 
   // Recieving a DELETE request to delete one user
-  @Delete(':id')
+  @Delete()
   @ApiOperation({ summary: 'Delete an user' })
-  @ApiParam({ name: 'id', type: 'number', description: 'The user id' })
   @ApiCreatedResponse({ description: 'User Deleted' })
   @ApiNoContentResponse({ description: 'User not found' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })

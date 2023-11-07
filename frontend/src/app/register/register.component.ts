@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { UserInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
-import { NotificationService } from '../services/notifications.service';
 import { TimerService } from '../services/timer.service';
 import { LOGIN_PAGE } from '../env';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +14,7 @@ import { LOGIN_PAGE } from '../env';
 export class RegisterComponent {
   responseData: any;
 
-  constructor (private formBuilder: FormBuilder, private req: RequestsService, private timerService: TimerService, private notif: NotificationService) {}
+  constructor (private formBuilder: FormBuilder, private req: RequestsService, private timerService: TimerService, private notif: NotificationsService) {}
 
   form = this.formBuilder.group({
     login: '',
@@ -41,11 +41,11 @@ export class RegisterComponent {
     };
 
     this.req.registerUser(userData).subscribe(async () => {
-      this.notif.showNotification(`Your account has been created successfully !`);
+      this.notif.success('Success', 'Your account has been created successfully !');
       await this.timerService.sleep(3000);
       window.location.href = `${LOGIN_PAGE}`
     }, () => {
-      this.notif.showNotification(`Error You not respect the expected answer to perform registration !`)
+      this.notif.error('Error', 'You not respect the expected answer to perform registration !');
     });
   }
 }

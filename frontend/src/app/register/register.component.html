@@ -1,5 +1,6 @@
 <div>
     <div class="register">
+      <simple-notifications></simple-notifications>
       <form [formGroup]="form" (ngSubmit)="register()">
         <input id="login" type="text" placeholder="login" formControlName="login" minlength="3" maxlength="120">
         <input id="firstname" type="text" placeholder="firstName" formControlName="firstName" maxlength="120">
