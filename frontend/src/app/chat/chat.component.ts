@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core';
-import { NotificationService } from '../services/notifications.service';
 import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-chat',
@@ -11,14 +11,13 @@ import { WsClient } from '../websocket/websocket.type';
 })
 export class ChatComponent implements OnInit {
 
-  constructor (private ws: WebsocketService, private notificationService: NotificationService) {}
+  constructor (private ws: WebsocketService, private notif: NotificationsService) {}
 
   ngOnInit() {
     const client: WsClient = this.ws.getClient();
 
     client.on('newJoinChat', (msg) => {
-      const text: string = msg;
-      this.notificationService.showNotification(text);
+      this.notif.info('New Arrival !!!', msg);
     })
 
     client.emit('message', 'hello chat !');

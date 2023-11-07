@@ -10,7 +10,6 @@ import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
 import { Status } from '../enum/status.enum';
-import { NotificationService } from './notifications.service';
 
 @Injectable({
   providedIn: 'root'

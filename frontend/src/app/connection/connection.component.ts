@@ -3,9 +3,9 @@ import { CLIENT_ID, PROFILE_PAGE, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
-import { NotificationService } from '../services/notifications.service';
 import { TimerService } from '../services/timer.service';
 import { CookiesService } from '../services/cookies.service';
+import { NotificationsService } from 'angular2-notifications';
 
 @Component({
   selector: 'app-connection',
@@ -16,7 +16,7 @@ export class ConnectionComponent {
 
   constructor(private formsBuilder: FormBuilder, 
     private req: RequestsService,
-    private readonly notif: NotificationService,
+    private readonly notif: NotificationsService,
     private readonly timeService: TimerService,
     private cookieServcie: CookiesService) {}
 
@@ -40,11 +40,11 @@ export class ConnectionComponent {
 
       this.cookieServcie.setCookie('authorization', token);
 
-      this.notif.showNotification(`You are connected with ${login} !`);
+      this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
       await this.timeService.sleep(2000);
       window.location.href = PROFILE_PAGE;
     }, async () => {
-      this.notif.showNotification('Error Your login or password is not correct !');
+      this.notif.error('Error', 'Your login or password is not correct !');
       return ;
     })
   }
