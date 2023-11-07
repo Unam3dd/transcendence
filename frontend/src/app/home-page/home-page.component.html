@@ -23,6 +23,7 @@
       </div>
     </div>
     <div class="button">
+      <simple-notifications></simple-notifications>
       <button type="submit" *ngIf="email.value && email.valid">Confirm</button>
       <button type="submit" *ngIf="!email.value || email.invalid" disabled>Confirm</button>
     </div>
