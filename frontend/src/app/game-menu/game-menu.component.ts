@@ -25,10 +25,16 @@ export class GameMenuComponent implements OnInit{
 
   moveToGame(mode: string) {
     if (mode === 'remote')
+    {
       this.findGame();
-    if (mode === 'tournament_remote')
+      this.router.navigate(['game/remote']);
+    }
+    else if (mode === 'tournament_remote')
+    {
       this.findTournament();
-    this.router.navigate(['game'], {queryParams: {mode: mode}});
+    }
+    else
+      this.router.navigate(['game'], {queryParams: {mode: mode}});
   }
 
   findGame(): void {

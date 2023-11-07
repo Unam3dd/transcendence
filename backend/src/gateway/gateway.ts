@@ -79,6 +79,7 @@ export class EventsGateway {
     const player: PlayerInfo = { 
       socket: client,
       login: body.login,
+      reset: false
     }
     this.lobbyManager.findLobby(player, body.size);
   }
@@ -87,7 +88,52 @@ export class EventsGateway {
   pressButton(@ConnectedSocket() client: Socket, @MessageBody() body: GamePayload) {
     const player = this.lobbyManager.findUserBySocket(client);
     const lobby = this.lobbyManager.findLobbyByPlayer(player);
+    if (!lobby) return ;
     lobby.gameInstance.pressButton(player, body.button);
+  }
+
+  @SubscribeMessage('randomDir')
+  randomDir(@ConnectedSocket() client: Socket, @MessageBody() ballSpeed: number) {
+    const player = this.lobbyManager.findUserBySocket(client);
+    const lobby = this.lobbyManager.findLobbyByPlayer(player);
+
+    if (!lobby) return ;
+
+    player.reset = true;
+
+    if (lobby.players.length === 1) return ;
+    
+    if (lobby.players[0].reset === true && lobby.players[1].reset === true)
+    {
+
+      const randomAngle = (Math.random() * (2 * 70)) - 70;
+      const angle = randomAngle * Math.PI / 180;
+      const initialSide = Math.random() < 0.5 ? -1 : 1;
+
+      const ballSpeedX = initialSide * Math.cos(angle) * ballSpeed;
+      const ballSpeedY = Math.sin(angle) * ballSpeed;
+
+      const payload = {
+        ballSpeedX,
+        ballSpeedY
+      }
+      lobby.players[0].socket.emit('randomDir', payload);
+      lobby.players[1].socket.emit('randomDir', payload);
+
+      lobby.players[0].reset = false;
+      lobby.players[1].reset = false;
+    }
+  }
+
+  @SubscribeMessage('winGame')
+  winGame(@ConnectedSocket() client: Socket)
+  {
+    const player = this.lobbyManager.findUserBySocket(client);
+    const lobby = this.lobbyManager.findLobbyByPlayer(player);
+
+    if (!lobby) return ;
+
+    lobby.gameInstance.gameVictory(player)  
   }
 
   //Detect clients disconnection

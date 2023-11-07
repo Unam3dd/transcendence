@@ -9,6 +9,7 @@ import { UserComponent } from './user/user.component';
 import {UpdateProfileComponent} from "./update-profile/update-profile.component";
 import { RegisterComponent } from './register/register.component';
 import {GameMenuComponent} from "./game-menu/game-menu.component";
+import { RemoteGameComponent } from './remote-game/remote-game.component';
 
 const routes: Routes = [
   {path: '', component: ConnectionComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'profile/update', component: UpdateProfileComponent},
   {path: 'game-menu', component: GameMenuComponent},
   {path: 'game', component: GamePageComponent},
+  {path: 'game/remote', component: RemoteGameComponent},
   {path: 'chat', component: ChatPageComponent},
   {path: 'user/:userId', component: UserComponent},
   {path: 'register', component: RegisterComponent}

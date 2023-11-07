@@ -22,6 +22,7 @@ import { UserComponent } from './user/user.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
+import { RemoteGameComponent } from './remote-game/remote-game.component';
 
 
 function initializeWebSocket(ws: WebsocketService) {
@@ -38,6 +39,7 @@ function initializeWebSocket(ws: WebsocketService) {
     ConnectionComponent,
     HomePageComponent,
     GamePageComponent,
+    RemoteGameComponent,
     ProfilePageComponent,
     FooterComponent,
     ChatComponent,

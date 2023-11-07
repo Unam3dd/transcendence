@@ -8,7 +8,13 @@ export class gameInstance {
 
   public launchGame(): void {
     this.lobby.state = gameState.playing;
-    this.lobby.sendToAll('display', null);
+    const players = {
+      "p1": this.lobby.players[0].login,
+      "p2": this.lobby.players[1].login
+    }
+    this.lobby.players[0].socket.emit('startGame', players);
+    this.lobby.players[1].socket.emit('startGame', players);
+    //this.lobby.sendToAll('display',  null);
   }
 
   public endGame(): void {
@@ -20,12 +26,25 @@ export class gameInstance {
   }
 
   public pressButton(player: PlayerInfo, button: string): void {
-    if (this && this.lobby.players.length === 2) {
+    if (this.lobby.players.length === 2) {
       if (player === this.lobby.players[0] && button == 'ArrowUp')
       {
         this.lobby.players[0].socket.emit('playerMoveUp', player.login);
         this.lobby.players[1].socket.emit('playerMoveUp', player.login);
 
+        //this.gameVictory(player);
+      }
+      else if (player === this.lobby.players[1] && button == 'ArrowUp')
+      {
+        this.lobby.players[0].socket.emit('playerMoveUp', player.login);
+        this.lobby.players[1].socket.emit('playerMoveUp', player.login);
+
+        //this.gameVictory(player);
+      }
+      else if (player === this.lobby.players[0] && button == 'ArrowDown')
+      {
+        this.lobby.players[0].socket.emit('playerMoveDown', player.login);
+        this.lobby.players[1].socket.emit('playerMoveDown', player.login);
         //this.gameVictory(player);
       }
       else if (player === this.lobby.players[1] && button == 'ArrowDown')
