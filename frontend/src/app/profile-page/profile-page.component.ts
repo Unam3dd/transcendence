@@ -3,6 +3,7 @@ import {Observable} from "rxjs";
 import {RequestsService} from "../services/requests.service";
 import { UserInterface } from '../interfaces/user.interface';
 import {Router} from "@angular/router";
+import { CookiesService } from '../services/cookies.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -13,6 +14,7 @@ export class ProfilePageComponent implements OnInit{
 
   userData$!: Observable<UserInterface> | null;
   constructor(private requestService: RequestsService,
+              private cookieService: CookiesService,
               private router: Router) {}
 
 
@@ -23,5 +25,9 @@ export class ProfilePageComponent implements OnInit{
 
   moveToUpdate() {
     this.router.navigateByUrl('profile/update');
+  }
+
+  Logout() {
+    this.cookieService.removeCookie('authorization');
   }
 }
