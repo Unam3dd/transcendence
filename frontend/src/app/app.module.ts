@@ -23,8 +23,14 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { RemoteGameComponent } from './remote-game/remote-game.component';
+import { Options, SimpleNotificationsModule } from 'angular2-notifications';
 
-
+const NotifcationOpt: Options = {
+  position: ["top", "right"],
+  showProgressBar: true,
+  clickToClose: true
+}
+ 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
     ws.initializeWebsocketService();
@@ -58,7 +64,8 @@ function initializeWebSocket(ws: WebsocketService) {
     ReactiveFormsModule,
     BrowserAnimationsModule,
     WebsocketModule,
-    NgbModule
+    NgbModule,
+    SimpleNotificationsModule.forRoot(NotifcationOpt)
   ],
   providers: [{
     provide: APP_INITIALIZER,
