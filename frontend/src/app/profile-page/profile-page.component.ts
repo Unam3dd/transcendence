@@ -37,7 +37,7 @@ export class ProfilePageComponent implements OnInit{
   }
 
   deleteUser() {
-    this.requestService.deleteUser();
+    this.requestService.deleteUser()?.subscribe();
     this.cookieService.removeCookie('authorization');
   }
 }

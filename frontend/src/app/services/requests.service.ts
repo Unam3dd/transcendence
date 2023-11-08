@@ -138,13 +138,13 @@ export class RequestsService {
     return (this.updateSubscription);
   }
 
-  deleteUser(): Observable<UserInterface> | null{
+  deleteUser(): Observable<UserInterface> | null {
     const JWT_TOKEN = this.cookieService.getToken();
 
     if (!JWT_TOKEN) return (null);
 
     return (this.http.delete<UserInterface>(`${NESTJS_URL}/users`, {
-      headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }));
+      headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }).pipe(catchError(this.handleError)));
   }
 
   // Get sanitazed informations about one user
