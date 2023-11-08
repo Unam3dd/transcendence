@@ -9,8 +9,4 @@ import { Component } from '@angular/core';
 export class ChatPageComponent /*implements OnInit*/ {
 
   constructor () {}
-
-  // ngOnInit() {
-
-  // }
 }

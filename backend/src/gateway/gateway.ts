@@ -66,6 +66,7 @@ export class EventsGateway {
 
     for (const el of this.clientList) {
       if (el.client.id === client.id) {
+        el.client.disconnect(true);
         this.server.emit('newDepart', `${el.nickName} (${el.login}) has left transcendence`);
         const index = this.clientList.indexOf(el);
         this.clientList.splice(index, 1);
