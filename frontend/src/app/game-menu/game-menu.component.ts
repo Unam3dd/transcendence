@@ -32,6 +32,7 @@ export class GameMenuComponent implements OnInit{
     else if (mode === 'tournament_remote')
     {
       this.findTournament();
+      this.router.navigate(['game/remote'], {queryParams: {mode: mode}});
     }
     else
       this.router.navigate(['game'], {queryParams: {mode: mode}});
@@ -42,6 +43,6 @@ export class GameMenuComponent implements OnInit{
   }
   
   findTournament(): void {
-    this.ws.enterLobby(this.client, 4);
+    this.ws.enterLobby(this.client, 3);
   }
 }

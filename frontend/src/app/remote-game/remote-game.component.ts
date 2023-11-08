@@ -1,8 +1,9 @@
 import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
-import { Subject } from "rxjs";
+import { Subject, takeUntil } from "rxjs";
 import { RequestsService } from '../services/requests.service';
+import { ActivatedRoute } from '@angular/router';
 
 export interface Player {
   login: string,
@@ -19,13 +20,20 @@ export class RemoteGameComponent implements AfterViewInit, OnDestroy {
 
   client: WsClient = this.ws.getClient();
   userLogin: string = '';
+  mode: string = '' ;
   playerRight = {} as Player;
   playerLeft = {} as Player;
 
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private readonly ws: WebsocketService, private readonly requestService: RequestsService) {
+  constructor(private readonly ws: WebsocketService, private readonly requestService: RequestsService, private readonly route: ActivatedRoute) {
+    this.route.queryParams
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(params => {
+      this.mode = params['mode'];
+    });
+    console.log("mode = '", this.mode,"'");
     this.requestService.getLoggedUserInformation()?.subscribe((user) => {
       this.userLogin = user.login as string;
     });
@@ -39,8 +47,10 @@ export class RemoteGameComponent implements AfterViewInit, OnDestroy {
     this.client.on('startGame', (players) => {
         this.playerRight.login = players.p1;
         this.playerLeft.login = players.p2;
+        this.ngAfterViewInit();
       this.launchGame();
     })
+
 
     this.client.on('endGame', () => {
       console.log("Game has finished");
@@ -248,17 +258,35 @@ export class RemoteGameComponent implements AfterViewInit, OnDestroy {
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (centerX / 2) - 20, 200);
         this.gameStart = false;
-        setTimeout(() => {
-          window.location.href = '/game-menu';},
-        3000 );
+        if (this.mode !== 'tournament_remote')
+        {
+          setTimeout(() => {
+            window.location.href = '/game-menu';},
+            3000 );
+        }
+        else
+        {
+          setTimeout(() => {
+            window.location.href = '/game/remote?mode=tournament_remote';},
+          3000 );
+        }
       } else if (this.playerRight.score == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
         this.gameStart = false;
-        setTimeout(() => {
-          window.location.href = '/game-menu';},
-        3000 );
+        if (this.mode !== 'tournament_remote')
+        {
+          setTimeout(() => {
+            window.location.href = '/game-menu';},
+          3000 );
+        }
+        else
+        {
+          setTimeout(() => {
+            window.location.href = '/game/remote?mode=tournament_remote';},
+          3000 );
+        }
       }
     }
   }

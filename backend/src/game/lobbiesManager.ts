@@ -22,7 +22,7 @@ export class LobbyManager {
 
     if (lobby) lobby.addClient(player);
     else this.createLobby(lobbySize, player);
-  }
+  } 
 
   public createLobby(maxSize: number, player: PlayerInfo): Lobby {
     let newLobby: Lobby | Tournament;
@@ -82,12 +82,12 @@ export class LobbyManager {
       }
     }
     return null;
-  }
+  } 
 
   public findTournamentByPlayer(player: PlayerInfo): Tournament | null {
     for (const lobby of this.lobbies) {
       for (const user of lobby[1].players) {
-        if (user.login === player.login && lobby[1].maxSize > 2) // check max size dans function qui call, fusionner les deux
+        if (user.login === player.login && lobby[1].maxSize > 2)
           return lobby[1] as Tournament;
       }
     }
