@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
-import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
+import { JWTPayload, UserSanitizeInterface, Message } from '../interfaces/user.interface';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
@@ -49,6 +49,27 @@ export class WebsocketService {
       if (!user) return ;
 
       client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
+    }
+
+    sendMessage(path: string, data: any) {
+      const user: UserSanitizeInterface | null = this.getUserInformation();
+
+      if (!user) return ;
+
+      const message: Message = {
+        author: user,
+        content: data,
+        createdAt: new Date(),
+        channel: path
+      }
+
+      this.client.emit('message', message);
+    }
+
+    listClient() {
+      const client = this.getClient();
+
+      client.emit('listClient', null);
     }
 
     getUserInformation(): UserSanitizeInterface | null {

@@ -67,6 +67,7 @@ export class AuthService {
       sub: user.id,
       login: user.login,
       nickName: user.nickName,
+      avatar: user.avatar
     };
 
     return await this.jwtService.signAsync(payload, {
@@ -81,6 +82,7 @@ export class AuthService {
       sub: user.id,
       login: user.login,
       nickName: user.nickName,
+      avatar: user.avatar
     };
 
     return await this.jwtService.signAsync(payload, {

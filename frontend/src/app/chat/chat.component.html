@@ -1,14 +1,16 @@
 <div class="global">
   <simple-notifications></simple-notifications>
-  <div class="title">User B</div>
+  <div class="title">User2</div>
   <div class="conversation">
 
     <ul class="messages">
-      <li class="message">Message a</li>
-      <li class="message">Message b</li>
-      <li class="message">Message c</li>
+      <div *ngFor="let msg of received_messages">
+        <p>{{msg.author.nickName}} : {{msg.content}}</p>
+      </div>
     </ul>
 
-  <div class="send-message">Send a message to #channel name</div>
-  </div>
+  <form [formGroup]="msg" (ngSubmit)="sendMessage()">
+    <input type="text" formControlName="content" required>
+    <button type="submit">Send !</button>
+  </form>
 </div>

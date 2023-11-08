@@ -52,7 +52,7 @@ function initializeWebSocket(ws: WebsocketService) {
     ChatPageComponent,
     UserComponent,
     RegisterComponent,
-    GameMenuComponent
+    GameMenuComponent,
   ],
   imports: [
     BrowserModule,
