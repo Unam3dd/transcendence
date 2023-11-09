@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-// import { OnInit } from '@angular/core';
+import { WebsocketService } from '../websocket/websocket.service';
 
 @Component({
   selector: 'app-chat-page',
@@ -8,5 +8,14 @@ import { Component } from '@angular/core';
 })
 export class ChatPageComponent /*implements OnInit*/ {
 
-  constructor () {}
+  constructor (private ws: WebsocketService) {}
+
+  ngOnInit() {
+
+    const client = this.ws.getClient();
+
+    client.on('listClient', (clients) => {
+      console.log(clients);
+    })
+  }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, PROFILE_PAGE, REDIRECT_URI } from '../env';
+import { CLIENT_ID, HOME_PAGE, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
@@ -42,7 +42,7 @@ export class ConnectionComponent {
 
       this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
       await this.timeService.sleep(2000);
-      window.location.href = PROFILE_PAGE;
+      window.location.href = HOME_PAGE;
     }, async () => {
       this.notif.error('Error', 'Your login or password is not correct !');
       return ;

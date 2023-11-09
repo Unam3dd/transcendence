@@ -28,19 +28,12 @@ export class ChatComponent implements OnInit {
     })
 
     client.on('newDepart', (msg) => {
-      console.log('quelqun est partis !');
       this.notif.error('Error', msg);
     })
 
     client.on('newMessage', (msg) => {
       this.received_messages.push(msg);
     })
-
-    client.on('listClient', (clients) => {
-      console.log(clients);
-    })
-
-    this.ws.listClient();
 
     this.ws.sendHelloChat(client);
   }

@@ -56,13 +56,15 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('newJoinChat')
-  JoinChat(@MessageBody() body: string, @ConnectedSocket() client: Socket) {
+  JoinChat(@MessageBody() body: string) {
     this.server.emit('newJoinChat', body);
-    this.ListClient(client);
+    this.ListClient();
   }
 
   //Detect clients disconnection
   handleDisconnect(@ConnectedSocket() client: Socket) {
+
+    console.log('New user just disconnected !');
 
     for (const el of this.clientList) {
       if (el.client.id === client.id) {
@@ -72,11 +74,12 @@ export class EventsGateway {
         this.clientList.splice(index, 1);
         break ;
       }
+      this.ListClient();
     }
   }
 
   @SubscribeMessage('listClient')
-  ListClient(@ConnectedSocket() client: Socket) {
+  ListClient() {
     let loginArray: UserSanitize[] = [];
 
     this.clientList.forEach((el: ClientInfo) => {
@@ -90,6 +93,6 @@ export class EventsGateway {
 
       loginArray.push(usanitize);
     });
-    client.emit('listClient', loginArray);
+    this.server.emit('listClient', loginArray);
   }
 }
