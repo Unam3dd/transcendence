@@ -1,19 +1,35 @@
 <div class="global">
-  <div class="title">
-    <h4 id="title-text">Title of chat page</h4>
-  </div>
-  <simple-notifications></simple-notifications>
+
+  <div id="active-chat-title">Active chat title</div>
+  <!-- <simple-notifications></simple-notifications> -->
   <div class="conversation">
 
-    <ul class="messages">
+    <!-- <ul class="messages">
       <div *ngFor="let msg of received_messages">
         <img id="profile-picture" src={{msg.author.avatar}}/>
         <p id="text">{{msg.author.nickName}} : {{msg.content}}</p>
       </div>
+    </ul> -->
+
+    <ul class="messages">
+      <div class="capsule" *ngFor="let msg of received_messages">
+        <div class="picture-column">
+          <div class="thumbnail">  
+            <img src={{msg.author.avatar}}/>
+          </div>
+        </div>
+        <div class="message-zone">
+          <p class="author-name">{{msg.author.nickName}} :</p>
+          <p class="message-content">{{msg.content}}</p>
+        </div>
+      </div>
     </ul>
 
-  <form class="messagebox" [formGroup]="msg" (ngSubmit)="sendMessage()">
-    <input placeholder="Enter a message" id="messageinput" type="text" formControlName="content" required>
-    <button id="sendbutton" type="submit">Send !</button>
-  </form>
+    <form class="messagebox" [formGroup]="msg" (ngSubmit)="sendMessage()">
+      <input placeholder="Enter your message here" id="messageinput" type="text" formControlName="content" required>
+      <button id="sendbutton" type="submit">Send !</button>
+    </form>
+
+  </div>
+
 </div>

@@ -1,20 +1,23 @@
 .global {
   width: 100%;
-  // header height is 80px - footer height is 50px
-  height: calc(100vh - 80px - 50px);
+  // header height is 80px - footer height is 30px
+  height: calc(100vh - 80px - 30px);
   background-color: blue;  
 }
 
-.title {
+#active-chat-title {
   height: 50px;
+  line-height: 50px;
   width: 100%;
-  left: 10px;
+  padding-left: 20px;
   background-color: grey;
+  text-align: left;
+  color: white;
 }
 
-.title #title-text {
-  text-align: center;
-  color: white;
+ul {
+  margin: 0;
+  padding: 0;
 }
 
 .conversation {
@@ -26,45 +29,83 @@
 .messages {
   // send-message height is 80px
   height: calc(100% - 80px);
-  background-color: white;
-}
-
-.messages #profile-picture {
-  border-radius: 50px;
-  max-width: 4%;
-  height: auto;
-}
-
-.messages #text {
   padding: 10px;
-  display: inline-block;
-  text-align: justify;
+  background-color: lightseagreen;
 }
 
-.message {
-  background-color: #909090;
+.capsule {
+  display: flex;
 }
 
-.send-message {
-  min-height: 80px;
-  background-color: #FFAAAA;
+.picture-column {
+  background-color: darkgoldenrod;
+  width: 70px;
+  padding:  0px 10px
+}
+
+.author-name {
+  font-weight: 500;
+  color: orange;
+}
+
+.action {
+  color: darkorange;
+}
+
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  // max-width: 4%;
+  // height: auto;
+}
+
+.message-content {
+  // padding: 10px;
+  // display: inline-block;
+  // text-align: justify;
+  background-color: lightskyblue;
+}
+
+
+
+.messagebox {
+  background-color: red;
+  height: 80px;
+  width: 100%;
+  display: flex;
 }
 
 .messagebox #messageinput {
   background-color: black;
   color: white;
   border-radius: 4px;
-  position: absolute;
-  right: 25%;
-  height: 40px;
-  width: 450px;
+  // position: absolute;
+  // right: 25%;
+  // height: 40px;
+  width: calc(100% - 80px);
+  height: 100%;
+  padding: 10px;
+  // position: absolute;
+  // top: 10%;
 }
 
 .messagebox #sendbutton {
   background-color: black;
   color: white;
   border-radius: 4px;
-  position: absolute;
-  right: 22%;
-  height: 40px;
+  // position: absolute;
+  // right: 22%;
+  // height: 40px;
+  height: 100%;
+  width: 80px;
+  // position: absolute;
+  // top: 10%;
 }

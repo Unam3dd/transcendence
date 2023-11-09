@@ -51,7 +51,7 @@ snyk_frontend:
 	@docker compose -f ./snyk.yaml stop
 	@docker compose -f ./snyk.yaml down
 
-damok:
+damok: stop down rm
 	@cd backend && npm install --save --legacy-peer-deps
 	@cd frontend && npm install --save --legacy-peer-deps
 
