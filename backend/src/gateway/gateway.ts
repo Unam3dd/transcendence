@@ -72,9 +72,9 @@ export class EventsGateway {
         this.server.emit('newDepart', `${el.nickName} (${el.login}) has left transcendence`);
         const index = this.clientList.indexOf(el);
         this.clientList.splice(index, 1);
-        break ;
+        this.ListClient();
+        return ;
       }
-      this.ListClient();
     }
   }
 

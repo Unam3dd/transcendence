@@ -1,9 +1,11 @@
 <div class="global">
   <span class="left-column">
-
-    <ul class="channel-list">
-      <li class="channel">User A</li>
-      <li class="channel">User B</li>
+    
+    <ul class="channel-general">
+      <li class="channel">general</li>
+    </ul>
+    <ul class="channel-list" *ngFor="let user of this.listClients">
+      <li class="channel">{{ user.nickName }} ({{ user.login}})</li>
     </ul>
   </span>
   <span class="right-column">

@@ -28,7 +28,7 @@ export class ChatComponent implements OnInit {
     })
 
     client.on('newDepart', (msg) => {
-      this.notif.error('Error', msg);
+      this.notif.info('Info', msg);
     })
 
     client.on('newMessage', (msg) => {

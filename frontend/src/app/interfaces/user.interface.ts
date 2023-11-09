@@ -1,3 +1,5 @@
+import { Socket } from "socket.io-client";
+
 export interface UserInterface {
     id?: number;
     login?: string | null;
@@ -18,6 +20,10 @@ export interface UserSanitizeInterface {
     login: string;
     nickName: string;
     avatar: string;
+}
+
+export interface ClientInfoInterface extends UserSanitizeInterface {
+    client: Socket;
 }
 
 export interface JWTPayload {
