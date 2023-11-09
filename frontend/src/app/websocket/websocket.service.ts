@@ -60,10 +60,9 @@ export class WebsocketService {
         author: user,
         content: data,
         createdAt: new Date(),
-        channel: path
       }
 
-      this.client.emit('message', message);
+      this.client.emit(path, message);
     }
 
     listClient() {

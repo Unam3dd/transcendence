@@ -39,7 +39,6 @@ export interface Message {
     author: UserSanitizeInterface;
     content: string;
     createdAt: Date;
-    channel: string;
 }
 
 export interface PrivateMessage extends Message {
