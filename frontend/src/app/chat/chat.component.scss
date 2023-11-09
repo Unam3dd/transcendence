@@ -8,7 +8,7 @@
 .title {
   height: 50px;
   width: 100%;
-  background-color: #30ff30;
+  background-color: #00ff00;
 }
 
 .conversation {
@@ -30,4 +30,23 @@
 .send-message {
   min-height: 80px;
   background-color: #FFAAAA;
+}
+
+.messagebox #messageinput {
+  background-color: black;
+  color: white;
+  border-radius: 4px;
+  position: absolute;
+  right: 25%;
+  height: 40px;
+  width: 450px;
+}
+
+.messagebox #sendbutton {
+  background-color: black;
+  color: white;
+  border-radius: 4px;
+  position: absolute;
+  right: 22%;
+  height: 40px;
 }

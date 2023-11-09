@@ -1,6 +1,6 @@
 <div class="global">
+  <div class="title">test</div>
   <simple-notifications></simple-notifications>
-  <div class="title">General</div>
   <div class="conversation">
 
     <ul class="messages">
@@ -9,8 +9,8 @@
       </div>
     </ul>
 
-  <form [formGroup]="msg" (ngSubmit)="sendMessage()">
-    <input type="text" formControlName="content" required>
-    <button type="submit">Send !</button>
+  <form class="messagebox" [formGroup]="msg" (ngSubmit)="sendMessage()">
+    <input placeholder="Enter a message" id="messageinput" type="text" formControlName="content" required>
+    <button id="sendbutton" type="submit">Send !</button>
   </form>
 </div>

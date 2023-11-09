@@ -39,6 +39,9 @@ export class ChatComponent implements OnInit {
   }
 
   sendMessage() {
+    
+    if (!this.msg.value.content) return ;
+
     this.ws.sendMessage('message', this.msg.value.content);
     this.msg.reset();
   }
