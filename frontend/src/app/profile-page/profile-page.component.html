@@ -13,13 +13,13 @@
   <p>Friends: my-friends</p>
   <p>History: my-games-history</p>
   <p>(Achievements: my-achievements)</p>
-  <button (click)="moveToUpdate()">Change my profile</button>
-  <button type="button" class="btn btn-danger" (click)="openModal(content)">
+  <button type="button" class="btn btn-in" (click)="moveToUpdate()">Change my profile</button>
+  <button type="button" class="btn btn-danger" (click)="openModal(deleteContent)">
     Delete account
   </button>
 </div>
 
-<ng-template #content let-modal>
+<ng-template #deleteContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Delete account</h4>
     <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
