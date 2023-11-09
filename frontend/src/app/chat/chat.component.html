@@ -7,7 +7,8 @@
 
     <ul class="messages">
       <div *ngFor="let msg of received_messages">
-        <p>{{msg.author.nickName}} : {{msg.content}}</p>
+        <img id="profile-picture" src={{msg.author.avatar}}/>
+        <p id="text">{{msg.author.nickName}} : {{msg.content}}</p>
       </div>
     </ul>
 
