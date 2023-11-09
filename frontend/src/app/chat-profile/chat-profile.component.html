@@ -1,7 +1,10 @@
 <div class="general-channel">
-    <ul class="channel">General</ul>
+   <h4 style="text-align: center;">General</h4>
+   <ul class="channel">General</ul>
+   <ul class="channel">GameChat</ul>
 </div>
 <div class="private-channel">
+    <h4 style="text-align: center;">Private Message</h4>
     <ul class="channel-list" *ngFor="let user of this.listClients">
         <li class="channel">
             <img class="img-thumb" src={{user.avatar}}/>
