@@ -1,0 +1,8 @@
+<div class="general-channel">
+    <ul class="channel">General</ul>
+</div>
+<div class="private-channel">
+    <ul class="channel-list" *ngFor="let user of this.listClients">
+        <li class="channel">{{ user.nickName }} ({{ user.login}})</li>
+    </ul>
+</div>

@@ -72,6 +72,17 @@ export class WebsocketService {
       client.emit('listClient', null);
     }
 
+    resetAllListener() {
+      const client = this.getClient();
+
+      client.removeAllListeners();
+    }
+
+    removeListener(channel: string) {
+      const client = this.getClient();
+      client.removeListener(channel);
+    }
+
     getUserInformation(): UserSanitizeInterface | null {
       const token: string | null = this.cookieService.getToken();
   
