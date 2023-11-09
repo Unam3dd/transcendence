@@ -5,7 +5,7 @@
     <ul class="channel-list" *ngFor="let user of this.listClients">
         <li class="channel">
             <img class="img-thumb" src={{user.avatar}}/>
-            <p>{{ user.nickName }} ({{ user.login }})</p>
+            <p id="profile-name">{{ user.nickName }} ({{ user.login }})</p>
         </li>
     </ul>
 </div>

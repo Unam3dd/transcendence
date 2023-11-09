@@ -1,5 +1,10 @@
-.img-thumb {
-    width: 200px;
-    height: 150px;
-    overflow: hidden;
+div.private-channel .channel-list .channel .img-thumb {
+    border-radius: 4px;
+    max-width: 15%;
+    height: auto;
+}
+
+div.private-channel .channel-list .channel #profile-name {
+    display: inline-block;
+    vertical-align: middle;
 }
