@@ -60,6 +60,7 @@ export class WebsocketService {
         author: user,
         content: data,
         createdAt: new Date(),
+        recipient: null
       }
 
       this.client.emit(path, message);

@@ -39,10 +39,7 @@ export interface Message {
     author: UserSanitizeInterface;
     content: string;
     createdAt: Date;
-}
-
-export interface PrivateMessage extends Message {
-    recipient: UserSanitizeInterface;
+    recipient: UserSanitizeInterface | null;
 }
 
 export interface UserFriendsInfo extends UserSanitizeInterface {
