@@ -54,7 +54,5 @@ snyk_frontend:
 damok:
 	@cd backend && npm install --save --legacy-peer-deps
 	@cd frontend && npm install --save --legacy-peer-deps
-	@echo backend/package.json >> .gitignore
-	@echo frontend/package.json >> .gitignore
 
 .PHONY: all up up_dev stop down build build_dev re snyk
