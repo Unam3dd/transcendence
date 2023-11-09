@@ -8,7 +8,13 @@
 .title {
   height: 50px;
   width: 100%;
-  background-color: #00ff00;
+  left: 10px;
+  background-color: grey;
+}
+
+.title #title-text {
+  text-align: center;
+  color: white;
 }
 
 .conversation {
