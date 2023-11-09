@@ -132,7 +132,7 @@ export class RequestsService {
     {
       headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
     }).subscribe(() => {
-      this.router.navigateByUrl('profile');
+      window.location.reload();
     });
 
     return (this.updateSubscription);

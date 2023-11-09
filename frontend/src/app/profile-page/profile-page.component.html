@@ -1,6 +1,6 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
   <button (click)="Logout()">Logout</button>
-  <img class="avatar" [src]="userData.avatar" alt="avatar picture">
+  <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
   <p>Login: {{userData.login}}</p>
   <p>Firstname: {{userData.firstName}}</p>
   <p>Lastname: {{userData.lastName}}</p>
@@ -13,12 +13,13 @@
   <p>Friends: my-friends</p>
   <p>History: my-games-history</p>
   <p>(Achievements: my-achievements)</p>
-  <button type="button" class="btn btn-in" (click)="moveToUpdate()">Change my profile</button>
+  <button type="button" class="btn btn-info" (click)="openModal(updateContent)">Change my profile</button>
   <button type="button" class="btn btn-danger" (click)="openModal(deleteContent)">
     Delete account
   </button>
 </div>
 
+<!-- Delete modal -->
 <ng-template #deleteContent let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Delete account</h4>
@@ -34,5 +35,46 @@
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
     <button type="button" class="btn btn-danger" (click)="deleteUser()">Delete my account</button>
+  </div>
+</ng-template>
+
+<!-- Update modal -->
+<ng-template #updateContent let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">Update profile</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+  </div>
+  <div class="modal-body">
+    <form (ngSubmit)="updateDatas()">
+      <div class="mb-3">
+        <div *ngIf="userData$ | async as userData">
+          <div>
+            <div>
+              <span>Firstname</span>
+              <input placeholder="{{userData.firstName}}" class="form-control" [formControl]="firstname">
+            </div>
+            <div>
+              <span>Lastname</span>
+              <input placeholder="{{userData.lastName}}" class="form-control" [formControl]="lastname">
+            </div>
+            <div>
+              <span>Nickname</span>
+              <input placeholder="{{userData.nickName}}" class="form-control" [formControl]="nickname">
+            </div>
+            <div>
+              <span>Email</span>
+              <input placeholder="{{userData.email}}" class="form-control" [formControl]="email">
+            </div>
+            <div class="form-check form-switch">
+              <span>A2F</span>
+              <input class="form-check-input" type="checkbox" role="switch" [formControl]="a2f">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </ng-template>
