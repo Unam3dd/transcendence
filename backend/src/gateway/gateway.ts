@@ -7,13 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { LobbyManager } from 'src/game/lobbiesManager';
-import { PlayerInfo } from 'src/interfaces/game.interfaces';
-
-export interface GamePayload {
-  login: string,
-  size?: number,
-  button?: string
-}
+import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
@@ -31,7 +25,7 @@ export class EventsGateway {
 
     // send message to all clients of the server on 'reponse' event using the server instance
     this.server.emit('response', 'A new client just connect');
-  } 
+  }
 
   @SubscribeMessage('join')
   newArrival(@MessageBody() msg: string) {
@@ -75,69 +69,46 @@ export class EventsGateway {
   /** Remote games functions */
 
   @SubscribeMessage('joinGame')
-  CreateLobby(@MessageBody() body: GamePayload, @ConnectedSocket() client: Socket) {
-    const player: PlayerInfo = { 
+  CreateLobby(
+    @MessageBody() body: playPayload,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const player: PlayerInfo = {
       socket: client,
       login: body.login,
-      reset: false
-    }
-    this.lobbyManager.findLobby(player, body.size);
+      score: 0,
+    };
+    this.lobbyManager.findLobby(player, body.size, this.server);
   }
 
   @SubscribeMessage('pressButton')
-  pressButton(@ConnectedSocket() client: Socket, @MessageBody() body: GamePayload) {
+  pressButton(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() body: playPayload,
+  ) {
     const player = this.lobbyManager.findUserBySocket(client);
+    if (!player) return;
     const lobby = this.lobbyManager.findLobbyByPlayer(player);
-    if (!lobby) return ;
+    if (!lobby) return;
     lobby.gameInstance.pressButton(player, body.button);
   }
 
-  @SubscribeMessage('randomDir')
-  randomDir(@ConnectedSocket() client: Socket, @MessageBody() ballSpeed: number) {
+  @SubscribeMessage('quitLobby')
+  quitLobby(@ConnectedSocket() client: Socket) {
     const player = this.lobbyManager.findUserBySocket(client);
+    if (!player) return;
+
     const lobby = this.lobbyManager.findLobbyByPlayer(player);
+    if (lobby && lobby.players.length != lobby.maxSize)
+      lobby.lobbyManager.leaveLobby(player, lobby);
 
-    if (!lobby) return ;
-
-    player.reset = true;
-
-    if (lobby.players.length === 1) return ;
-    
-    if (lobby.players[0].reset === true && lobby.players[1].reset === true)
-    {
-
-      const randomAngle = (Math.random() * (2 * 70)) - 70;
-      const angle = randomAngle * Math.PI / 180;
-      const initialSide = Math.random() < 0.5 ? -1 : 1;
-
-      const ballSpeedX = initialSide * Math.cos(angle) * ballSpeed;
-      const ballSpeedY = Math.sin(angle) * ballSpeed;
-
-      const payload = {
-        ballSpeedX,
-        ballSpeedY
-      }
-      lobby.players[0].socket.emit('randomDir', payload);
-      lobby.players[1].socket.emit('randomDir', payload);
-
-      lobby.players[0].reset = false;
-      lobby.players[1].reset = false;
-    }
-  }
-
-  @SubscribeMessage('winGame')
-  winGame(@ConnectedSocket() client: Socket)
-  {
-    const player = this.lobbyManager.findUserBySocket(client);
-    const lobby = this.lobbyManager.findLobbyByPlayer(player);
-
-    if (!lobby) return ;
-
-    lobby.gameInstance.gameVictory(player)  
+    const tournament = this.lobbyManager.findTournamentByPlayer(player);
+    if (tournament && tournament.players.length != tournament.maxSize)
+      this.lobbyManager.leaveLobby(player, tournament);
   }
 
   //Detect clients disconnection
-  
+
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('new Client disconnected');
     this.lobbyManager.clientDisconnect(client);

@@ -1,8 +1,9 @@
 import { v4 } from 'uuid';
 import { gameInstance } from './game';
 import { LobbyManager } from './lobbiesManager';
-import { PlayerInfo } from 'src/interfaces/game.interfaces';
+import { GameInfo, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
+import { Server } from 'socket.io';
 
 export class Lobby {
   public id: string;
@@ -18,6 +19,7 @@ export class Lobby {
   constructor(
     public readonly maxSize: number,
     public readonly lobbyManager: LobbyManager,
+    public readonly server: Server,
   ) {
     this.id = v4();
     this.size = maxSize;
@@ -28,37 +30,38 @@ export class Lobby {
 
   public addClient(player: PlayerInfo): void {
     if (this.players.length >= this.maxSize) return;
-
+    player.score = 0;
+    player.socket.join(this.id);
     this.players.push(player);
-    this.sendToAll('gameMessage', 'Someone joined the lobby');
+    this.sendMessageToAll('gameMessage', 'Someone joined the lobby');
 
     if (this.players.length === this.maxSize) this.gameInstance.launchGame();
   }
 
   public removeClient(player: PlayerInfo): void {
     const index = this.players.indexOf(player);
-    if (index !== -1) this.players.splice(index, 1);
-
-    this.sendToAll('gameMessage', 'Someone has leave the lobby');
+    if (index !== -1) {
+      player.socket.leave(this.id);
+      this.players.splice(index, 1);
+    }
+    this.sendMessageToAll('gameMessage', 'Someone has leave the lobby');
+    if (this.players.length === 0) this.lobbyManager.destroyLobby(this);
   }
 
   public playerDisconnect(player: PlayerInfo): void {
     this.state = gameState.finish;
-    this.sendToAll(
+    this.sendMessageToAll(
       'gameMessage',
       `Game is over becaune ${player.login} has disconnected`,
     );
-    this.finishGame();
+    this.gameInstance.stopGame();
   }
 
-  public finishGame(): void {
-    this.gameInstance.endGame();
-    this.lobbyManager.destroyLobby(this);
+  public sendMessageToAll(event: string, msg: string): void {
+    this.server.to(this.id).emit(event, msg);
   }
 
-  public sendToAll(event: string, msg: string): void {
-    this.players.forEach((player) => {
-      player.socket.emit(event, msg);
-    });
+  public sendGameEventToAll(event: string, param: GameInfo): void {
+    this.server.to(this.id).emit(event, param);
   }
 }

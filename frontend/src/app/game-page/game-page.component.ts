@@ -51,31 +51,6 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     this.requestService.getLoggedUserInformation()?.subscribe((data) => {
       this.userLogin = data.login as string;
     });
-
-    this.client.on('gameMessage', (data) => {
-      console.log(data);
-    })
-
-    this.client.on('display', () => {
-      this.launchGame();
-    })
-/*
-    this.client.on('endGame', () => {
-      console.log("Game has finished");
-      this.display = false;
-    });
-*/
-
-    this.client.on('playerMoveUp', (payload) => {
-      if (payload === this.userLogin)
-        this.barRightY -= this.barSpeed;
-      if (payload !== this.userLogin)
-        this.barLeftY -= this.barSpeed;
-    });
-
-    this.client.on('playerMoveDown', (payload) => {
-      console.log(payload);
-    });
   }
 
   //envoie le bouton sur leaquel le joueur a appuyer

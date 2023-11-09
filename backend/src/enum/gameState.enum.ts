@@ -1,5 +1,5 @@
 export enum gameState {
-    waiting = 1,
-    playing,
-    finish,
-  }
+  waiting = 1,
+  playing,
+  finish,
+}

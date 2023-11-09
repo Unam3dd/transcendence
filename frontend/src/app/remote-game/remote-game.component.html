@@ -1,17 +1,4 @@
-<!--
- <div class="game">Game part</div>
-<div class="chat">Chat part</div>
+<canvas #gameCanvasRemote class="game" width="800" height="400">Game part</canvas>
+<button *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
 
-<button (click)="findGame()">Find Game</button>
-<div *ngIf="display">
-    <button (click)="endGame('A')" >End Game first</button>
-    <button (click)="endGame('B')" >End Game second</button>
-</div>
-
-<button (click)="findTournament()">Find Tournament</button>
--->
-
-<div class="gameDiv">
-  <canvas #gameCanvas class="game">Game part</canvas>
-</div>
-
+<!-- mettre un bouton pour rejouer a la fin ?-->

@@ -1,4 +1,4 @@
-import { Socket } from 'socket.io';
+import { Socket, Server } from 'socket.io';
 import { Lobby } from './lobby';
 import { Tournament } from './tournament';
 import { PlayerInfo } from 'src/interfaces/game.interfaces';
@@ -12,8 +12,11 @@ export class LobbyManager {
   >();
 
   //Search for a lobby of desired size, if no place found, create a new lobby
-  public findLobby(player: PlayerInfo, lobbySize: number): void {
-
+  public findLobby(
+    player: PlayerInfo,
+    lobbySize: number,
+    server: Server,
+  ): void {
     if (this.findLobbyByPlayer(player) || this.findTournamentByPlayer(player)) {
       console.log('Client is already in a lobby!');
       return;
@@ -21,14 +24,18 @@ export class LobbyManager {
     const lobby = this.searchLobby(lobbySize);
 
     if (lobby) lobby.addClient(player);
-    else this.createLobby(lobbySize, player);
-  } 
+    else this.createLobby(lobbySize, player, server);
+  }
 
-  public createLobby(maxSize: number, player: PlayerInfo): Lobby {
+  public createLobby(
+    maxSize: number,
+    player: PlayerInfo,
+    server: Server,
+  ): Lobby {
     let newLobby: Lobby | Tournament;
 
-    if (maxSize === 2) newLobby = new Lobby(maxSize, this);
-    if (maxSize > 2) newLobby = new Tournament(maxSize, this);
+    if (maxSize === 2) newLobby = new Lobby(maxSize, this, server);
+    if (maxSize > 2) newLobby = new Tournament(maxSize, this, server);
 
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(player);
@@ -65,9 +72,12 @@ export class LobbyManager {
     }
   }
 
-  clientDisconnect(client: Socket) {
+  clientDisconnect(client: Socket): void {
     const player = this.findUserBySocket(client);
+    if (!player) return;
+
     const tournois = this.findTournamentByPlayer(player);
+
     const lobby = this.findLobbyByPlayer(player);
 
     if (tournois) tournois.playerDisconnect(player);
@@ -82,7 +92,7 @@ export class LobbyManager {
       }
     }
     return null;
-  } 
+  }
 
   public findTournamentByPlayer(player: PlayerInfo): Tournament | null {
     for (const lobby of this.lobbies) {
@@ -97,8 +107,7 @@ export class LobbyManager {
   public findUserBySocket(client: Socket): PlayerInfo {
     for (const lobby of this.lobbies) {
       for (const user of lobby[1].players) {
-        if (user.socket.id === client.id)
-          return user;
+        if (user.socket.id === client.id) return user;
       }
     }
   }
