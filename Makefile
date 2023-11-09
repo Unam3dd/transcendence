@@ -55,4 +55,4 @@ damok:
 	@cd backend && npm install --save --legacy-peer-deps
 	@cd frontend && npm install --save --legacy-peer-deps
 
-.PHONY: all up up_dev stop down build build_dev re snyk
+.PHONY: all up up_dev stop down build build_dev re snyk damok
