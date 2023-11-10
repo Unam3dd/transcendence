@@ -88,6 +88,8 @@ export class UsersService {
 
     if (!target) throw new UserError('User not found !');
 
+    console.log(target);
+
     await this.usersRepository.remove(target);
 
     return target;
