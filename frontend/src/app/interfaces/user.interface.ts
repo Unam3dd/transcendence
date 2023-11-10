@@ -9,6 +9,7 @@ export interface UserInterface {
     a2f?: boolean | null;
     avatar?: string | null;
     is42: boolean;
+    a2fsecret: string | null;
     createdAt?: Date;
     updatedAt?: Date;
 }

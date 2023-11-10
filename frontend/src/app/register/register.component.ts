@@ -37,7 +37,8 @@ export class RegisterComponent {
       email: email,
       password: password,
       a2f: a2f,
-      is42: false
+      is42: false,
+      a2fsecret: null
     };
 
     this.req.registerUser(userData).subscribe(async () => {
