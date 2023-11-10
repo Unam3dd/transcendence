@@ -26,7 +26,7 @@ import { Options, SimpleNotificationsModule } from 'angular2-notifications';
 const NotifcationOpt: Options = {
   position: ["top", "right"],
   showProgressBar: true,
-  clickToClose: true
+  timeOut: 3000
 }
 
 function initializeWebSocket(ws: WebsocketService) {
