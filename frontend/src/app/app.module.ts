@@ -13,7 +13,6 @@ import { FooterComponent } from './footer/footer.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
@@ -28,7 +27,7 @@ import { Options, SimpleNotificationsModule } from 'angular2-notifications';
 const NotifcationOpt: Options = {
   position: ["top", "right"],
   showProgressBar: true,
-  clickToClose: true
+  timeOut: 3000
 }
  
 function initializeWebSocket(ws: WebsocketService) {
@@ -49,7 +48,6 @@ function initializeWebSocket(ws: WebsocketService) {
     ProfilePageComponent,
     FooterComponent,
     ChatComponent,
-    UpdateProfileComponent,
     FriendsComponent,
     ChatPageComponent,
     UserComponent,
