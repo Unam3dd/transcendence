@@ -11,6 +11,7 @@ import { AuthController } from './modules/auth/auth.controller';
 import { GatewayModule } from './gateway/events.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { BlockModule } from './modules/block/block.module';
+import { A2fModule } from './modules/a2f/a2f.module';
 
 dotenv.config();
 
@@ -33,6 +34,7 @@ dotenv.config();
     GatewayModule,
     FriendsModule,
     BlockModule,
+    A2fModule,
   ],
   controllers: [],
   providers: [],

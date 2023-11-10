@@ -6,6 +6,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import * as argon2 from "argon2";
+import { A2fService } from '../a2f/a2f.service';
 
 @Injectable()
 export class AuthService {
@@ -15,6 +16,7 @@ export class AuthService {
   constructor(
     private readonly userService: UsersService,
     private readonly jwtService: JwtService,
+    private readonly a2fService: A2fService
   ) {}
 
   public async AuthTo42API(code: string): Promise<TokensFrom42API> {
@@ -36,6 +38,7 @@ export class AuthService {
       email: null,
       avatar: user.image.versions.medium,
       is42: true,
+      a2fsecret: null
     };
 
     try {
@@ -50,6 +53,7 @@ export class AuthService {
   public async CreateNewAccount(user: CreateUserDto): Promise<boolean> {
     try {
       user.password = await argon2.hash(user.password);
+      if (user.a2f) user.a2fsecret = this.a2fService.generateSecret().base32;
       await this.userService.registerUser(user);
     } catch (err) {
       return false;

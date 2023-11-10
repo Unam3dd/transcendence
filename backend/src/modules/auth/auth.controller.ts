@@ -16,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
+import { A2fService } from '../a2f/a2f.service';
 
 @ApiTags('Auth Module')
 @Controller('auth')
