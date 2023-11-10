@@ -49,6 +49,7 @@ export class ProfilePageComponent implements OnInit{
     this.cookieService.removeCookie('authorization');
   }
 
+  //update function for update the profile
   updateDatas() {
     const firstname: string = this.firstname.value as string;
     const lastname: string = this.lastname.value as string;
