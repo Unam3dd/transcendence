@@ -5,6 +5,7 @@ import {UserInterface} from "../interfaces/user.interface";
 import {Router} from "@angular/router";
 import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-game-menu',
@@ -15,15 +16,16 @@ export class GameMenuComponent implements OnInit{
 
   userData$!: Observable<UserInterface> | null;
   client: WsClient = this.ws.getClient();
+  selectedValue: string = '';
 
   constructor(private requestsService: RequestsService,
-              private router: Router, private ws: WebsocketService) {}
+              private router: Router, private ws: WebsocketService, private modalService: NgbModal) {}
 
   ngOnInit() {
     this.userData$ = this.requestsService.getLoggedUserInformation();
   }
 
-  moveToGame(mode: string) {
+  moveToGame(mode: string, size: string | null) {
     if (mode === 'remote')
     {
       this.findGame();
@@ -31,8 +33,12 @@ export class GameMenuComponent implements OnInit{
     }
     else if (mode === 'tournament_remote')
     {
-      this.findTournament();
-      this.router.navigate(['game/remote'], {queryParams: {mode: mode}});
+      if (size)
+      {
+
+        this.findTournament(+size);
+        this.router.navigate(['game/remote'], {queryParams: {mode: mode}});
+      }
     }
     else
       this.router.navigate(['game'], {queryParams: {mode: mode}});
@@ -42,7 +48,15 @@ export class GameMenuComponent implements OnInit{
     this.ws.enterLobby(this.client, 2);
   }
   
-  findTournament(): void {
-    this.ws.enterLobby(this.client, 3);
+  findTournament(size: number): void {
+    this.modalService.dismissAll();
+    console.log("size: ", size);
+    if (size < 3 || size > 8)
+      size = 3;
+    this.ws.enterLobby(this.client, size);
+  }
+
+  openModal(content: any):void {
+    this.modalService.open(content);
   }
 }
