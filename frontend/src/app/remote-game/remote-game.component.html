@@ -1,4 +1,18 @@
 <canvas #gameCanvasRemote class="game" width="800" height="400">Game part</canvas>
 <button *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
 
+<br>
+<section *ngIf="this.gameStart" class="fight">
+    <div class="userInfo">
+        <img class="avatar" [src]="playerLeft.avatar" alt="avatar picture"> 
+        <p class="username">{{playerLeft.nickName}}</p>
+    </div>
+    <p>vs</p> 
+    <div>
+        <img class="avatar" [src]="playerRight.avatar" alt="avatar picture"> 
+        <p class="username">{{playerRight.nickName}}</p>
+    </div>
+</section>
+
+
 <!-- mettre un bouton pour rejouer a la fin ?-->

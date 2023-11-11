@@ -36,7 +36,6 @@ export class EventsGateway {
       const { id, login } = JSON.parse(msg);
       //const test: ClientInfo =  JSON.parse(msg);
       const found = this.clientList.find((el) => el.id === id);
-
       //test.client = client;
       if (!found) {
         this.clientList.push({
@@ -44,7 +43,6 @@ export class EventsGateway {
           client,
         });
       }
-
       this.server.emit('newArrival', `${login} has join the transcendence !`);
     } catch (e) {
       console.error(e);
@@ -90,22 +88,24 @@ export class EventsGateway {
     const opponent = this.clientList.find(
       (el) => el.nickName === body.opponentNickname,
     );
-    if (!opponent) return;
+    const player = this.clientList.find((el) => el.nickName === body.nickName);
+    if (!opponent || !player) return;
 
-    const opponentInfo = {
+    const opponentInfo: PlayerInfo = {
       socket: opponent.client,
       nickName: opponent.nickName,
+      avatar: opponent.avatar,
       score: 0,
     };
-
-    const player: PlayerInfo = {
+    const playerInfo: PlayerInfo = {
       socket: client,
-      nickName: body.nickName,
+      nickName: player.nickName,
+      avatar: player.avatar,
       score: 0,
     };
 
     const gameId = this.lobbyManager.createPrivateLobby(
-      player,
+      playerInfo,
       opponentInfo,
       this.server,
     );
@@ -113,7 +113,7 @@ export class EventsGateway {
 
     opponent.client.emit('gameInvitation', {
       gameId: gameId,
-      host: player.nickName,
+      host: player.nickName, //voir pour add avatar?
     });
   }
 
@@ -130,14 +130,17 @@ export class EventsGateway {
     @MessageBody() body: playPayload,
     @ConnectedSocket() client: Socket,
   ) {
-    const player: PlayerInfo = {
+    const player = this.clientList.find((el) => el.nickName === body.nickName);
+    if (!player) return;
+    const playerInfo: PlayerInfo = {
       socket: client,
-      nickName: body.nickName,
+      nickName: player.nickName,
+      avatar: player.avatar,
       score: 0,
     };
     const lobby = this.lobbyManager.lobbies.get(body.gameId);
     if (!lobby) return;
-    lobby.joinPrivateLobby(player);
+    lobby.joinPrivateLobby(playerInfo);
   }
 
   @SubscribeMessage('joinGame')
@@ -145,12 +148,15 @@ export class EventsGateway {
     @MessageBody() body: playPayload,
     @ConnectedSocket() client: Socket,
   ) {
-    const player: PlayerInfo = {
+    const player = this.clientList.find((el) => el.nickName === body.nickName);
+    if (!player) return;
+    const playerInfo: PlayerInfo = {
       socket: client,
-      nickName: body.nickName,
+      nickName: player.nickName,
+      avatar: player.avatar,
       score: 0,
     };
-    this.lobbyManager.findLobby(player, body.size, this.server);
+    this.lobbyManager.findLobby(playerInfo, body.size, this.server);
   }
 
   @SubscribeMessage('pressButton')

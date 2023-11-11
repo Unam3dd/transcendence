@@ -2,11 +2,12 @@ import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Subject, takeUntil } from "rxjs";
-import { RequestsService } from '../services/requests.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GameInfo } from '../interfaces/user.interface';
 
 export interface Player {
-  login: string,
+  nickName: string,
+  avatar: string,
   score: number
 }
 
@@ -19,7 +20,6 @@ export interface Player {
 export class RemoteGameComponent implements OnDestroy, OnInit {
 
   client: WsClient = this.ws.getClient();
-  userLogin: string = '';
   mode: string = '' ;
   playerRight = {} as Player;
   playerLeft = {} as Player;
@@ -28,22 +28,13 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   @ViewChild('gameCanvasRemote', {static: true}) canvas!: ElementRef;
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private readonly ws: WebsocketService, private readonly requestService: RequestsService, private readonly route: ActivatedRoute, private readonly router: Router) {
-    
-    //Game data initialisation
+  constructor(private readonly ws: WebsocketService, private readonly route: ActivatedRoute, private readonly router: Router) {
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(params => {
       this.mode = params['mode'];
     });
 
-    this.requestService.getLoggedUserInformation()?.subscribe((user) => {
-      this.userLogin = user.login as string;
-    });
-    this.playerRight.score = 0;
-    this.playerLeft.score = 0;
-    this.playerRight.login = '';
-    this.playerLeft.login= '';
     console.log("constructor");
   }
 
@@ -51,13 +42,19 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     console.log("init");
 
     this.drawWaiting();
-    this.client.on('gameMessage', (data) => {
+    this.client.on('gameMessage', (data: string) => {
       console.log(data);
+      this.gameStart = false;
     })
 
-    this.client.on('interval', (payload) => {
-      if(!this.gameStart)
+    this.client.on('interval', (payload: GameInfo) => {
+      if(!this.gameStart){
         this.gameStart = true;
+        this.playerRight.nickName = payload.playerRight.nickName;
+        this.playerLeft.nickName = payload.playerLeft.nickName;
+        this.playerRight.avatar = payload.playerRight.avatar;
+        this.playerLeft.avatar = payload.playerLeft.avatar;
+      }
       this.drawElements(payload);
     });
 
@@ -68,6 +65,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     this.client.on('endMatch', () => {
       console.log("Game has finish because someone has won the match");
       //Gerer les deconnection et les redirs de fin de match ici
+      //print something like victory or defeat to players?
 
       //redir looser to menu? 
     });
@@ -104,13 +102,13 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     }
   }
 
-  drawElements(payload: any) {
+  drawElements(payload: GameInfo) {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
     const centerX: number = 800 / 2;
 
-    this.playerLeft.score = payload.playerLeftScore as number;
-    this.playerRight.score = payload.playerRightScore as number;
+    this.playerLeft.score = payload.playerLeft.score as number;
+    this.playerRight.score = payload.playerRight.score as number;
 
     if (context) {
       context.clearRect(0, 0, 800, 400);
@@ -141,11 +139,13 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
 
       //Win message
       if (this.playerLeft.score == 3) {
+        this.gameStart = false;
         console.log("this.playerLeft.score", this.playerLeft.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (centerX / 2) - 20, 200);
       } else if (this.playerRight.score == 3) {
+        this.gameStart = false;
         console.log("this.playerRight.score", this.playerRight.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';

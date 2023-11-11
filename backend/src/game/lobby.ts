@@ -33,7 +33,6 @@ export class Lobby {
 
   public addClient(player: PlayerInfo): void {
     if (this.players.length >= this.maxSize) return;
-
     player.score = 0;
     player.socket.join(this.id);
     this.players.push(player);

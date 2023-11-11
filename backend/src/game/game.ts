@@ -131,8 +131,16 @@ export class gameInstance {
       ballX: this.ballX,
       ballY: this.ballY,
       ballRadius: this.ballRadius,
-      playerLeftScore: this.lobby.players[1].score,
-      playerRightScore: this.lobby.players[0].score,
+      playerLeft: {
+        nickName: this.lobby.players[1].nickName,
+        avatar: this.lobby.players[1].avatar,
+        score: this.lobby.players[1].score,
+      },
+      playerRight: {
+        nickName: this.lobby.players[0].nickName,
+        avatar: this.lobby.players[0].avatar,
+        score: this.lobby.players[0].score,
+      },
     };
     this.lobby.sendGameEventToAll('interval', payload);
   }

@@ -44,7 +44,39 @@ export interface UserFriendsInfo extends UserSanitizeInterface {
     showOpt: boolean;
 }
 
+/** Game Interfaces */
+
 export interface gameInvitationPayload {
     gameId: string;
     host: string;
 }
+
+
+export interface playersInfo {
+    nickName: string;
+    avatar: string;
+    score: number;
+
+}
+
+export interface GameInfo {
+    barLeftY: number;
+    barRightY: number;
+    barHeight: number;
+    barWidth: number;
+  
+    ballX: number;
+    ballY: number;
+    ballRadius: number;
+
+    playerLeft: playersInfo;
+    playerRight: playersInfo;
+  
+    /*
+    playerLeftName: string;
+    playerRightName: string;
+    playerLeftScore: number;
+    playerRightScore: number;
+    playerRightAvatar: string,
+    playerLeftAvatar: string,*/
+  }

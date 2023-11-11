@@ -9,3 +9,20 @@
   background-color: black;
   margin-top: 1vmin;
 }
+
+
+.avatar {
+  width: 25px;
+  height: 25px;
+  margin-left: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.fight {
+  width: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
