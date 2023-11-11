@@ -23,6 +23,7 @@ import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { RemoteGameComponent } from './remote-game/remote-game.component';
 import { Options, SimpleNotificationsModule } from 'angular2-notifications';
+import { GameInvitationComponent } from './game-invitation/game-invitation.component';
 
 const NotifcationOpt: Options = {
   position: ["top", "right"],
@@ -52,7 +53,8 @@ function initializeWebSocket(ws: WebsocketService) {
     ChatPageComponent,
     UserComponent,
     RegisterComponent,
-    GameMenuComponent
+    GameMenuComponent,
+    GameInvitationComponent,
   ],
   imports: [
     BrowserModule,

@@ -33,18 +33,17 @@ export class GameMenuComponent implements OnInit{
     }
     else if (mode === 'tournament_remote')
     {
-      if (size)
-      {
-
-        this.findTournament(+size);
-        this.router.navigate(['game/remote'], {queryParams: {mode: mode}});
-      }
+      if (!size)
+        return ;
+      this.findTournament(+size);
+      this.router.navigate(['game/remote'], {queryParams: {mode: mode}});
     }
     else
       this.router.navigate(['game'], {queryParams: {mode: mode}});
   }
 
   findGame(): void {
+    //this.ws.privateGame(this.client, "tata3"); // it was just a test to send a game invit to nickName tata3
     this.ws.enterLobby(this.client, 2);
   }
   

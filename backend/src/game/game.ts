@@ -188,7 +188,7 @@ export class gameInstance {
 
     this.lobby.sendMessageToAll('endMatch', null);
     clearInterval(this.gameInterval);
-    this.printResult(player.login);
+    this.printResult(player.nickName);
 
     this.lobby.state = gameState.finish;
 

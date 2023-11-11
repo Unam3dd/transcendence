@@ -132,7 +132,7 @@ export class Tournament extends Lobby {
 
     match.sendMessageToAll(
       'gameMessage',
-      `Game is over becaune ${player.login} has disconnected llalala`,
+      `Game is over becaune ${player.nickName} has disconnected llalala`,
     );
     if (player === match.players[0]) this.handleVictory(match.players[1]);
     else this.handleVictory(match.players[0]);
@@ -141,7 +141,7 @@ export class Tournament extends Lobby {
   public finishTournament(winner: PlayerInfo): void {
     this.sendMessageToAll(
       'gameMessage',
-      `${winner.login} is the winner of this tournament`,
+      `${winner.nickName} is the winner of this tournament`,
     );
     if (this.currentMatch[0])
       this.lobbyManager.destroyLobby(this.currentMatch[0]);

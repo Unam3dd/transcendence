@@ -16,6 +16,9 @@ export class Lobby {
 
   state: gameState;
 
+  invitedOpponent: string | null = null;
+  //function to set this in case of privateGame ? and verify it isn't null before joining?
+
   constructor(
     public readonly maxSize: number,
     public readonly lobbyManager: LobbyManager,
@@ -30,6 +33,7 @@ export class Lobby {
 
   public addClient(player: PlayerInfo): void {
     if (this.players.length >= this.maxSize) return;
+
     player.score = 0;
     player.socket.join(this.id);
     this.players.push(player);
@@ -48,11 +52,28 @@ export class Lobby {
     if (this.players.length === 0) this.lobbyManager.destroyLobby(this);
   }
 
+  public addPrivateOpponent(opponentName: string) {
+    if (opponentName) this.invitedOpponent = opponentName;
+  }
+
+  public joinPrivateLobby(player: PlayerInfo) {
+    if (
+      this.lobbyManager.findLobbyByPlayer(player) ||
+      this.lobbyManager.findTournamentByPlayer(player)
+    )
+      return;
+    if (this.invitedOpponent == null) return;
+    if (player.nickName != this.invitedOpponent) {
+      console.log('this is a private game and user is not the invited player');
+      return;
+    } else this.addClient(player);
+  }
+
   public playerDisconnect(player: PlayerInfo): void {
     this.state = gameState.finish;
     this.sendMessageToAll(
       'gameMessage',
-      `Game is over becaune ${player.login} has disconnected`,
+      `Game is over becaune ${player.nickName} has disconnected`,
     );
     this.gameInstance.stopGame();
   }

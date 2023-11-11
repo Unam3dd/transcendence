@@ -2,14 +2,16 @@ import { Socket } from 'socket.io';
 
 export interface PlayerInfo {
   socket: Socket;
-  login: string;
+  nickName: string;
   score: number;
 }
 
 export interface playPayload {
-  login: string;
+  nickName: string;
   size?: number;
   button?: string;
+  opponentNickname?: string;
+  gameId?: string;
 }
 
 export interface GameInfo {

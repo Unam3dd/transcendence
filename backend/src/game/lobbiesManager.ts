@@ -42,6 +42,23 @@ export class LobbyManager {
     return newLobby;
   }
 
+  createPrivateLobby(
+    player: PlayerInfo,
+    oppponentPalyer: PlayerInfo,
+    server: Server,
+  ): string | null {
+    if (
+      this.findLobbyByPlayer(oppponentPalyer) ||
+      this.findTournamentByPlayer(oppponentPalyer)
+    )
+      return null;
+    const newLobby = new Lobby(2, this, server);
+    this.lobbies.set(newLobby.id, newLobby);
+    newLobby.addClient(player);
+    newLobby.addPrivateOpponent(oppponentPalyer.nickName);
+    return newLobby.id;
+  }
+
   // Search for a place in an existing lobby
   public searchLobby(lobbySize: number): Lobby | Tournament | null {
     for (const lobby of this.lobbies) {
@@ -57,7 +74,7 @@ export class LobbyManager {
 
   public leaveLobby(player: PlayerInfo, lobby: Lobby): void {
     lobby.removeClient(player);
-    console.log('client = ', player.login, ' removed');
+    console.log('client = ', player.nickName, ' removed');
     if (lobby.players.length === 0) {
       console.log('lobby ', lobby.id, 'has been deleted');
       this.lobbies.delete(lobby.id);
@@ -67,7 +84,7 @@ export class LobbyManager {
 
   public destroyLobby(lobby: Lobby): void {
     while (lobby.players.length) {
-      console.log(lobby.players[0].login);
+      console.log(lobby.players[0].nickName);
       this.leaveLobby(lobby.players[0], lobby);
     }
   }
@@ -87,7 +104,7 @@ export class LobbyManager {
   public findLobbyByPlayer(player: PlayerInfo): Lobby | null {
     for (const lobby of this.lobbies) {
       for (const user of lobby[1].players) {
-        if (user.login === player.login && lobby[1].maxSize === 2)
+        if (user.nickName === player.nickName && lobby[1].maxSize === 2)
           return lobby[1] as Lobby;
       }
     }
@@ -97,7 +114,7 @@ export class LobbyManager {
   public findTournamentByPlayer(player: PlayerInfo): Tournament | null {
     for (const lobby of this.lobbies) {
       for (const user of lobby[1].players) {
-        if (user.login === player.login && lobby[1].maxSize > 2)
+        if (user.nickName === player.nickName && lobby[1].maxSize > 2)
           return lobby[1] as Tournament;
       }
     }

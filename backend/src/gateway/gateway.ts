@@ -8,6 +8,7 @@ import {
 import { Server, Socket } from 'socket.io';
 import { LobbyManager } from 'src/game/lobbiesManager';
 import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
+import { ClientInfo } from 'src/interfaces/user.interfaces';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
@@ -15,6 +16,8 @@ export class EventsGateway {
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
   server: Server;
+
+  clientList: ClientInfo[] = [];
 
   //Detect clients connections
   handleConnection(client: Socket) {
@@ -28,9 +31,20 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('join')
-  newArrival(@MessageBody() msg: string) {
+  newArrival(@ConnectedSocket() client: Socket, @MessageBody() msg: string) {
     try {
-      const { login } = JSON.parse(msg);
+      const { id, login } = JSON.parse(msg);
+      //const test: ClientInfo =  JSON.parse(msg);
+      const found = this.clientList.find((el) => el.id === id);
+
+      //test.client = client;
+      if (!found) {
+        this.clientList.push({
+          ...JSON.parse(msg),
+          client,
+        });
+      }
+
       this.server.emit('newArrival', `${login} has join the transcendence !`);
     } catch (e) {
       console.error(e);
@@ -68,6 +82,64 @@ export class EventsGateway {
 
   /** Remote games functions */
 
+  @SubscribeMessage('privateGame')
+  CreatePrivateLobby(
+    @MessageBody() body: playPayload,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const opponent = this.clientList.find(
+      (el) => el.nickName === body.opponentNickname,
+    );
+    if (!opponent) return;
+
+    const opponentInfo = {
+      socket: opponent.client,
+      nickName: opponent.nickName,
+      score: 0,
+    };
+
+    const player: PlayerInfo = {
+      socket: client,
+      nickName: body.nickName,
+      score: 0,
+    };
+
+    const gameId = this.lobbyManager.createPrivateLobby(
+      player,
+      opponentInfo,
+      this.server,
+    );
+    if (!gameId) return;
+
+    opponent.client.emit('gameInvitation', {
+      gameId: gameId,
+      host: player.nickName,
+    });
+  }
+
+  @SubscribeMessage('declinePrivateGame')
+  declinePrivateGame(@MessageBody() body: playPayload) {
+    const lobby = this.lobbyManager.lobbies.get(body.gameId);
+    if (!lobby) return;
+    lobby.sendMessageToAll('declined', null);
+    this.lobbyManager.destroyLobby(lobby);
+  }
+
+  @SubscribeMessage('joinPrivateGame')
+  joinPrivateGame(
+    @MessageBody() body: playPayload,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const player: PlayerInfo = {
+      socket: client,
+      nickName: body.nickName,
+      score: 0,
+    };
+    const lobby = this.lobbyManager.lobbies.get(body.gameId);
+    if (!lobby) return;
+    lobby.joinPrivateLobby(player);
+  }
+
   @SubscribeMessage('joinGame')
   CreateLobby(
     @MessageBody() body: playPayload,
@@ -75,7 +147,7 @@ export class EventsGateway {
   ) {
     const player: PlayerInfo = {
       socket: client,
-      login: body.login,
+      nickName: body.nickName,
       score: 0,
     };
     this.lobbyManager.findLobby(player, body.size, this.server);
@@ -112,5 +184,18 @@ export class EventsGateway {
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('new Client disconnected');
     this.lobbyManager.clientDisconnect(client);
+    for (const el of this.clientList) {
+      if (el.client.id === client.id) {
+        el.client.disconnect();
+        this.server.emit(
+          'newDepart',
+          `${el.nickName} (${el.login}) has left transcendence`,
+        );
+        const index = this.clientList.indexOf(el);
+        this.clientList.splice(index, 1);
+        //this.ListClient();
+        return;
+      }
+    }
   }
 }
