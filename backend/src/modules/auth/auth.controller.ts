@@ -25,6 +25,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly apiService: ApiService,
     private readonly userService: UsersService,
+    private readonly a2fService: A2fService
   ) {}
 
   @ApiOperation({ summary: 'Authentication with the 42 Api' })
@@ -79,10 +80,12 @@ export class AuthController {
 
     data.avatar =
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
+    
+    const status = await this.authService.CreateNewAccount(data);
 
-    return (await this.authService.CreateNewAccount(data))
-      ? res.status(HttpStatus.CREATED).send()
-      : res.status(HttpStatus.CONFLICT).send();
+    if (!status) return (res.status(HttpStatus.CONFLICT).send());
+  
+    return (res.status(HttpStatus.OK).send());
   }
 
   @Post('login')

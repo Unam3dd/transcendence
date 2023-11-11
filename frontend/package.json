@@ -22,6 +22,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "@ng-bootstrap/ng-bootstrap": "^15.1.2",
+    "@types/qrcode": "^1.5.5",
     "@types/speakeasy": "^2.0.10",
     "angular-popper": "^2.0.1",
     "angular2-notifications": "^16.0.1",

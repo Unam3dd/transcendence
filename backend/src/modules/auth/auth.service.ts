@@ -13,10 +13,12 @@ export class AuthService {
   @Inject(ApiService)
   private readonly apiService: ApiService;
 
+  @Inject(A2fService)
+  private readonly a2fService: A2fService;
+
   constructor(
     private readonly userService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly a2fService: A2fService
+    private readonly jwtService: JwtService
   ) {}
 
   public async AuthTo42API(code: string): Promise<TokensFrom42API> {
@@ -53,7 +55,9 @@ export class AuthService {
   public async CreateNewAccount(user: CreateUserDto): Promise<boolean> {
     try {
       user.password = await argon2.hash(user.password);
-      if (user.a2f) user.a2fsecret = this.a2fService.generateSecret().base32;
+
+      if (user.a2f) user.a2fsecret = JSON.stringify(this.a2fService.generateSecret());
+
       await this.userService.registerUser(user);
     } catch (err) {
       return false;
