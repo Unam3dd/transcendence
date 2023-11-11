@@ -16,16 +16,6 @@ export class A2fService {
         return ({ otpauthUrl: secret.otpauth_url, base32: secret.base32});
     }
 
-    async getOtpUrl(login: string): Promise<string | null> {
-        const user = await this.userService.findOneByLogin(login);
-
-        if (!user) return null;
-
-        const { otpauthUrl } = JSON.parse(user.a2fsecret);
-
-        return (otpauthUrl);
-    }
-
     async respondWithQRCode(otpauthUrl: string) {
         return (await QRCode.toDataURL(otpauthUrl));
     }

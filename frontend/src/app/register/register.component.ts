@@ -5,6 +5,7 @@ import { RequestsService } from '../services/requests.service';
 import { TimerService } from '../services/timer.service';
 import { LOGIN_PAGE } from '../env';
 import { NotificationsService } from 'angular2-notifications';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-register',
@@ -13,6 +14,7 @@ import { NotificationsService } from 'angular2-notifications';
 })
 export class RegisterComponent {
   responseData: any;
+  qrcode: Object | null = null;
 
   constructor (private formBuilder: FormBuilder, private req: RequestsService, private timerService: TimerService, private notif: NotificationsService) {}
 
@@ -41,8 +43,13 @@ export class RegisterComponent {
       a2fsecret: null
     };
 
-    this.req.registerUser(userData).subscribe(async () => {
+    this.req.registerUser(userData).subscribe(async (res) => {
+
       this.notif.success('Success', 'Your account has been created successfully !');
+      if (res.status == HttpStatusCode.Created) {
+        this.qrcode = res.body;
+        return ;
+      }
       await this.timerService.sleep(3000);
       window.location.href = `${LOGIN_PAGE}`
     }, () => {

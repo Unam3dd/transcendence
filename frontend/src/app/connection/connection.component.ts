@@ -6,6 +6,7 @@ import { RequestsService } from '../services/requests.service';
 import { TimerService } from '../services/timer.service';
 import { CookiesService } from '../services/cookies.service';
 import { NotificationsService } from 'angular2-notifications';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-connection',
@@ -13,6 +14,8 @@ import { NotificationsService } from 'angular2-notifications';
   styleUrls: ['./connection.component.scss']
 })
 export class ConnectionComponent {
+
+  qrcodeData: Object | null = null;
 
   constructor(private formsBuilder: FormBuilder, 
     private req: RequestsService,

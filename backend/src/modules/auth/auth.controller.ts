@@ -84,6 +84,15 @@ export class AuthController {
     const status = await this.authService.CreateNewAccount(data);
 
     if (!status) return (res.status(HttpStatus.CONFLICT).send());
+
+    if (data.a2f) {
+      const user = await this.userService.findOneByLogin(data.login);
+      const { otpauthUrl } = JSON.parse(user.a2fsecret);
+
+      const qrcode = await this.a2fService.respondWithQRCode(otpauthUrl);
+
+      return (res.status(HttpStatus.CREATED).send(qrcode));
+    }
   
     return (res.status(HttpStatus.OK).send());
   }

@@ -222,7 +222,7 @@ export class RequestsService {
   /** Register new User without 42 API */
 
   registerUser(userData: UserInterface) {
-    return this.http.post(`${NESTJS_URL}/auth/register`, userData, { observe: 'response'}).pipe(catchError(this.handleError));
+    return this.http.post(`${NESTJS_URL}/auth/register`, userData, { observe: 'response', responseType: 'text'}).pipe(catchError(this.handleError));
   }
 
   loginUser(login: string, password: string) {
