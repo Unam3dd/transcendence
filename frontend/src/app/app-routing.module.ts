@@ -8,6 +8,7 @@ import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
 import { RegisterComponent } from './register/register.component';
 import {GameMenuComponent} from "./game-menu/game-menu.component";
+import { A2fComponent } from './a2f/a2f.component';
 
 const routes: Routes = [
   {path: '', component: ConnectionComponent},
@@ -17,7 +18,8 @@ const routes: Routes = [
   {path: 'game', component: GamePageComponent},
   {path: 'chat', component: ChatPageComponent},
   {path: 'user/:userId', component: UserComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
+  {path: 'a2f', component: A2fComponent}
 ];
 
 @NgModule({

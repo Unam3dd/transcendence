@@ -228,5 +228,9 @@ export class RequestsService {
   loginUser(login: string, password: string) {
     return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' })
   }
+
+  sendA2fToken(token: string) {
+    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token}, { observe: 'response'})
+  }
 }
 

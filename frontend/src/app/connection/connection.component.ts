@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, PROFILE_PAGE, REDIRECT_URI } from '../env';
+import { CLIENT_ID, NESTJS_URL, PROFILE_PAGE, REDIRECT_URI } from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
@@ -14,8 +14,6 @@ import { HttpStatusCode } from '@angular/common/http';
   styleUrls: ['./connection.component.scss']
 })
 export class ConnectionComponent {
-
-  qrcodeData: Object | null = null;
 
   constructor(private formsBuilder: FormBuilder, 
     private req: RequestsService,
@@ -38,6 +36,10 @@ export class ConnectionComponent {
     if (isEmpty(login) || isEmpty(password)) return ;
 
     this.req.loginUser(<string>login, <string>password).subscribe(async (res) => {
+
+      if (res.status == HttpStatusCode.PermanentRedirect) {
+        window.location.href = `localhost:4200/a2f`
+      }
 
       const { token } = JSON.parse(JSON.stringify(res.body));
 

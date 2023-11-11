@@ -106,6 +106,8 @@ export class AuthController {
     if (isEmpty(user) || user.is42 || !(await argon2.verify(user.password, password)))
       return res.status(401).send();
 
+    if (user.a2f) return res.status(HttpStatus.PERMANENT_REDIRECT).send()
+
     return res.status(200).send({
       token: `Bearer ${await this.authService.generateJwt(user.login)}`,
     });
