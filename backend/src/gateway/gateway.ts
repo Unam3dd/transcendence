@@ -83,7 +83,6 @@ export class EventsGateway {
   @SubscribeMessage('privateGame')
   CreatePrivateLobby(
     @MessageBody() body: playPayload,
-    @ConnectedSocket() client: Socket,
   ) {
     const opponent = this.clientList.find(
       (el) => el.nickName === body.opponentNickname,
@@ -91,29 +90,17 @@ export class EventsGateway {
     const player = this.clientList.find((el) => el.nickName === body.nickName);
     if (!opponent || !player) return;
 
-    const opponentInfo: PlayerInfo = {
-      socket: opponent.client,
-      nickName: opponent.nickName,
-      avatar: opponent.avatar,
-      score: 0,
-    };
-    const playerInfo: PlayerInfo = {
-      socket: client,
-      nickName: player.nickName,
-      avatar: player.avatar,
-      score: 0,
-    };
-
     const gameId = this.lobbyManager.createPrivateLobby(
-      playerInfo,
-      opponentInfo,
+      player,
+      opponent,
       this.server,
     );
     if (!gameId) return;
 
     opponent.client.emit('gameInvitation', {
       gameId: gameId,
-      host: player.nickName, //voir pour add avatar?
+      host: player.nickName,
+      hostAvatar: player.avatar
     });
   }
 

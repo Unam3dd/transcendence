@@ -7,7 +7,7 @@ import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { GameInvitationComponent } from '../game-invitation/game-invitation.component';
+import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
 import { NotificationsService } from 'angular2-notifications';
 
 @Injectable({
@@ -16,7 +16,7 @@ import { NotificationsService } from 'angular2-notifications';
 export class WebsocketService {
 
   public client: any
-
+ 
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService) 
   {
@@ -48,7 +48,7 @@ export class WebsocketService {
       this.client.on('disconnect', (msg: string) => {
         console.log(msg);
       })
-  }
+  } 
 
   openModal(payload: gameInvitationPayload) {
     const modalRef = this.modalService.open(GameInvitationComponent, {
@@ -58,6 +58,7 @@ export class WebsocketService {
     console.log('Modal Reference:', modalRef);
     modalRef.componentInstance.invitation = payload.gameId;
     modalRef.componentInstance.host = payload.host;
+    modalRef.componentInstance.hostAvatar = payload.hostAvatar;
   }
 
   initializeWebsocketService() {

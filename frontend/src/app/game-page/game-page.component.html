@@ -1,17 +1,34 @@
-<!--
- <div class="game">Game part</div>
-<div class="chat">Chat part</div>
+<section class ="gameContent">
+  <section *ngIf="this.gameStart && this.gameMode === 'tournament_local'" class="fight">
+    <div class="userInfo">
+        <p class="username">{{this.currentMatch[0].nickName}} </p>
+    </div>
+    <p> vs </p> 
+    <div>
+        <p class="username">{{this.currentMatch[1].nickName}} </p>
+    </div>
+  </section>
+  <br>
 
-<button (click)="findGame()">Find Game</button>
-<div *ngIf="display">
-    <button (click)="endGame('A')" >End Game first</button>
-    <button (click)="endGame('B')" >End Game second</button>
-</div>
+  <div class="gameDiv">
+    <canvas #gameCanvas class="game">Game part</canvas>
+  </div>
 
-<button (click)="findTournament()">Find Tournament</button>
--->
 
-<div class="gameDiv">
-  <canvas #gameCanvas class="game">Game part</canvas>
-</div>
-
+  <h6>Order of fights for this round:</h6>
+   <section *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
+    <content *ngFor="let pair of printOrder" class="roundInfo"> 
+      <div class="userInfo">
+        <p class="username">{{pair[0].nickName}}</p>
+      </div>
+      <p>vs</p> 
+      <div>
+         <p class="username">{{pair[1].nickName}}</p>
+      </div>
+    </content>
+<!-- Maybe we should show this in the modal when people choose the amount of players for the tournament?-->
+    <h6>Rules of the tournament: </h6>
+    <p>Players affront each other in turn, winners of first round will fight against each other next round.</p>
+    <p>If you are not select for a round and than you don't have been eliminated, it means that there was no opponent for you this round. But you will fight against one of the winner of the actual round on the next round.</p>
+    <p>If you loose a match, you are eliminated of the tournament.</p>
+</section>

@@ -3,6 +3,7 @@ import { Lobby } from './lobby';
 import { Tournament } from './tournament';
 import { PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
+import { ClientInfo } from 'src/interfaces/user.interfaces';
 
 //This class handle all lobbies and tournaments
 export class LobbyManager {
@@ -43,19 +44,31 @@ export class LobbyManager {
   }
 
   createPrivateLobby(
-    player: PlayerInfo,
-    oppponentPalyer: PlayerInfo,
+    player: ClientInfo,
+    oppponentPalyer: ClientInfo,
     server: Server,
   ): string | null {
+    const opponentInfo: PlayerInfo = {
+      socket: oppponentPalyer.client,
+      nickName: oppponentPalyer.nickName,
+      avatar: oppponentPalyer.avatar,
+      score: 0,
+    };
+    const playerInfo: PlayerInfo = {
+      socket: player.client,
+      nickName: player.nickName,
+      avatar: player.avatar,
+      score: 0,
+    };
     if (
-      this.findLobbyByPlayer(oppponentPalyer) ||
-      this.findTournamentByPlayer(oppponentPalyer)
+      this.findLobbyByPlayer(opponentInfo) ||
+      this.findTournamentByPlayer(opponentInfo)
     )
       return null;
     const newLobby = new Lobby(2, this, server);
     this.lobbies.set(newLobby.id, newLobby);
-    newLobby.addClient(player);
-    newLobby.addPrivateOpponent(oppponentPalyer.nickName);
+    newLobby.addClient(playerInfo);
+    newLobby.addPrivateOpponent(opponentInfo.nickName);
     return newLobby.id;
   }
 

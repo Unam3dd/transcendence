@@ -70,6 +70,7 @@ export class Lobby {
 
   public playerDisconnect(player: PlayerInfo): void {
     this.state = gameState.finish;
+
     this.sendMessageToAll(
       'gameMessage',
       `Game is over becaune ${player.nickName} has disconnected`,

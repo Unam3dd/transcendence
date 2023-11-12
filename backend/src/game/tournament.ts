@@ -9,9 +9,9 @@ export class Tournament extends Lobby {
 
   roundTotal: number = 0;
 
-  livePlayers: PlayerInfo[];
+  livePlayers: PlayerInfo[] = [];
 
-  currentMatch: Lobby[];
+  currentMatch: Lobby[] = [];
 
   constructor(
     public readonly maxSize: number,
@@ -119,8 +119,12 @@ export class Tournament extends Lobby {
 
   public playerDisconnect(player: PlayerInfo): void {
     const match = this.lobbyManager.findLobbyByPlayer(player);
-
-    if (!match) {
+    if (this.players.length === 1)
+    {
+      this.lobbyManager.destroyLobby(this);
+      return ;
+    }
+    if (!match) { 
       const index = this.livePlayers.indexOf(player);
       if (index !== -1) this.livePlayers.splice(index, 1);
       this.removeClient(player);

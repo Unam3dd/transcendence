@@ -49,8 +49,8 @@ export interface UserFriendsInfo extends UserSanitizeInterface {
 export interface gameInvitationPayload {
     gameId: string;
     host: string;
+    hostAvatar: string;
 }
-
 
 export interface playersInfo {
     nickName: string;
@@ -71,12 +71,9 @@ export interface GameInfo {
 
     playerLeft: playersInfo;
     playerRight: playersInfo;
-  
-    /*
-    playerLeftName: string;
-    playerRightName: string;
-    playerLeftScore: number;
-    playerRightScore: number;
-    playerRightAvatar: string,
-    playerLeftAvatar: string,*/
   }
+
+  export interface LocalPlayer {
+    nickName: string;
+  }
+  

@@ -1,16 +1,16 @@
-import { WebsocketService } from '../websocket/websocket.service';
-import { WsClient } from '../websocket/websocket.type';
-import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, ViewChild} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, TemplateRef, ViewChild} from '@angular/core';
+import {ActivatedRoute, Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import { RequestsService } from '../services/requests.service';
+import { LocalPlayer } from '../interfaces/user.interface';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { SelectPlayerModalComponent } from '../modals/select-player-modal/select-player-modal.component';
+import { NotificationsService } from 'angular2-notifications';
 
 enum GameMode {
   SOLO = 'solo',
   LOCAL = 'local',
-  REMOTE = 'remote',
   TOURNAMENT_LOCAL = 'tournament_local',
-  TOURNAMENT_REMOTE = 'tournament_remote'
 }
 
 @Component({
@@ -21,42 +21,56 @@ enum GameMode {
 
 export class GamePageComponent implements AfterViewInit, OnDestroy {
 
-  client: WsClient = this.ws.getClient();
-  userLogin: string = '';
-  display: boolean = false;
+  userNickame: string = '';
 
+  players: LocalPlayer[] = [];
+  currentMatch: LocalPlayer[] = [];
+  currentRound: LocalPlayer[] = [];
+  nextRound: LocalPlayer[] = [];
+
+  printOrder: LocalPlayer[][] = [];
+
+  matchCount: number = 0;
+  roundTotal: number = 0;
+  roundCount: number = 1;
+
+  display: boolean = false;
+  final: boolean = false;
+
+  @ViewChild('chooseNickname', { static: true }) chooseNicknameTemplate!: TemplateRef<any>;
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
+  
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private readonly ws: WebsocketService, private readonly requestService: RequestsService) {
+  constructor(private route: ActivatedRoute, private router: Router, private readonly requestService: RequestsService, private modalService: NgbModal, private notif: NotificationsService) {
+    
+    this.requestService.getLoggedUserInformation()?.subscribe((data) => {
+      this.userNickame = data.nickName as string;
+      const player1: LocalPlayer = {
+        "nickName": this.userNickame,
+      }
+      this.players.push(player1);
+    });
+    
     //change the game mode with the button return in the game menu
     this.route.queryParams
       .pipe(takeUntil(this.unsubscribe))
       .subscribe(params => {
       const mode = params['mode'];
+      const size: number = params['size'];
 
       if (mode === GameMode.SOLO) {
         this.gameMode = GameMode.SOLO;
       } else if (mode === GameMode.LOCAL) {
         this.gameMode = GameMode.LOCAL;
-      } else if (mode === GameMode.REMOTE) {
-        this.gameMode = GameMode.REMOTE;
       } else if (mode === GameMode.TOURNAMENT_LOCAL) {
         this.gameMode = GameMode.TOURNAMENT_LOCAL;
-      } else if (mode === GameMode.TOURNAMENT_REMOTE) {
-        this.gameMode = GameMode.TOURNAMENT_REMOTE;
+        this.selectPlayer(size);
       }
     })
- 
-    this.requestService.getLoggedUserInformation()?.subscribe((data) => {
-      this.userLogin = data.login as string;
-    });
   }
 
-  //envoie le bouton sur leaquel le joueur a appuyer
-  pressButton(button: string): void {
-    this.ws.pressButton(this.client, button);
-  }
+  showModal: boolean = false;
 
   //Rackets config variables
   barLeftY: number = 0;
@@ -80,6 +94,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
 
   //This variable checks whether the game is running
   gameStart: boolean = false;
+  roundStart: boolean = false;
 
   //Game mode variable
   gameMode!: GameMode;
@@ -91,6 +106,153 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     this.randomDirection();
     this.drawElements();
   }
+
+  // Guest players choose their nicknames for the local tournament
+  async selectPlayer(size: number) {
+    for (let i: number = 1; i < size; i++)
+    {
+      let player = await this.openModal(i);
+      while (this.players.find((el) => el.nickName === player.nickName))
+      {
+        this.notif.error("Nickname is already taken");
+        player = await this.openModal(i);
+      }
+      if (!player.nickName)
+      {
+        this.exitTournament();
+        return ;
+      }
+      this.players.push(player)
+    }
+    this.launchTournament(size);
+  }
+
+   async openModal(size: number): Promise<LocalPlayer> {
+
+    const modalRef = this.modalService.open(SelectPlayerModalComponent, {
+      backdrop: 'static',
+      keyboard: false,
+    });
+
+    modalRef.componentInstance.number = size;
+
+    return modalRef.result.then((result) => {
+      const playerdata: LocalPlayer = {
+        "nickName": result,
+      }
+      return playerdata;
+    })
+  }
+
+/** Tournament related functions */
+  exitTournament()
+  {
+    this.players = [];
+    this.router.navigate(["/game-menu"]);
+    console.log(this.players);
+    return ;
+  }
+
+  launchTournament(size: number) {
+
+    if (this.players.length < 5) this.roundTotal = 2;
+    else this.roundTotal = 3;
+
+    this.currentRound = this.players;
+    if (size % 2 != 0)
+    {
+      this.nextRound.push(this.currentRound[this.currentRound.length - 1]);
+      this.currentRound.pop();
+    }
+    this.printOrder = this.makePairs(this.currentRound);
+    this.roundStart = true;
+    this.currentMatch.push(this.currentRound[0]);
+    this.currentMatch.push(this.currentRound[1]);
+    this.launchGame();
+  }
+
+  // just to make pair of 2 players that will fight to print fight order in the html
+  makePairs(playerArray: LocalPlayer[]): LocalPlayer[][]{
+    const pairArray: LocalPlayer[][] = [];
+    for (let i = 0; i < playerArray.length; i++)
+    {
+      const pair = [playerArray[i], playerArray[i + 1]];
+      pairArray.push(pair);
+      i++;
+    }
+    return pairArray;
+  }
+
+  public nextMatch() {
+    if (this.currentRound.length === 0) {
+      this.launchNextRound();
+    }
+    else
+    {
+      this.currentMatch.push(this.currentRound[0]);
+      this.currentMatch.push(this.currentRound[1]);
+      console.log("next Match in 3 secondes!");
+      setTimeout(() => {
+        this.launchGame();
+      }, 3000);
+    }
+  }
+
+  public launchNextRound() {
+    this.roundCount++;
+    this.roundStart = false;
+
+    this.currentRound = this.nextRound;
+    this.nextRound = [];
+    if (this.currentRound.length % 2 != 0)
+    {
+      this.nextRound.push(this.currentRound[this.currentRound.length - 1]);
+      this.currentRound.pop();
+    }
+    this.printOrder = this.makePairs(this.currentRound);
+    console.log("next Round in 5 secondes!");
+    setTimeout(() => {
+      this.roundStart = true;
+      this.nextMatch();
+    }, 5000);
+  }
+
+  matchResult(winner: string) {
+    console.log("winner is :", winner);
+    if (this.roundCount === this.roundTotal)
+    {
+      this.tournamentEnd(winner);
+      return;
+    }
+    if (winner === this.currentMatch[0].nickName)// winner is left player
+      this.endMatch(this.currentMatch[1],this.currentMatch[0]);
+    else // winner is right player
+      this.endMatch(this.currentMatch[0],this.currentMatch[1]);
+    this.currentMatch = [];
+    this.nextMatch();
+  }
+
+  endMatch(looserInfo: LocalPlayer, winnerInfo: LocalPlayer) {
+    this.nextRound.push(winnerInfo);
+    const looser = this.currentRound.findIndex((elem) => elem.nickName === looserInfo.nickName);
+    if (looser !== -1)
+      this.currentRound.splice(looser, 1)
+    const winner = this.currentRound.findIndex((elem) => elem.nickName === winnerInfo.nickName);
+    if (winner !== -1)
+      this.currentRound.splice(winner, 1)
+  }
+
+  tournamentEnd(winner: string)
+  {
+    console.log("tournament end match result");
+    if (winner === this.userNickame)
+      console.log("Need to push victory in BD ?")
+    else
+      console.log("Need to push defeat in BD ?")
+    return ;
+  }
+
+/** Game related functions */
 
   //Key management
   @HostListener('window:keydown', ['$event'])
@@ -107,7 +269,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     this.drawElements();
 
     if (event.key === 'Enter') {
-      if ((this.scoreP1 === 10 || this.scoreP2 === 10) && !this.gameStart) {
+      if ((this.scoreP1 === 3 || this.scoreP2 === 3) && !this.gameStart) {
         this.scoreP1 = 0;
         this.scoreP2 = 0;
         this.initPosition();
@@ -121,7 +283,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
   }
 
   launchGame(){
-    if ((this.scoreP1 === 10 || this.scoreP2 === 10) && !this.gameStart) {
+    if ((this.scoreP1 === 3 || this.scoreP2 === 3) && !this.gameStart) {
       this.scoreP1 = 0;
       this.scoreP2 = 0;
       this.initPosition();
@@ -134,28 +296,14 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
   }
 
   @HostListener('window:keydown', ['$event'])
-  remoteKeyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowUp') {
-      this.pressButton(event.key);
-    } else if (event.key === 'ArrowDown') {
-      this.pressButton(event.key);
-    }
-    //this.drawElements();
-  }
-
-  @HostListener('window:keydown', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (this.gameMode === GameMode.SOLO) {
+      this.localKeyEvent(event);
       console.log('Mode solo activated');
     } else if (this.gameMode === GameMode.LOCAL) {
       this.localKeyEvent(event);
-    } else if (this.gameMode === GameMode.REMOTE) {
-      this.pressButton(event.key);
-      //this.remoteKeyEvent(event);
-    } else if (this.gameMode === GameMode.TOURNAMENT_LOCAL) {
-      console.log('Mode local tournament activated');
-    } else if (this.gameMode === GameMode.TOURNAMENT_REMOTE) {
-      console.log('Mode remote tournament activated');
+    } else if (this.gameMode === GameMode.TOURNAMENT_LOCAL && this.gameStart) {
+      this.localKeyEvent(event);
     }
   }
 
@@ -222,7 +370,7 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     }
 
     //stop the game
-    if (this.scoreP1 === 10 || this.scoreP2 === 10) {
+    if (this.scoreP1 === 3 || this.scoreP2 === 3) {
       clearInterval(this.gameInterval);
     }
 
@@ -277,16 +425,20 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
       context.fillText(`${this.scoreP2}`, 3 * (canvas.width / 4), 100);
 
       //Win message
-      if (this.scoreP1 == 10) {
+      if (this.scoreP1 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (centerX / 2) - 20, 200);
         this.gameStart = false;
-      } else if (this.scoreP2 == 10) {
+        if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
+          this.matchResult(this.currentMatch[0].nickName);
+      } else if (this.scoreP2 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
         this.gameStart = false;
+        if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
+          this.matchResult(this.currentMatch[1].nickName);
       }
     }
   }
