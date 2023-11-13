@@ -1,5 +1,6 @@
 .global {
   width: 100%;
+  max-width: 100%;
   // header height is 80px - footer height is 30px
   height: calc(100vh - 80px - 30px);
   background-color: blue;  
@@ -10,9 +11,14 @@
   line-height: 50px;
   width: 100%;
   padding-left: 20px;
-  background-color: grey;
+  background-color: rgb(94, 94, 94);
+  background-image: linear-gradient(177deg, rgb(118, 118, 118), rgb(36, 36, 36) 15%, rgb(36, 36, 36) 80%, rgb(23, 23, 23) 100%);
   text-align: left;
-  color: white;
+  color: rgb(238, 238, 238);
+  font-size: larger;
+  font-weight: 550;
+  text-shadow: 0px 2px 2px black;
+  
 }
 
 ul {
@@ -26,58 +32,79 @@ ul {
   background-color: #404060;
 }
 
+
+
 .messages {
   // send-message height is 80px
   height: calc(100% - 80px);
-  padding: 10px;
-  background-color: lightseagreen;
+  width: 100%;
+  max-width: 100%;
+  overflow-y: auto;
+  background-image: linear-gradient(to top left,  rgb(23, 23, 23) 0%, rgb(50, 50, 50) 80%);
+  padding-bottom: 10px;
+  // background-color: rgb(12, 12, 12);
 }
 
 .capsule {
+  padding: 10px 0px 0px; // bug : spawn on init; bug : need to be disabled when same author in prev message
+  width: 100%;
   display: flex;
+  // background-color: rgb(204, 12, 12);
 }
 
 .picture-column {
-  background-color: darkgoldenrod;
   width: 70px;
-  padding:  0px 10px
-}
-
-.author-name {
-  font-weight: 500;
-  color: orange;
-}
-
-.action {
-  color: darkorange;
+  padding:  3px 13px;
+  // background-color: darkgoldenrod;
 }
 
 .thumbnail {
-  width: 50px;
-  height: 50px;
+  width: 44px;
+  height: 44px;
   overflow: hidden;
   border-radius: 50%;
+  box-shadow:
+    -4px -4px 8px #b5764050,
+    -5px 5px 10px #cfc09f50,
+    2px 2px 6px #ffecb350,
+    0px 3px 0px black;
+  img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+  }
 }
 
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  // max-width: 4%;
-  // height: auto;
+
+.message-zone {
+  // picture-column width is 70px
+  max-width: calc(100% - 70px);
+  padding-right: 70px;
+  // background-color: blueviolet;
+}
+
+.author-name {
+  height: 30px;
+  line-height: 30px;
+  font-size: large;
+  font-weight: 550;
+  color: goldenrod;
+  text-shadow: 0px 2px 2px black;
+  // background-color: orange;
 }
 
 .message-content {
-  // padding: 10px;
-  // display: inline-block;
-  // text-align: justify;
-  background-color: lightskyblue;
+  line-height: 20px;
+  overflow-wrap: break-word;
+  color: rgb(222, 222, 222);
+  border-radius: 8px;
 }
 
 
 
 .messagebox {
-  background-color: red;
+  // background-color: red;
+  background-color: black;
   height: 80px;
   width: 100%;
   display: flex;
@@ -87,25 +114,15 @@ ul {
   background-color: black;
   color: white;
   border-radius: 4px;
-  // position: absolute;
-  // right: 25%;
-  // height: 40px;
   width: calc(100% - 80px);
   height: 100%;
   padding: 10px;
-  // position: absolute;
-  // top: 10%;
 }
 
 .messagebox #sendbutton {
   background-color: black;
   color: white;
   border-radius: 4px;
-  // position: absolute;
-  // right: 22%;
-  // height: 40px;
   height: 100%;
   width: 80px;
-  // position: absolute;
-  // top: 10%;
 }

@@ -1,16 +1,39 @@
+<!-- <div class="global">
+  <div class="general-channel">
+    <h4 style="text-align: center;">General</h4>
+    <ul class="channel">General</ul>
+    <ul class="channel">GameChat</ul>
+  </div>
+  <div class="private-channel">
+    <h4 style="text-align: center;">Private Message</h4>
+    <ul class="channel-list" *ngFor="let user of this.listClients">
+      <li class="channel">
+        <img class="img-thumb" src={{user.avatar}}/>
+        <p id="profile-name">{{ user.nickName }} ({{ user.login }})</p>
+      </li>
+    </ul>
+  </div>
+</div> -->
+
 <div class="global">
-    <div class="general-channel">
-        <h4 style="text-align: center;">General</h4>
-        <ul class="channel">General</ul>
-        <ul class="channel">GameChat</ul>
-    </div>
-    <div class="private-channel">
-        <h4 style="text-align: center;">Private Message</h4>
-        <ul class="channel-list" *ngFor="let user of this.listClients">
-            <li class="channel">
-                <img class="img-thumb" src={{user.avatar}}/>
-                <p id="profile-name">{{ user.nickName }} ({{ user.login }})</p>
-            </li>
-        </ul>
-    </div>
+
+  <ul class="channel-list">
+
+    <li class="channel">
+      <div class="thumbnail">  
+        <div class="initial">G</div>
+      </div>
+      <span class="profile-name">General</span>
+    </li>
+
+    <li></li>
+
+    <li class="channel" *ngFor="let user of this.listClients">
+      <div class="thumbnail">  
+        <img src={{user.avatar}}/>
+      </div>
+      <span class="profile-name">{{ user.nickName }} ({{ user.login }})</span>
+    </li>
+    
+  </ul>
 </div>

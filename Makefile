@@ -17,7 +17,7 @@ up:
 
 up_dev:
 	@docker compose -f docker-compose-dev.yml up --build
-	@echo "Transcandance has been stopped !"
+	@echo "Transcendence has been stopped !"
 
 stop:
 	@docker compose stop
