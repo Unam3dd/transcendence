@@ -2,7 +2,7 @@ import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, TemplateR
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import { RequestsService } from '../services/requests.service';
-import { LocalPlayer } from '../interfaces/user.interface';
+import { LocalPlayer } from '../interfaces/game.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SelectPlayerModalComponent } from '../modals/select-player-modal/select-player-modal.component';
 import { NotificationsService } from 'angular2-notifications';

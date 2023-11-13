@@ -1,4 +1,4 @@
-import { PlayerInfo } from 'src/interfaces/game.interfaces';
+import { GameParams, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { LobbyManager } from './lobbiesManager';
 import { Lobby } from './lobby';
 import { gameState } from 'src/enum/gameState.enum';
@@ -43,6 +43,12 @@ export class Tournament extends Lobby {
   }
 
   public startTournament(): void {
+    const gameParams: GameParams = {
+      id: this.id,
+      size: this.size
+    } 
+    this.server.to(this.id).emit('gameId', gameParams);
+
     this.state = gameState.playing;
     if (this.players.length < 5) this.roundTotal = 2;
     else this.roundTotal = 3;
@@ -143,6 +149,7 @@ export class Tournament extends Lobby {
   }
 
   public finishTournament(winner: PlayerInfo): void {
+    //winner.socket.emit('EndGame', payload: )
     this.sendMessageToAll(
       'gameMessage',
       `${winner.nickName} is the winner of this tournament`,

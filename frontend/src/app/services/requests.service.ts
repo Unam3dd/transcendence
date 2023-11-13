@@ -5,11 +5,12 @@ import {Observable, catchError, throwError, Subscription } from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
-import { GameResult, UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
+import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
 import { Status } from '../enum/status.enum';
+import { GameResult } from '../interfaces/game.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -231,18 +232,24 @@ export class RequestsService {
 
   /** Game Requests */
 
-  /*addGameResult(gameResult: GameResult)
+  addGameResult(gameResult: GameResult)
   {
-    return this.http.post(`${NESTJS_URL}/game/add`, {})
-  }*/
+    const token = this.cookieService.getToken();
 
-  listGame()
-  {
-
+    if (!token) return ;
+  
+    return this.http.post(`${NESTJS_URL}/game/add`, gameResult, { headers:
+      new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
-  deleteGame(){
+  listGame(nickname: string)
+  {
+    const token = this.cookieService.getToken();
 
+    if (!token) return ;
+
+    return this.http.get<GameResult[]>(`${NESTJS_URL}/game/list/${nickname}`, {headers:
+      new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 }
 

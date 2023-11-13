@@ -26,6 +26,7 @@ export class gameInstance {
   gameStart: boolean = false;
 
   public launchGame(): void {
+    this.lobby.sendMessageToAll('gameId', this.lobby.id);
     this.lobby.state = gameState.playing;
     this.initGame();
     this.startGame();

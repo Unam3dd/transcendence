@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
-import { JWTPayload, UserSanitizeInterface, gameInvitationPayload } from '../interfaces/user.interface';
+import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
+import {gameInvitationPayload } from '../interfaces/game.interface';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';

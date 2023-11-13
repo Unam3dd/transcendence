@@ -16,12 +16,12 @@ export class Game {
     @IsString({ message: 'lobby id must be a string !' })
     lobby: string;
 
-    @OneToOne(() => User, (user) => user.id)
+    @OneToOne(() => User, (user) => user.nickName)
     @Column({
         nullable: false,
-        type: 'int',
+        type: 'varchar',
     })
-    user: number;
+    user: string;
 
     @Column({
         nullable: false,
@@ -32,7 +32,14 @@ export class Game {
 
     @Column({
         nullable: false,
-        type: 'varchar'
+        type: 'boolean'
+    })
+    @IsBoolean({ message: 'local must be a boolean !' })
+    local: boolean;
+
+    @Column({
+        nullable: false,
+        type: 'boolean'
     })
     @IsBoolean({ message: 'victory must be a boolean !' })
     victory: boolean;

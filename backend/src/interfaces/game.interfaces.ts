@@ -34,3 +34,8 @@ export interface GameInfo {
   playerLeft: playersPayload;
   playerRight: playersPayload;
 }
+
+export interface GameParams {
+  id: string,
+  size: number
+}

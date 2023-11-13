@@ -14,8 +14,8 @@ export class GameService {
     return await this.gameRepository.save({...createGameDto});
   }
 
-  async findGames(playerId: number): Promise<Game[]> {
-    return await this.gameRepository.find({ where: {user:playerId}});
+  async findGames(nickname: string): Promise<Game[]> {
+    return await this.gameRepository.find({ where: {user:nickname}});
   }
 
   findOne(id: number) {

@@ -3,7 +3,8 @@ import { WsClient } from '../websocket/websocket.type';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Subject, takeUntil } from "rxjs";
 import { ActivatedRoute, Router } from '@angular/router';
-import { GameInfo } from '../interfaces/user.interface';
+import { GameInfo, GameParams, GameResult } from '../interfaces/game.interface';
+import { RequestsService } from '../services/requests.service';
 
 export interface Player {
   nickName: string,
@@ -25,10 +26,12 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   playerLeft = {} as Player;
   gameStart: boolean = false;
 
+  gameParams: GameParams = {id: '', size: 0};
+
   @ViewChild('gameCanvasRemote', {static: true}) canvas!: ElementRef;
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private readonly ws: WebsocketService, private readonly route: ActivatedRoute, private readonly router: Router) {
+  constructor(private readonly ws: WebsocketService, private readonly route: ActivatedRoute, private readonly router: Router, private readonly requestsService: RequestsService) {
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(params => {
@@ -47,6 +50,16 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       this.gameStart = false;
     })
 
+    //Pas besoin ?
+    this.client.on('gameId', (payload: GameParams) => {
+      if (!this.gameParams.id)
+      {
+        console.log("Game param test");
+        this.gameParams.id = payload.id;
+        this.gameParams.size = payload.size
+      }
+    })
+
     this.client.on('interval', (payload: GameInfo) => {
       if(!this.gameStart){
         this.gameStart = true;
@@ -62,8 +75,16 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       console.log("Game has stopped for because your opponent has give up the match");
     });
 
-    this.client.on('endMatch', () => {
+    this.client.on('endMatch', (payload: GameResult) => {
       console.log("Game has finish because someone has won the match");
+      
+      /*const game: GameResult = {
+        lobby: this.gameParams.id,
+        //user: 
+        size: this.gameParams.size,
+        
+      }
+      this.requestsService.addGameResult(payload);*/
       //Gerer les deconnection et les redirs de fin de match ici
       //print something like victory or defeat to players?
 

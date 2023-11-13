@@ -3,7 +3,6 @@ import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { Res, Req } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { UpdateGameDto } from './dto/update-game.dto';
 import { AuthGuard } from '../auth/auth.guard';
 
 @UseGuards(AuthGuard)
@@ -12,13 +11,22 @@ export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @Post('/add')
-  async create(@Body() createGameDto: CreateGameDto, @Res() res: Response) {
+  async create(@Body() createGameDto: CreateGameDto, @Res() res: Response, @Req() req: Request) {
+    const data = await this.gameService.getJWTToken(
+      req.headers.authorization,
+    );
+
+    if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
+
+    const { nickName } = JSON.parse(data[1]);
+    if ( nickName != createGameDto.user)
+      return res.status(HttpStatus.CONFLICT).send();
     await this.gameService.create(createGameDto);
     res.status(HttpStatus.OK).send();
   }
 
-  @Get('/list')
-  async listGames(@Req() req: Request, @Res() res: Response,) {
+  @Get('/list/:nickname')
+  async listGames(@Param('nickname') nickname: string, @Req() req: Request, @Res() res: Response,) {
 
     const data = await this.gameService.getJWTToken(
       req.headers.authorization,
@@ -26,11 +34,11 @@ export class GameController {
 
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 
-    const { sub } = JSON.parse(data[1]);
+   // const { sub } = JSON.parse(data[1]);
 
     return res
     .status(HttpStatus.OK)
-    .send(await this.gameService.findGames(sub));
+    .send(await this.gameService.findGames(nickname));
   }
 
   @Delete('/delete/:id')

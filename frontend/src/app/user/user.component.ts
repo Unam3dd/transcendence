@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { UserSanitizeInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
+import { GameResult } from '../interfaces/game.interface';
 
 @Component({
   selector: 'app-user',
@@ -11,6 +12,7 @@ import { RequestsService } from '../services/requests.service';
 export class UserComponent implements OnInit {
 
   user = {} as UserSanitizeInterface;
+  gameHistory: GameResult[] = [];
 
   constructor(private readonly route: ActivatedRoute,
     private readonly requestServices: RequestsService) {}
@@ -21,6 +23,10 @@ export class UserComponent implements OnInit {
 
     this.requestServices.getUserInfo(userIdFromRoute)?.subscribe((user) => {
       this.user = user;
+
+      this.requestServices.listGame(this.user.nickName)?.subscribe((games) => {
+        this.gameHistory = games;
+      });
     });
   }
 }
