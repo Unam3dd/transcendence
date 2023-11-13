@@ -5,7 +5,7 @@ import {Observable, catchError, throwError, Subscription } from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
-import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
+import { GameResult, UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
@@ -227,6 +227,22 @@ export class RequestsService {
 
   loginUser(login: string, password: string) {
     return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' })
+  }
+
+  /** Game Requests */
+
+  /*addGameResult(gameResult: GameResult)
+  {
+    return this.http.post(`${NESTJS_URL}/game/add`, {})
+  }*/
+
+  listGame()
+  {
+
+  }
+
+  deleteGame(){
+
   }
 }
 

@@ -77,3 +77,10 @@ export interface GameInfo {
     nickName: string;
   }
   
+
+  export interface GameResult {
+    lobby: string,
+    user: number,
+    size: number,
+    victory: boolean
+  }
