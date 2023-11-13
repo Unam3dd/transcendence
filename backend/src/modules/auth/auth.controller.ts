@@ -104,11 +104,11 @@ export class AuthController {
     const user = await this.userService.findOneByLogin(login);
 
     if (isEmpty(user) || user.is42 || !(await argon2.verify(user.password, password)))
-      return res.status(401).send();
+      return res.status(HttpStatus.UNAUTHORIZED).send();
 
-    if (user.a2f) return res.status(HttpStatus.PERMANENT_REDIRECT).send()
+    if (user.a2f) return res.status(HttpStatus.OK).send({ a2f: true });
 
-    return res.status(200).send({
+    return res.status(HttpStatus.OK).send({
       token: `Bearer ${await this.authService.generateJwt(user.login)}`,
     });
   }

@@ -226,11 +226,15 @@ export class RequestsService {
   }
 
   loginUser(login: string, password: string) {
-    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' })
+    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response', responseType: 'json'}).pipe(catchError(this.handleError));
   }
 
-  sendA2fToken(token: string) {
-    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token}, { observe: 'response'})
+  sendA2fToken(token: string | null | undefined) {
+    const login: string | null = this.cookieService.getCookie('tmp_name');
+    
+    if (!token || !login) return ;
+
+    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token}, { headers: new HttpHeaders().append('tmp_name', login), observe: 'response'}).pipe(catchError(this.handleError));
   }
 }
 

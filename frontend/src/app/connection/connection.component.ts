@@ -37,8 +37,11 @@ export class ConnectionComponent {
 
     this.req.loginUser(<string>login, <string>password).subscribe(async (res) => {
 
-      if (res.status == HttpStatusCode.PermanentRedirect) {
-        window.location.href = `localhost:4200/a2f`
+      const { a2f } = JSON.parse(JSON.stringify(res.body));
+
+      if (res.status == HttpStatusCode.Ok && a2f) {
+        this.cookieServcie.setCookie('tmp_name', `${login}`);
+        window.location.href = `http://localhost:4200/a2f`;
       }
 
       const { token } = JSON.parse(JSON.stringify(res.body));

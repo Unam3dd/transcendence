@@ -1,7 +1,6 @@
 import { Controller, HttpStatus } from '@nestjs/common';
 import { Post } from '@nestjs/common';
 import { Req, Res } from '@nestjs/common';
-import { A2fService } from './a2f.service';
 import { Request, Response } from 'express';
 import { UsersService } from '../users/users.service';
 import * as speakeasy from 'speakeasy';
@@ -13,9 +12,13 @@ export class A2fController {
     constructor (private readonly userService: UsersService,
         private readonly authService: AuthService) {}
     
-    @Post('/token')
+    @Post('verify')
     async verify(@Req() req: Request, @Res() res: Response) {
-        const { login, token } = JSON.parse(req.body);
+        console.log(req.headers);
+
+        const login = 'supertoto';
+
+        const { token } = JSON.parse(JSON.stringify(req.body));
 
         const user = await this.userService.findOneByLogin(login);
 
