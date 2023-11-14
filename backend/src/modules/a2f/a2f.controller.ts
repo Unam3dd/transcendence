@@ -14,7 +14,10 @@ export class A2fController {
     
     @Post('verify')
     async verify(@Req() req: Request, @Res() res: Response) {
-        console.log(req.headers);
+
+        const data: string | string[] = req.headers.tmp_name;
+
+        console.log(data);
 
         const login = 'supertoto';
 

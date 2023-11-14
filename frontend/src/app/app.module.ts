@@ -22,7 +22,6 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { Options, SimpleNotificationsModule } from 'angular2-notifications';
-import { A2fComponent } from './a2f/a2f.component';
 
 const NotifcationOpt: Options = {
   position: ["top", "right"],
@@ -51,8 +50,7 @@ function initializeWebSocket(ws: WebsocketService) {
     ChatPageComponent,
     UserComponent,
     RegisterComponent,
-    GameMenuComponent,
-    A2fComponent
+    GameMenuComponent
   ],
   imports: [
     BrowserModule,

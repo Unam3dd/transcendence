@@ -1,3 +1,10 @@
+.connection42API h4 {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .connection42API button {
   font-size: 30px;
   position: absolute;
@@ -9,7 +16,7 @@
 .connection #login {
   font-size: 15px;
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -17,7 +24,7 @@
 .connection #password {
   font-size: 15px;
   position: absolute;
-  top: 55%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -25,7 +32,7 @@
 .connection button {
   font-size: 30px;
   position: absolute;
-  top: 65%;
+  top: 58%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -33,7 +40,29 @@
 .registration #link {
   font-size: 15px;
   position: absolute;
-  top: 75%;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.a2f #token {
+  font-size: 15px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.a2f h4 {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.a2f #button-token {
+  position: absolute;
+  top: 55%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
