@@ -37,9 +37,9 @@ export interface GameInfo {
   
   export interface GameResult {
     lobby: string,
-    user: number,
+    user?: number,
     size: number,
     local: boolean,
     victory: boolean,
-    createdAt: string
+    createdAt?: string
   }

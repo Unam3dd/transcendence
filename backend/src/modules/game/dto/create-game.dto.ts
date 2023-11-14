@@ -1,11 +1,12 @@
-import { IsBoolean, IsNumber, IsString } from "class-validator";
+import { IsBoolean, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateGameDto {
     @IsString({ message: 'lobby id must be a string !' })
     lobby: string;
 
-    @IsString({ message: 'user must be a string !' })
-    user: string;
+    @IsOptional()
+    @IsNumber({}, { message: 'user must be a number !' })
+    user?: number;
 
     @IsNumber({}, { message: 'size must be an id !' })
     size: number;

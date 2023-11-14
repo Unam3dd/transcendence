@@ -75,16 +75,21 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       console.log("Game has stopped for because your opponent has give up the match");
     });
 
-    this.client.on('endMatch', (payload: GameResult) => {
+    this.client.on('endGame', (payload) => {
       console.log("Game has finish because someone has won the match");
-      
-      /*const game: GameResult = {
-        lobby: this.gameParams.id,
-        //user: 
-        size: this.gameParams.size,
-        
+      if (payload.gameId)
+      {
+        console.log("jai gagne");
+        const test: GameResult = {
+          "lobby": payload.gameId as string,
+          "size": payload.size as number,
+          "local": false,
+          "victory": payload.victory as boolean
+        }
+        this.requestsService.addGameResult(test);
       }
-      this.requestsService.addGameResult(payload);*/
+
+      //this.requestsService.addGameResult(test);
       //Gerer les deconnection et les redirs de fin de match ici
       //print something like victory or defeat to players?
 

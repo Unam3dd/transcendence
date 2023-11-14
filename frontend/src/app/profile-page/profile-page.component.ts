@@ -42,7 +42,7 @@ export class ProfilePageComponent implements OnInit{
         this.a2f = new FormControl(a2fValue);
       }
 
-      this.gameObserver$ = this.requestService.listGame(userData.nickName as string);
+      this.gameObserver$ = this.requestService.listGame(userData.id as number);
 
       this.gameObserver$?.subscribe((gameList: GameResult[]) => {
         this.gameHistory = gameList;

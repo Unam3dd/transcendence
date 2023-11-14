@@ -16,12 +16,12 @@ export class Game {
     @IsString({ message: 'lobby id must be a string !' })
     lobby: string;
 
-    @OneToOne(() => User, (user) => user.nickName)
+    @OneToOne(() => User, (user) => user.id)
     @Column({
         nullable: false,
-        type: 'varchar',
+        type: 'int',
     })
-    user: string;
+    user: number;
 
     @Column({
         nullable: false,

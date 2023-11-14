@@ -24,7 +24,7 @@ export class UserComponent implements OnInit {
     this.requestServices.getUserInfo(userIdFromRoute)?.subscribe((user) => {
       this.user = user;
 
-      this.requestServices.listGame(this.user.nickName)?.subscribe((games) => {
+      this.requestServices.listGame(userIdFromRoute)?.subscribe((games) => {
         this.gameHistory = games;
       });
     });

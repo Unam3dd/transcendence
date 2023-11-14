@@ -237,18 +237,18 @@ export class RequestsService {
     const token = this.cookieService.getToken();
 
     if (!token) return ;
-  
-    return this.http.post(`${NESTJS_URL}/game/add`, gameResult, { headers:
+
+    return this.http.post<HttpResponse<Status>>(`${NESTJS_URL}/game/add`, gameResult, { headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
-  listGame(nickname: string)
+  listGame(userId: number)
   {
     const token = this.cookieService.getToken();
 
     if (!token) return ;
 
-    return this.http.get<GameResult[]>(`${NESTJS_URL}/game/list/${nickname}`, {headers:
+    return this.http.get<GameResult[]>(`${NESTJS_URL}/game/list/${userId}`, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 }
