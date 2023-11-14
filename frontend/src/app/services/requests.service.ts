@@ -230,10 +230,10 @@ export class RequestsService {
     return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response', responseType: 'json'}).pipe(catchError(this.handleError));
   }
 
-  sendA2fToken(token: string | null | undefined): Observable<HttpResponse<string>> {
+  sendA2fToken(token: string | null | undefined): Observable<HttpResponse<Object>> {
     const login: string | null = this.cookieService.getCookie('tmp_name');
 
-    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token }, { headers: new HttpHeaders().append('tmp_name', `${login}`), observe: 'response', responseType: 'text'});
+    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token }, { headers: new HttpHeaders().append('tmp_name', `${login}`), observe: 'response'});
   }
 }
 

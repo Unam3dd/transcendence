@@ -48,7 +48,7 @@ export class ConnectionComponent {
       const { a2f } = JSON.parse(JSON.stringify(res.body));
 
       if (res.status == HttpStatusCode.Ok && a2f) {
-        this.cookieService.setCookie('tmp_name', `${login}`);
+        this.cookieService.setCookie('tmp_name', `${btoa(<string>login)}`);
         this.double_factor = true;
         return ;
       }
@@ -77,7 +77,6 @@ export class ConnectionComponent {
 
       this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
       this.cookieService.removeCookie('tmp_name');
-      await this.timeService.sleep(5000);
       window.location.href = 'http://localhost:4200/home';
     }, async () => {
       this.notif.error('Error', 'Your token is invalid !');

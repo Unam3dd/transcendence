@@ -16,6 +16,7 @@ export class CookiesService {
   }
 
   getCookie(name: string): string | null {
+    this.cookies = document.cookie.split(' ');
     for (const cookie of this.cookies) {
       const [key, value] = cookie.split('=');
       if (key === name) return (value);

@@ -17,9 +17,7 @@ export class A2fController {
 
         const data: string | string[] = req.headers.tmp_name;
 
-        console.log(data);
-
-        const login = 'supertoto';
+        const login = atob(<string>data);
 
         const { token } = JSON.parse(JSON.stringify(req.body));
 
