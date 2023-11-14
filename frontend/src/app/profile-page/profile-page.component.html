@@ -49,6 +49,10 @@
       <div class="mb-3">
         <div *ngIf="userData$ | async as userData">
           <div>
+            <div class="mb-3">
+              <label for="formFile" class="form-label">Upload avatar</label>
+              <input class="form-control" type="file" id="formFile" (change)="onFileSelected($event)" [formControl]="avatar">
+            </div>
             <div>
               <span>Firstname</span>
               <input placeholder="{{userData.firstName}}" class="form-control" [formControl]="firstname">

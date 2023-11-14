@@ -17,6 +17,7 @@ export class ProfilePageComponent implements OnInit{
               private modalService: NgbModal) {}
 
   userData$!: Observable<UserInterface> | null;
+  avatar: FormControl = new FormControl(null);
   firstname = new FormControl('');
   lastname = new FormControl('');
   nickname = new FormControl('');
@@ -51,6 +52,20 @@ export class ProfilePageComponent implements OnInit{
 
   //update function for update the profile
   updateDatas() {
+    if (this.avatar) {
+      const avatar: File | null = this.avatar.value;
+
+      if (avatar) {
+        this.requestService.uploadUserImage(avatar)?.subscribe(() => {
+          this.updateDatasWithoutImage();
+        })
+      } else {
+        this.updateDatasWithoutImage();
+      }
+    }
+  }
+
+  updateDatasWithoutImage() {
     const firstname: string = this.firstname.value as string;
     const lastname: string = this.lastname.value as string;
     const nickname: string = this.nickname.value as string;
@@ -58,5 +73,13 @@ export class ProfilePageComponent implements OnInit{
     const a2f: boolean = this.a2f.value as boolean;
 
     this.requestService.updateUserDatas(firstname, lastname, nickname, email, a2f);
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    console.log('Type of avatar in updateDatas:', typeof file);
+
+    this.avatar.setValue(file);
+    this.updateDatas();
   }
 }
