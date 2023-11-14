@@ -1,5 +1,5 @@
 import { Lobby } from './lobby';
-import { GameInfo, PlayerInfo } from 'src/interfaces/game.interfaces';
+import { GameInfo, GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 
 //In this class we define actions needed to play the game
@@ -26,7 +26,6 @@ export class gameInstance {
   gameStart: boolean = false;
 
   public launchGame(): void {
-    this.lobby.sendMessageToAll('gameId', this.lobby.id);
     this.lobby.state = gameState.playing;
     this.initGame();
     this.startGame();
@@ -81,9 +80,9 @@ export class gameInstance {
 
     //increment players score
     if (this.ballX + this.ballRadius >= 800) {
-      this.lobby.players[1].score++;
-    } else if (this.ballX - this.ballRadius <= 0) {
       this.lobby.players[0].score++;
+    } else if (this.ballX - this.ballRadius <= 0) {
+      this.lobby.players[1].score++;
     }
 
     //reset ball position
@@ -133,14 +132,14 @@ export class gameInstance {
       ballY: this.ballY,
       ballRadius: this.ballRadius,
       playerLeft: {
-        nickName: this.lobby.players[1].nickName,
-        avatar: this.lobby.players[1].avatar,
-        score: this.lobby.players[1].score,
-      },
-      playerRight: {
         nickName: this.lobby.players[0].nickName,
         avatar: this.lobby.players[0].avatar,
         score: this.lobby.players[0].score,
+      },
+      playerRight: {
+        nickName: this.lobby.players[1].nickName,
+        avatar: this.lobby.players[1].avatar,
+        score: this.lobby.players[1].score,
       },
     };
     this.lobby.sendGameEventToAll('interval', payload);
@@ -155,25 +154,25 @@ export class gameInstance {
   public pressButton(player: PlayerInfo, button: string): void {
     if (this.lobby.players.length === 2) {
       if (
-        player === this.lobby.players[0] &&
+        player === this.lobby.players[1] &&
         button == 'ArrowUp' &&
         this.barRightY - this.barSpeed >= 0
       )
         this.barRightY -= this.barSpeed;
       else if (
-        player === this.lobby.players[1] &&
+        player === this.lobby.players[0] &&
         button == 'ArrowUp' &&
         this.barLeftY - this.barSpeed >= 0
       )
         this.barLeftY -= this.barSpeed;
       else if (
-        player === this.lobby.players[0] &&
+        player === this.lobby.players[1] &&
         button == 'ArrowDown' &&
         this.barRightY + this.barHeight + this.barSpeed <= 400
       )
         this.barRightY += this.barSpeed;
       else if (
-        player === this.lobby.players[1] &&
+        player === this.lobby.players[0] &&
         button == 'ArrowDown' &&
         this.barLeftY + this.barHeight + this.barSpeed <= 400
       )
@@ -202,6 +201,21 @@ export class gameInstance {
     this.lobby.state = gameState.finish;
 
     if (tournois) tournois.handleVictory(player);
+    else if (!tournois) this.sendGameResult(player);
     this.lobby.lobbyManager.destroyLobby(this.lobby);
+  }
+
+  sendGameResult(player: PlayerInfo): void {
+    let payload: GamePayload = {
+      lobby: this.lobby.id,
+      size: this.lobby.size,
+      victory: true 
+    }
+    player.socket.emit('1v1Result', payload);
+    payload.victory = false;
+    if (this.lobby.players[0] === player)
+      this.lobby.players[1].socket.emit('1v1Result', payload)
+    else
+      this.lobby.players[0].socket.emit('1v1Result', payload) 
   }
 }

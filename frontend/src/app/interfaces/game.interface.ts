@@ -9,7 +9,6 @@ export interface playersInfo {
     nickName: string;
     avatar: string;
     score: number;
-
 }
 
 export interface GameInfo {
@@ -30,16 +29,16 @@ export interface GameInfo {
     nickName: string;
   }
 
-  export interface GameParams {
-    id: string,
-    size: number
+  export interface GamePayload {
+    lobby: string,
+    size: number,
+    victory: boolean
+  }
+
+  export interface PlayerResult extends GamePayload{
+    local: boolean,
   }
   
-  export interface GameResult {
-    lobby: string,
-    user?: number,
-    size: number,
-    local: boolean,
-    victory: boolean,
-    createdAt?: string
+  export interface GameResult extends PlayerResult{
+    createdAt: string
   }

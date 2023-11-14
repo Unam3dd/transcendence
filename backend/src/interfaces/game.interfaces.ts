@@ -15,7 +15,7 @@ export interface playPayload {
   gameId?: string;
 }
 
-export interface playersPayload {
+export interface PlayersPayload {
   nickName: string;
   avatar: string;
   score: number;
@@ -31,11 +31,12 @@ export interface GameInfo {
   ballY: number;
   ballRadius: number;
 
-  playerLeft: playersPayload;
-  playerRight: playersPayload;
+  playerLeft: PlayersPayload;
+  playerRight: PlayersPayload;
 }
 
-export interface GameParams {
-  id: string,
-  size: number
+export interface GamePayload {
+  lobby: string,
+  size: number,
+  victory: boolean
 }

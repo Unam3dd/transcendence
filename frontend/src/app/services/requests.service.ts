@@ -10,7 +10,7 @@ import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
 import { Status } from '../enum/status.enum';
-import { GameResult } from '../interfaces/game.interface';
+import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -232,7 +232,7 @@ export class RequestsService {
 
   /** Game Requests */
 
-  addGameResult(gameResult: GameResult)
+  addGameResult(gameResult: PlayerResult)
   {
     const token = this.cookieService.getToken();
 

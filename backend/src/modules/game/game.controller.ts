@@ -15,14 +15,12 @@ export class GameController {
     const data = await this.gameService.getJWTToken(
       req.headers.authorization,
     );
-
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 
     const { sub } = JSON.parse(data[1]);
-
     createGameDto.user = sub;
     await this.gameService.create(createGameDto);
-    res.status(HttpStatus.OK).send();
+    return res.status(HttpStatus.OK).send();
   }
 
   @Get('/list/:id')
@@ -33,8 +31,6 @@ export class GameController {
     );
  
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
-
-   // const { sub } = JSON.parse(data[1]);
 
     return res
     .status(HttpStatus.OK)

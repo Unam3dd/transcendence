@@ -6,6 +6,8 @@ import {Router} from "@angular/router";
 import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import { PlayerResult } from '../interfaces/game.interface';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-game-menu',
@@ -19,7 +21,7 @@ export class GameMenuComponent implements OnInit{
   selectedValue: string = '';
 
   constructor(private requestsService: RequestsService,
-              private router: Router, private ws: WebsocketService, private modalService: NgbModal,) {}
+              private router: Router, private ws: WebsocketService, private modalService: NgbModal,private http: HttpClient) {}
 
   ngOnInit() {
     this.userData$ = this.requestsService.getLoggedUserInformation();

@@ -3,7 +3,7 @@ import { WsClient } from '../websocket/websocket.type';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Subject, takeUntil } from "rxjs";
 import { ActivatedRoute, Router } from '@angular/router';
-import { GameInfo, GameParams, GameResult } from '../interfaces/game.interface';
+import { GameInfo, GamePayload, GameResult, PlayerResult } from '../interfaces/game.interface';
 import { RequestsService } from '../services/requests.service';
 
 export interface Player {
@@ -25,8 +25,6 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   playerRight = {} as Player;
   playerLeft = {} as Player;
   gameStart: boolean = false;
-
-  gameParams: GameParams = {id: '', size: 0};
 
   @ViewChild('gameCanvasRemote', {static: true}) canvas!: ElementRef;
   private unsubscribe: Subject<void> = new Subject<void>();
@@ -50,16 +48,6 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       this.gameStart = false;
     })
 
-    //Pas besoin ?
-    this.client.on('gameId', (payload: GameParams) => {
-      if (!this.gameParams.id)
-      {
-        console.log("Game param test");
-        this.gameParams.id = payload.id;
-        this.gameParams.size = payload.size
-      }
-    })
-
     this.client.on('interval', (payload: GameInfo) => {
       if(!this.gameStart){
         this.gameStart = true;
@@ -75,25 +63,13 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       console.log("Game has stopped for because your opponent has give up the match");
     });
 
-    this.client.on('endGame', (payload) => {
-      console.log("Game has finish because someone has won the match");
-      if (payload.gameId)
-      {
-        console.log("jai gagne");
-        const test: GameResult = {
-          "lobby": payload.gameId as string,
-          "size": payload.size as number,
-          "local": false,
-          "victory": payload.victory as boolean
-        }
-        this.requestsService.addGameResult(test);
+    this.client.on('1v1Result', (payload: GamePayload) => {
+
+      const playerInfo: PlayerResult = {
+        ...payload,
+        local: false,
       }
-
-      //this.requestsService.addGameResult(test);
-      //Gerer les deconnection et les redirs de fin de match ici
-      //print something like victory or defeat to players?
-
-      //redir looser to menu? 
+      this.requestsService.addGameResult(playerInfo)?.subscribe();
     });
   }
 
@@ -164,15 +140,15 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       context.fillText(`${this.playerRight.score}`, 3 * (800 / 4), 100);
 
       //Win message
-      if (this.playerLeft.score == 3) {
+      if (this.playerRight.score == 3) {
         this.gameStart = false;
-        console.log("this.playerLeft.score", this.playerLeft.score)
+        console.log("this.playerRight.score", this.playerRight.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (centerX / 2) - 20, 200);
-      } else if (this.playerRight.score == 3) {
+      } else if (this.playerLeft.score == 3) {
         this.gameStart = false;
-        console.log("this.playerRight.score", this.playerRight.score)
+        console.log("this.playerLEft.score", this.playerLeft.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (3 * (800 / 4)) - 20, 200);
@@ -203,5 +179,9 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     console.log("ng destroy");
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    this.client.off('gameMessage');
+    this.client.off('1v1Result');
+    this.client.off('interval');
+    this.client.off('stopGame');
   }
 }

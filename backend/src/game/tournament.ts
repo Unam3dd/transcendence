@@ -1,4 +1,4 @@
-import { GameParams, PlayerInfo } from 'src/interfaces/game.interfaces';
+import { PlayerInfo } from 'src/interfaces/game.interfaces';
 import { LobbyManager } from './lobbiesManager';
 import { Lobby } from './lobby';
 import { gameState } from 'src/enum/gameState.enum';
@@ -43,11 +43,11 @@ export class Tournament extends Lobby {
   }
 
   public startTournament(): void {
-    const gameParams: GameParams = {
+    /*const gameParams: GameParams = {
       id: this.id,
       size: this.size
     } 
-    this.server.to(this.id).emit('gameId', gameParams);
+    this.server.to(this.id).emit('gameId', gameParams);*/
 
     this.state = gameState.playing;
     if (this.players.length < 5) this.roundTotal = 2;
