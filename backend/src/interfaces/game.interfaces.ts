@@ -1,10 +1,13 @@
 import { Socket } from 'socket.io';
 
-export interface PlayerInfo {
-  socket: Socket;
+export interface PlayersPayload {
   nickName: string;
   avatar: string;
   score: number;
+}
+
+export interface PlayerInfo extends PlayersPayload{
+  socket: Socket;
 }
 
 export interface playPayload {
@@ -13,12 +16,6 @@ export interface playPayload {
   button?: string;
   opponentNickname?: string;
   gameId?: string;
-}
-
-export interface PlayersPayload {
-  nickName: string;
-  avatar: string;
-  score: number;
 }
 
 export interface GameInfo {
@@ -38,5 +35,6 @@ export interface GameInfo {
 export interface GamePayload {
   lobby: string,
   size: number,
+  nickname: string,
   victory: boolean
 }

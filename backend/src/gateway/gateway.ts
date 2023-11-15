@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -6,13 +7,14 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { LobbyManager } from 'src/game/lobbiesManager';
 import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
 import { ClientInfo } from 'src/interfaces/user.interfaces';
+import { LobbyServices } from 'src/modules/remote-game/lobbiesServices';
 
+@Injectable()
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
-  constructor(private readonly lobbyManager: LobbyManager) {}
+  constructor(private readonly lobbyServices: LobbyServices) {}
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
   server: Server;
@@ -90,7 +92,7 @@ export class EventsGateway {
     const player = this.clientList.find((el) => el.nickName === body.nickName);
     if (!opponent || !player) return;
 
-    const gameId = this.lobbyManager.createPrivateLobby(
+    const gameId = this.lobbyServices.createPrivateLobby(
       player,
       opponent,
       this.server,
@@ -106,10 +108,10 @@ export class EventsGateway {
 
   @SubscribeMessage('declinePrivateGame')
   declinePrivateGame(@MessageBody() body: playPayload) {
-    const lobby = this.lobbyManager.lobbies.get(body.gameId);
+    const lobby = this.lobbyServices.lobbies.get(body.gameId);
     if (!lobby) return;
     lobby.sendMessageToAll('declined', null);
-    this.lobbyManager.destroyLobby(lobby);
+    this.lobbyServices.destroyLobby(lobby);
   }
 
   @SubscribeMessage('joinPrivateGame')
@@ -125,7 +127,7 @@ export class EventsGateway {
       avatar: player.avatar,
       score: 0,
     };
-    const lobby = this.lobbyManager.lobbies.get(body.gameId);
+    const lobby = this.lobbyServices.lobbies.get(body.gameId);
     if (!lobby) return;
     lobby.joinPrivateLobby(playerInfo);
   }
@@ -143,7 +145,7 @@ export class EventsGateway {
       avatar: player.avatar,
       score: 0,
     };
-    this.lobbyManager.findLobby(playerInfo, body.size, this.server);
+    this.lobbyServices.findLobby(playerInfo, body.size, this.server);
   }
 
   @SubscribeMessage('pressButton')
@@ -151,32 +153,32 @@ export class EventsGateway {
     @ConnectedSocket() client: Socket,
     @MessageBody() body: playPayload,
   ) {
-    const player = this.lobbyManager.findUserBySocket(client);
+    const player = this.lobbyServices.findUserBySocket(client);
     if (!player) return;
-    const lobby = this.lobbyManager.findLobbyByPlayer(player);
+    const lobby = this.lobbyServices.findLobbyByPlayer(player);
     if (!lobby) return;
     lobby.gameInstance.pressButton(player, body.button);
   }
 
   @SubscribeMessage('quitLobby')
   quitLobby(@ConnectedSocket() client: Socket) {
-    const player = this.lobbyManager.findUserBySocket(client);
+    const player = this.lobbyServices.findUserBySocket(client);
     if (!player) return;
 
-    const lobby = this.lobbyManager.findLobbyByPlayer(player);
+    const lobby = this.lobbyServices.findLobbyByPlayer(player);
     if (lobby && lobby.players.length != lobby.maxSize)
       lobby.lobbyManager.leaveLobby(player, lobby);
 
-    const tournament = this.lobbyManager.findTournamentByPlayer(player);
+    const tournament = this.lobbyServices.findTournamentByPlayer(player);
     if (tournament && tournament.players.length != tournament.maxSize)
-      this.lobbyManager.leaveLobby(player, tournament);
+      this.lobbyServices.leaveLobby(player, tournament);
   }
 
   //Detect clients disconnection
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
     console.log('new Client disconnected');
-    this.lobbyManager.clientDisconnect(client);
+    this.lobbyServices.clientDisconnect(client);
     for (const el of this.clientList) {
       if (el.client.id === client.id) {
         el.client.disconnect();

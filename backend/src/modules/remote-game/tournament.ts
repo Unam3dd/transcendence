@@ -1,5 +1,5 @@
 import { GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
-import { LobbyManager } from './lobbiesManager';
+import { LobbyServices } from './lobbiesServices';
 import { Lobby } from './lobby';
 import { gameState } from 'src/enum/gameState.enum';
 import { Server } from 'socket.io';
@@ -16,10 +16,11 @@ export class Tournament extends Lobby {
 
   constructor(
     public readonly maxSize: number,
-    public readonly lobbyManager: LobbyManager,
-    public readonly server: Server,
+    public readonly lobbyServices: LobbyServices,
+    public readonly server: Server, 
+    public readonly gameService: GameService
   ) {
-    super(maxSize, lobbyManager, server);
+    super(maxSize, lobbyServices, server, gameService);
     this.state = gameState.waiting;
     console.log('Tournament created : ', this.id);
   }
@@ -122,13 +123,14 @@ export class Tournament extends Lobby {
     this.lobbyManager.destroyLobby(match);
   }
 
-  sendTournamentResult(player: PlayerInfo, victory: boolean): void {
+  async sendTournamentResult(player: PlayerInfo, victory: boolean) {
     let payload: GamePayload = {
       lobby: this.id,
       size: this.size,
+      nickname: player.nickName,
       victory: victory
     }
-    player.socket.emit('1v1Result', payload);
+    await this.gameService.createRemote(payload);
   }
 
   public playerDisconnect(player: PlayerInfo): void {
@@ -159,7 +161,6 @@ export class Tournament extends Lobby {
   }
 
   public finishTournament(winner: PlayerInfo): void {
-    //winner.socket.emit('EndGame', payload: )
     this.sendMessageToAll(
       'gameMessage',
       `${winner.nickName} is the winner of this tournament`,

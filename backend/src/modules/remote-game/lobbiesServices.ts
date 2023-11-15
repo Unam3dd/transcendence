@@ -4,15 +4,18 @@ import { Tournament } from './tournament';
 import { PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 import { ClientInfo } from 'src/interfaces/user.interfaces';
-import { GameService } from 'src/modules/game/game.service';
+import { Injectable } from '@nestjs/common';
+import { GameService } from '../game/game.service';
 
 //This class handle all lobbies and tournaments
-export class LobbyManager {
+@Injectable()
+export class LobbyServices {
   public lobbies: Map<Lobby['id'], Lobby | Tournament> = new Map<
     Lobby['id'],
     Lobby | Tournament
   >();
 
+  constructor(private readonly gameService: GameService) {}
   //Search for a lobby of desired size, if no place found, create a new lobby
   public findLobby(
     player: PlayerInfo,
@@ -36,8 +39,8 @@ export class LobbyManager {
   ): Lobby {
     let newLobby: Lobby | Tournament;
 
-    if (maxSize === 2) newLobby = new Lobby(maxSize, this, server);
-    if (maxSize > 2) newLobby = new Tournament(maxSize, this, server);
+    if (maxSize === 2) newLobby = new Lobby(maxSize, this, server, this.gameService);
+    if (maxSize > 2) newLobby = new Tournament(maxSize, this, server, this.gameService);
 
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(player);
@@ -66,7 +69,7 @@ export class LobbyManager {
       this.findTournamentByPlayer(opponentInfo)
     )
       return null;
-    const newLobby = new Lobby(2, this, server);
+    const newLobby = new Lobby(2, this, server, this.gameService);
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(playerInfo);
     newLobby.addPrivateOpponent(opponentInfo.nickName);

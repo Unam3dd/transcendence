@@ -12,6 +12,7 @@ import { GatewayModule } from './gateway/events.module';
 import { FriendsModule } from './modules/friends/friends.module';
 import { BlockModule } from './modules/block/block.module';
 import { GameModule } from './modules/game/game.module';
+import { RemoteGameModule } from './modules/remote-game/remote-game.module';
 
 dotenv.config();
 
@@ -34,7 +35,8 @@ dotenv.config();
     GatewayModule,
     FriendsModule,
     BlockModule,
-    GameModule
+    GameModule,
+    RemoteGameModule
   ],
   controllers: [],
   providers: [],

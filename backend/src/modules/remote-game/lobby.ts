@@ -1,9 +1,10 @@
 import { v4 } from 'uuid';
 import { gameInstance } from './game';
-import { LobbyManager } from './lobbiesManager';
-import { GameInfo, PlayerInfo } from 'src/interfaces/game.interfaces';
+import { LobbyServices } from './lobbiesServices';
+import { GameInfo, GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 import { Server } from 'socket.io';
+import { GameService } from '../game/game.service';
 
 export class Lobby {
   public id: string;
@@ -17,12 +18,12 @@ export class Lobby {
   state: gameState;
 
   invitedOpponent: string | null = null;
-  //function to set this in case of privateGame ? and verify it isn't null before joining?
 
   constructor(
     public readonly maxSize: number,
-    public readonly lobbyManager: LobbyManager,
+    public readonly lobbyManager: LobbyServices,
     public readonly server: Server,
+    public readonly gameService: GameService
   ) {
     this.id = v4();
     this.size = maxSize;
@@ -68,6 +69,23 @@ export class Lobby {
     } else this.addClient(player);
   }
 
+  async sendGameResult(player: PlayerInfo) {
+    let payload: GamePayload = {
+      lobby: this.id,
+      size: this.size,
+      nickname: player.nickName,
+      victory: true 
+    }
+    let looser: string;
+    if (this.players[0] === player) looser = this.players[1].nickName;
+    else looser = this.players[0].nickName;
+
+    await this.gameService.createRemote(payload);
+    payload.victory = false;
+    payload.nickname = looser;
+    await this.gameService.createRemote(payload);
+  }
+
   public playerDisconnect(player: PlayerInfo): void {
     this.state = gameState.finish;
 
@@ -75,6 +93,10 @@ export class Lobby {
       'gameMessage',
       `Game is over becaune ${player.nickName} has disconnected`,
     );
+    if (this.players[0].nickName === player.nickName)
+      this.sendGameResult(this.players[1]);
+    else
+      this.sendGameResult(this.players[0]);
     this.gameInstance.stopGame();
   }
 

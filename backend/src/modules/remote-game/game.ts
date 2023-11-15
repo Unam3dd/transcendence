@@ -1,6 +1,7 @@
 import { Lobby } from './lobby';
 import { GameInfo, GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
+import { GameService } from '../game/game.service';
 
 //In this class we define actions needed to play the game
 export class gameInstance {
@@ -201,21 +202,7 @@ export class gameInstance {
     this.lobby.state = gameState.finish;
 
     if (tournois) tournois.handleVictory(player);
-    else if (!tournois) this.sendGameResult(player);
+    else if (!tournois) this.lobby.sendGameResult(player);
     this.lobby.lobbyManager.destroyLobby(this.lobby);
-  }
-
-  sendGameResult(player: PlayerInfo): void {
-    let payload: GamePayload = {
-      lobby: this.lobby.id,
-      size: this.lobby.size,
-      victory: true 
-    }
-    player.socket.emit('1v1Result', payload);
-    payload.victory = false;
-    if (this.lobby.players[0] === player)
-      this.lobby.players[1].socket.emit('1v1Result', payload)
-    else
-      this.lobby.players[0].socket.emit('1v1Result', payload) 
   }
 }
