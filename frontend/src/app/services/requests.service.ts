@@ -132,7 +132,7 @@ export class RequestsService {
     {
       headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
     }).subscribe(() => {
-      //window.location.reload();
+      window.location.reload();
     });
 
     return (this.updateSubscription);
@@ -147,7 +147,7 @@ export class RequestsService {
 
     const formData = new FormData();
 
-    formData.append('file', img, img.name);
+    formData.append('file', img);
 
     return this.http.post(`${NESTJS_URL}/upload`, formData,
         {

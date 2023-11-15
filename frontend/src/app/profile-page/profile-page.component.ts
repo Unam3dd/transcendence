@@ -17,12 +17,13 @@ export class ProfilePageComponent implements OnInit{
               private modalService: NgbModal) {}
 
   userData$!: Observable<UserInterface> | null;
-  avatar: FormControl = new FormControl(null);
   firstname = new FormControl('');
   lastname = new FormControl('');
   nickname = new FormControl('');
   email = new FormControl('');
   a2f!: FormControl<boolean | null>;
+
+  file: File | null = null;
 
   // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
@@ -51,17 +52,17 @@ export class ProfilePageComponent implements OnInit{
   }
 
   //update function for update the profile
-  updateDatas() {
-    if (this.avatar) {
-      const avatar: File | null = this.avatar.value;
+  onFileSelected(event: any) {
+    this.file = event.target.files[0] as File;
+  }
 
-      if (avatar) {
-        this.requestService.uploadUserImage(avatar)?.subscribe(() => {
-          this.updateDatasWithoutImage();
-        })
-      } else {
+  updateDatas() {
+    if (this.file) {
+      this.requestService.uploadUserImage(this.file)?.subscribe(() => {
         this.updateDatasWithoutImage();
-      }
+      });
+    } else {
+      this.updateDatasWithoutImage();
     }
   }
 
@@ -75,11 +76,4 @@ export class ProfilePageComponent implements OnInit{
     this.requestService.updateUserDatas(firstname, lastname, nickname, email, a2f);
   }
 
-  onFileSelected(event: any) {
-    const file: File = event.target.files[0];
-    console.log('Type of avatar in updateDatas:', typeof file);
-
-    this.avatar.setValue(file);
-    this.updateDatas();
-  }
 }
