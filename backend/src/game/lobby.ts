@@ -1,7 +1,7 @@
 import { v4 } from 'uuid';
 import { gameInstance } from './game';
 import { LobbyManager } from './lobbiesManager';
-import { GameInfo, GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
+import { GameInfo, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 import { Server } from 'socket.io';
 

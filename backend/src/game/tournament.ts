@@ -1,8 +1,9 @@
-import { PlayerInfo } from 'src/interfaces/game.interfaces';
+import { GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { LobbyManager } from './lobbiesManager';
 import { Lobby } from './lobby';
 import { gameState } from 'src/enum/gameState.enum';
 import { Server } from 'socket.io';
+import { GameService } from 'src/modules/game/game.service';
 
 export class Tournament extends Lobby {
   roundCount: number = 0;
@@ -43,12 +44,6 @@ export class Tournament extends Lobby {
   }
 
   public startTournament(): void {
-    /*const gameParams: GameParams = {
-      id: this.id,
-      size: this.size
-    } 
-    this.server.to(this.id).emit('gameId', gameParams);*/
-
     this.state = gameState.playing;
     if (this.players.length < 5) this.roundTotal = 2;
     else this.roundTotal = 3;
@@ -118,21 +113,36 @@ export class Tournament extends Lobby {
     const match = this.lobbyManager.findLobbyByPlayer(winner);
 
     for (const player of match.players) {
-      if (player !== winner) this.removeClient(player);
+      if (player !== winner)
+      { 
+        this.sendTournamentResult(player, false);
+        this.removeClient(player);
+      }
     }
     this.lobbyManager.destroyLobby(match);
+  }
+
+  sendTournamentResult(player: PlayerInfo, victory: boolean): void {
+    let payload: GamePayload = {
+      lobby: this.id,
+      size: this.size,
+      victory: victory
+    }
+    player.socket.emit('1v1Result', payload);
   }
 
   public playerDisconnect(player: PlayerInfo): void {
     const match = this.lobbyManager.findLobbyByPlayer(player);
     if (this.players.length === 1)
     {
+      this.sendTournamentResult(player, true);
       this.lobbyManager.destroyLobby(this);
       return ;
     }
     if (!match) { 
       const index = this.livePlayers.indexOf(player);
       if (index !== -1) this.livePlayers.splice(index, 1);
+      this.sendTournamentResult(player, false);
       this.removeClient(player);
       return;
     }
@@ -154,8 +164,16 @@ export class Tournament extends Lobby {
       'gameMessage',
       `${winner.nickName} is the winner of this tournament`,
     );
+    this.sendTournamentResult(winner, true);
     if (this.currentMatch[0])
+    {
+      for (const player of this.currentMatch[0].players)
+      {
+        if (player !== winner)
+          this.sendTournamentResult(player, false);
+      }
       this.lobbyManager.destroyLobby(this.currentMatch[0]);
+    }
     this.lobbyManager.destroyLobby(this);
   }
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
 import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
-import {gameInvitationPayload } from '../interfaces/game.interface';
+import {GamePayload, PlayerResult, gameInvitationPayload } from '../interfaces/game.interface';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
@@ -10,6 +10,7 @@ import { WsClient } from './websocket.type';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
 import { NotificationsService } from 'angular2-notifications';
+import { RequestsService } from '../services/requests.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class WebsocketService {
   public client: any
  
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService) 
+    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService, private readonly requestsService: RequestsService) 
   {
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
@@ -37,6 +38,9 @@ export class WebsocketService {
         console.log(msg);
       })
 
+
+      /** Game related listening events */
+
       this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
         this.openModal(payload);
         console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
@@ -45,22 +49,19 @@ export class WebsocketService {
       this.client.on('declined', () => {
         this.notif.error('Game invitation has been declined');
       })
+
+      this.client.on('1v1Result', (payload: GamePayload) => {
+        const playerInfo: PlayerResult = {
+          ...payload,
+          local: false,
+        }
+        this.requestsService.addGameResult(playerInfo)?.subscribe();
+      });
   
       this.client.on('disconnect', (msg: string) => {
         console.log(msg);
       })
   } 
-
-  openModal(payload: gameInvitationPayload) {
-    const modalRef = this.modalService.open(GameInvitationComponent, {
-      backdrop: 'static',
-      keyboard: false,
-    });
-    console.log('Modal Reference:', modalRef);
-    modalRef.componentInstance.invitation = payload.gameId;
-    modalRef.componentInstance.host = payload.host;
-    modalRef.componentInstance.hostAvatar = payload.hostAvatar;
-  }
 
   initializeWebsocketService() {
     console.log('Websocket service was initialized !');
@@ -94,6 +95,17 @@ export class WebsocketService {
   }
 
   /* Game and Matchmaking functions */
+
+  openModal(payload: gameInvitationPayload) {
+    const modalRef = this.modalService.open(GameInvitationComponent, {
+      backdrop: 'static',
+      keyboard: false,
+    });
+    console.log('Modal Reference:', modalRef);
+    modalRef.componentInstance.invitation = payload.gameId;
+    modalRef.componentInstance.host = payload.host;
+    modalRef.componentInstance.hostAvatar = payload.hostAvatar;
+  }
 
   privateGame(client: WsClient, opponentNickname: string) {
     const user = this.getUserInformation();

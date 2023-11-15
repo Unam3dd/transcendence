@@ -8,15 +8,24 @@
         <p class="username">{{this.currentMatch[1].nickName}} </p>
     </div>
   </section>
+
+  <section *ngIf="this.gameStart && this.gameMode === 'local'" class="fight">
+    <div class="userInfo">
+        <p class="username">{{this.userNickame}} </p>
+    </div>
+    <p> vs </p> 
+    <div>
+        <p class="username">Guest</p>
+    </div>
+  </section>
   <br>
 
   <div class="gameDiv">
     <canvas #gameCanvas class="game">Game part</canvas>
   </div>
 
-
-  <h6>Order of fights for this round:</h6>
    <section *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
+    <h6>Order of fights for this round:</h6>
     <content *ngFor="let pair of printOrder" class="roundInfo"> 
       <div class="userInfo">
         <p class="username">{{pair[0].nickName}}</p>

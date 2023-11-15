@@ -4,6 +4,7 @@ import { Tournament } from './tournament';
 import { PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 import { ClientInfo } from 'src/interfaces/user.interfaces';
+import { GameService } from 'src/modules/game/game.service';
 
 //This class handle all lobbies and tournaments
 export class LobbyManager {

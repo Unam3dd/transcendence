@@ -1,10 +1,11 @@
-import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, TemplateRef, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import { RequestsService } from '../services/requests.service';
-import { LocalPlayer } from '../interfaces/game.interface';
+import { LocalPlayer, PlayerResult } from '../interfaces/game.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SelectPlayerModalComponent } from '../modals/select-player-modal/select-player-modal.component';
+import { v4 } from 'uuid';
 import { NotificationsService } from 'angular2-notifications';
 
 enum GameMode {
@@ -19,9 +20,12 @@ enum GameMode {
   styleUrls: ['./game-page.component.scss']
 })
 
-export class GamePageComponent implements AfterViewInit, OnDestroy {
+export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   userNickame: string = '';
+
+  gameId: string = '';
+  gameSize: number = 0;
 
   players: LocalPlayer[] = [];
   currentMatch: LocalPlayer[] = [];
@@ -42,29 +46,33 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
   
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private readonly requestService: RequestsService, private modalService: NgbModal, private notif: NotificationsService) {
+  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService) {
     
-    this.requestService.getLoggedUserInformation()?.subscribe((data) => {
+    this.requestsService.getLoggedUserInformation()?.subscribe((data) => {
       this.userNickame = data.nickName as string;
       const player1: LocalPlayer = {
         "nickName": this.userNickame,
       }
       this.players.push(player1);
     });
-    
-    //change the game mode with the button return in the game menu
+  }
+
+  ngOnInit(): void {
     this.route.queryParams
-      .pipe(takeUntil(this.unsubscribe))
-      .subscribe(params => {
-      const mode = params['mode'];
-      const size: number = params['size'];
+    .pipe(takeUntil(this.unsubscribe))
+    .subscribe(params => {
+    const mode = params['mode'];
+    const size: number = params['size'];
+    this.gameSize = size;
 
       if (mode === GameMode.SOLO) {
         this.gameMode = GameMode.SOLO;
       } else if (mode === GameMode.LOCAL) {
+        this.gameSize = 2;
         this.gameMode = GameMode.LOCAL;
       } else if (mode === GameMode.TOURNAMENT_LOCAL) {
         this.gameMode = GameMode.TOURNAMENT_LOCAL;
+        this.gameSize = size;
         this.selectPlayer(size);
       }
     })
@@ -154,6 +162,8 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
   }
 
   launchTournament(size: number) {
+
+    this.gameId = v4();
 
     if (this.players.length < 5) this.roundTotal = 2;
     else this.roundTotal = 3;
@@ -246,10 +256,20 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
   {
     console.log("tournament end match result");
     if (winner === this.userNickame)
-      console.log("Need to push victory in BD ?")
+      this.pushGameResult(true);
     else
-      console.log("Need to push defeat in BD ?")
+      this.pushGameResult(false);
     return ;
+  }
+
+  pushGameResult(victory: boolean): void {
+    const playerInfo: PlayerResult = {
+      lobby: this.gameId,
+      size: +this.gameSize,
+      victory: victory,
+      local: true,
+    }
+    this.requestsService.addGameResult(playerInfo)?.subscribe();
   }
 
 /** Game related functions */
@@ -266,7 +286,6 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
     } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
       this.barLeftY += this.barSpeed;
     }
-    this.drawElements();
 
     if (event.key === 'Enter') {
       if ((this.scoreP1 === 3 || this.scoreP2 === 3) && !this.gameStart) {
@@ -276,10 +295,12 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.gameStart = true;
         this.startGame();
       } else if (!this.gameStart) {
+        this.gameId = v4();
         this.gameStart = true;
         this.startGame();
       }
     }
+    this.drawElements();
   }
 
   launchGame(){
@@ -432,6 +453,9 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.gameStart = false;
         if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
           this.matchResult(this.currentMatch[0].nickName);
+        else
+          this.gameReset(true);
+
       } else if (this.scoreP2 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
@@ -439,15 +463,26 @@ export class GamePageComponent implements AfterViewInit, OnDestroy {
         this.gameStart = false;
         if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
           this.matchResult(this.currentMatch[1].nickName);
+        else
+          this.gameReset(false);
       }
     }
+  }
+
+  gameReset(victory: boolean)
+  {
+    this.scoreP2 = 0;
+    this.scoreP1 = 0;
+    clearInterval(this.gameInterval);
+    this.pushGameResult(victory);
   }
 
   //Destructor
   ngOnDestroy() {
     this.unsubscribe.next();
     this.unsubscribe.complete();
-
+    this.scoreP1 = 0;
+    this.scoreP2 = 0;
     if (this.gameInterval) {
       clearInterval(this.gameInterval);
     }

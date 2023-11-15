@@ -62,15 +62,18 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     this.client.on('stopGame', () => {
       console.log("Game has stopped for because your opponent has give up the match");
     });
+  }
 
-    this.client.on('1v1Result', (payload: GamePayload) => {
-
-      const playerInfo: PlayerResult = {
-        ...payload,
-        local: false,
-      }
-      this.requestsService.addGameResult(playerInfo)?.subscribe();
-    });
+  public receiveDrawInfo(payload: GameInfo)
+  {
+    if(!this.gameStart){
+      this.gameStart = true;
+      this.playerRight.nickName = payload.playerRight.nickName;
+      this.playerLeft.nickName = payload.playerLeft.nickName;
+      this.playerRight.avatar = payload.playerRight.avatar;
+      this.playerLeft.avatar = payload.playerLeft.avatar;
+    }
+    this.drawElements(payload);
   }
 
   //envoie le bouton sur leaquel le joueur a appuyer
@@ -104,7 +107,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     }
   }
 
-  drawElements(payload: GameInfo) {
+  drawElements(payload: GameInfo): void {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
     const centerX: number = 800 / 2;
@@ -148,7 +151,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
         context.fillText('Win', (centerX / 2) - 20, 200);
       } else if (this.playerLeft.score == 3) {
         this.gameStart = false;
-        console.log("this.playerLEft.score", this.playerLeft.score)
+        console.log("this.playerLeft.score", this.playerLeft.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         context.fillText('Win', (3 * (800 / 4)) - 20, 200);
@@ -156,7 +159,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     }
   }
 
-  drawWaiting(){
+  drawWaiting(): void{
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
     const centerX: number = 800 / 2;
@@ -169,19 +172,18 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     }
   }
 
-  public cancel()
+  public cancel(): void
   {
     this.client.emit('quitLobby');
     this.router.navigate(['/game-menu'])
   }
 
   ngOnDestroy() {
+    this.client.off('interval');
+    this.client.off('gameMessage');
+    this.client.off('stopGame');
     console.log("ng destroy");
     this.unsubscribe.next();
     this.unsubscribe.complete();
-    this.client.off('gameMessage');
-    this.client.off('1v1Result');
-    this.client.off('interval');
-    this.client.off('stopGame');
   }
 }
