@@ -1,14 +1,25 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
-  <button (click)="Logout()">Logout</button>
   <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
   <div class="line">
-    <p id="key">Login</p>
+    <p id="key">Login:</p>
     <p id="value">{{userData.login}}</p>
   </div>
-  <p>Firstname: {{userData.firstName}}</p>
-  <p>Lastname: {{userData.lastName}}</p>
-  <p>Nickname: {{userData.nickName}}</p>
-  <p>Email: {{userData.email}}</p>
+  <div class="line">
+    <p id="key">FirstName:</p>
+    <p id="value">{{userData.firstName}}</p>
+  </div>
+  <div class="line">
+    <p id="key">LastName:</p>
+    <p id="value">{{userData.lastName}}</p>
+  </div>
+  <div class="line">
+    <p id="key">NickName:</p>
+    <p id="value">{{userData.nickName}}</p>
+  </div>
+  <div class="line">
+    <p id="key">Email:</p>
+    <p id="value">{{userData.email}}</p>
+  </div>
   <p class="form-check form-switch">
     <label class="form-check-label" for="a2fCheck">A2F </label>
     <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="userData.a2f" disabled>
@@ -19,6 +30,9 @@
   <button type="button" class="btn btn-info" (click)="openModal(updateContent)">Change my profile</button>
   <button type="button" class="btn btn-danger" (click)="openModal(deleteContent)">
     Delete account
+  </button>
+  <button type="button" class="btn btn-danger" (click)="Logout()">
+    Logout
   </button>
 </div>
 
