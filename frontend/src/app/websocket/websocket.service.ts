@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
 import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
-import {GamePayload, PlayerResult, gameInvitationPayload } from '../interfaces/game.interface';
+import { gameInvitationPayload } from '../interfaces/game.interface';
 import { WS_GATEWAY } from '../env';
 import { io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
@@ -11,6 +11,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
 import { NotificationsService } from 'angular2-notifications';
 import { RequestsService } from '../services/requests.service';
+import { EndMatchComponent } from '../modals/end-match/end-match.component';
 
 @Injectable({
   providedIn: 'root'
@@ -50,12 +51,8 @@ export class WebsocketService {
         this.notif.error('Game invitation has been declined');
       })
 
-      this.client.on('1v1Result', (payload: GamePayload) => {
-        const playerInfo: PlayerResult = {
-          ...payload,
-          local: false,
-        }
-        this.requestsService.addGameResult(playerInfo)?.subscribe();
+      this.client.on('result', (payload: boolean) => {
+        this.printGameResult(payload);
       });
   
       this.client.on('disconnect', (msg: string) => {
@@ -101,7 +98,7 @@ export class WebsocketService {
       backdrop: 'static',
       keyboard: false,
     });
-    console.log('Modal Reference:', modalRef);
+    //console.log('Modal Reference:', modalRef);
     modalRef.componentInstance.invitation = payload.gameId;
     modalRef.componentInstance.host = payload.host;
     modalRef.componentInstance.hostAvatar = payload.hostAvatar;
@@ -167,5 +164,15 @@ export class WebsocketService {
       "button": button,
     }
     client.emit('pressButton', payload);
+  }
+
+  printGameResult(victory: boolean)
+  {
+    const modalRef = this.modalService.open(EndMatchComponent, {
+      backdrop: 'static',
+      keyboard: false,
+    });
+    modalRef.componentInstance.result = victory;
+    modalRef.componentInstance.local = false;
   }
 }

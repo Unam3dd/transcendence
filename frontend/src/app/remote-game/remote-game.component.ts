@@ -3,7 +3,7 @@ import { WsClient } from '../websocket/websocket.type';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Subject, takeUntil } from "rxjs";
 import { ActivatedRoute, Router } from '@angular/router';
-import { GameInfo, GamePayload, GameResult, PlayerResult } from '../interfaces/game.interface';
+import { GameInfo } from '../interfaces/game.interface';
 import { RequestsService } from '../services/requests.service';
 
 export interface Player {

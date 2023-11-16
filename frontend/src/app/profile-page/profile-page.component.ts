@@ -5,7 +5,7 @@ import { UserInterface } from '../interfaces/user.interface';
 import { CookiesService } from '../services/cookies.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
-import { GameInfo, GameResult } from '../interfaces/game.interface';
+import { GameResult } from '../interfaces/game.interface';
 
 @Component({
   selector: 'app-profile-page',

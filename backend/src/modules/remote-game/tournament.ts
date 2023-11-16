@@ -17,8 +17,8 @@ export class Tournament extends Lobby {
   constructor(
     public readonly maxSize: number,
     public readonly lobbyServices: LobbyServices,
-    public readonly server: Server, 
-    public readonly gameService: GameService
+    public readonly server: Server,
+    public readonly gameService: GameService,
   ) {
     super(maxSize, lobbyServices, server, gameService);
     this.state = gameState.waiting;
@@ -114,8 +114,7 @@ export class Tournament extends Lobby {
     const match = this.lobbyManager.findLobbyByPlayer(winner);
 
     for (const player of match.players) {
-      if (player !== winner)
-      { 
+      if (player !== winner) {
         this.sendTournamentResult(player, false);
         this.removeClient(player);
       }
@@ -124,24 +123,24 @@ export class Tournament extends Lobby {
   }
 
   async sendTournamentResult(player: PlayerInfo, victory: boolean) {
-    let payload: GamePayload = {
+    const payload: GamePayload = {
       lobby: this.id,
       size: this.size,
       nickname: player.nickName,
-      victory: victory
-    }
+      victory: victory,
+    };
+    player.socket.emit('result', victory);
     await this.gameService.createRemote(payload);
   }
 
   public playerDisconnect(player: PlayerInfo): void {
     const match = this.lobbyManager.findLobbyByPlayer(player);
-    if (this.players.length === 1)
-    {
+    if (this.players.length === 1) {
       this.sendTournamentResult(player, true);
       this.lobbyManager.destroyLobby(this);
-      return ;
+      return;
     }
-    if (!match) { 
+    if (!match) {
       const index = this.livePlayers.indexOf(player);
       if (index !== -1) this.livePlayers.splice(index, 1);
       this.sendTournamentResult(player, false);
@@ -166,12 +165,9 @@ export class Tournament extends Lobby {
       `${winner.nickName} is the winner of this tournament`,
     );
     this.sendTournamentResult(winner, true);
-    if (this.currentMatch[0])
-    {
-      for (const player of this.currentMatch[0].players)
-      {
-        if (player !== winner)
-          this.sendTournamentResult(player, false);
+    if (this.currentMatch[0]) {
+      for (const player of this.currentMatch[0].players) {
+        if (player !== winner) this.sendTournamentResult(player, false);
       }
       this.lobbyManager.destroyLobby(this.currentMatch[0]);
     }

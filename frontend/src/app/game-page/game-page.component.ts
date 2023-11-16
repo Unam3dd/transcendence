@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SelectPlayerModalComponent } from '../modals/select-player-modal/select-player-modal.component';
 import { v4 } from 'uuid';
 import { NotificationsService } from 'angular2-notifications';
+import { EndMatchComponent } from '../modals/end-match/end-match.component';
 
 enum GameMode {
   SOLO = 'solo',
@@ -259,6 +260,13 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       this.pushGameResult(true);
     else
       this.pushGameResult(false);
+    const modalRef = this.modalService.open(EndMatchComponent, {
+        backdrop: 'static',
+        keyboard: false,
+    });
+    modalRef.componentInstance.result = true;
+    modalRef.componentInstance.local = true;
+    modalRef.componentInstance.winner = winner;
     return ;
   }
 

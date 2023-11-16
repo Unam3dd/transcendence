@@ -29,13 +29,17 @@
       </select>
     </form>
   </div>
+  <!-- Maybe we should show this in the modal when people choose the amount of players for the tournament?-->
+  <h6>Rules of the tournament: </h6>
+  <p>Players affront each other in turn, winners of first round will fight against each other next round.</p>
+  <p>If you are not select for a round and than you don't have been eliminated, it means that there was no opponent for you this round. But you will fight against one of the winner of the actual round on the next round.</p>
+  <p>If you loose a match, you are eliminated of the tournament.</p>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
     <button type="button" class="btn btn-danger" (click)="moveToGame('tournament_remote', selectedOption.value)">Find Tournament</button>
   </div>
 </ng-template>
 
-<!-- Choose Players Number for Tournament modal -->
 <ng-template #LocalTournament let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Tournament participants</h4>
@@ -56,6 +60,11 @@
       </select>
     </form>
   </div>
+  
+  <h6>Rules of the tournament: </h6>
+  <p>Players affront each other in turn, winners of first round will fight against each other next round.</p>
+  <p>If you are not select for a round and than you don't have been eliminated, it means that there was no opponent for you this round. But you will fight against one of the winner of the actual round on the next round.</p>
+  <p>If you loose a match, you are eliminated of the tournament.</p>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
     <button type="button" class="btn btn-danger" (click)="moveToGame('tournament_local', selectedOption.value)">Launch Tournament</button>

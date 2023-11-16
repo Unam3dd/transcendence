@@ -36,7 +36,7 @@ dotenv.config();
     FriendsModule,
     BlockModule,
     GameModule,
-    RemoteGameModule
+    RemoteGameModule,
   ],
   controllers: [],
   providers: [],

@@ -6,7 +6,7 @@ export interface PlayersPayload {
   score: number;
 }
 
-export interface PlayerInfo extends PlayersPayload{
+export interface PlayerInfo extends PlayersPayload {
   socket: Socket;
 }
 
@@ -33,8 +33,8 @@ export interface GameInfo {
 }
 
 export interface GamePayload {
-  lobby: string,
-  size: number,
-  nickname: string,
-  victory: boolean
+  lobby: string;
+  size: number;
+  nickname: string;
+  victory: boolean;
 }

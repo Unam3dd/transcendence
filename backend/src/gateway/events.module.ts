@@ -9,9 +9,11 @@ import { UsersService } from 'src/modules/users/users.service';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @Module({
-  imports:[RemoteGameModule,
+  imports: [
+    RemoteGameModule,
     TypeOrmModule.forFeature([Game]),
-    TypeOrmModule.forFeature([User]),],
+    TypeOrmModule.forFeature([User]),
+  ],
   providers: [EventsGateway, LobbyServices, GameService, UsersService],
 })
 export class GatewayModule {}

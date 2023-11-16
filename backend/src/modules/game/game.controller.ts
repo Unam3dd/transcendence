@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Body, Param, Delete, UseGuards, HttpStatus } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  UseGuards,
+  HttpStatus,
+} from '@nestjs/common';
 import { GameService } from './game.service';
 import { CreateGameDto } from './dto/create-game.dto';
 import { Res, Req } from '@nestjs/common';
@@ -11,10 +20,12 @@ export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @Post('/add')
-  async create(@Body() createGameDto: CreateGameDto, @Res() res: Response, @Req() req: Request) {
-    const data = await this.gameService.getJWTToken(
-      req.headers.authorization,
-    );
+  async create(
+    @Body() createGameDto: CreateGameDto,
+    @Res() res: Response,
+    @Req() req: Request,
+  ) {
+    const data = await this.gameService.getJWTToken(req.headers.authorization);
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 
     const { sub } = JSON.parse(data[1]);
@@ -24,25 +35,27 @@ export class GameController {
   }
 
   @Get('/list/:id')
-  async listGames(@Param('id') userId: number, @Req() req: Request, @Res() res: Response,) {
+  async listGames(
+    @Param('id') userId: number,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const data = await this.gameService.getJWTToken(req.headers.authorization);
 
-    const data = await this.gameService.getJWTToken(
-      req.headers.authorization,
-    );
- 
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 
     return res
-    .status(HttpStatus.OK)
-    .send(await this.gameService.findGames(userId));
+      .status(HttpStatus.OK)
+      .send(await this.gameService.findGames(userId));
   }
 
   @Delete('/delete/:id')
-  async deleteGame(@Param('id') id: string, @Req() req: Request, @Res() res: Response,) {
-
-    const data = await this.gameService.getJWTToken(
-      req.headers.authorization,
-    );
+  async deleteGame(
+    @Param('id') id: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ) {
+    const data = await this.gameService.getJWTToken(req.headers.authorization);
 
     if (!data) return res.status(HttpStatus.UNAUTHORIZED).send();
 

@@ -1,7 +1,9 @@
 import { Lobby } from './lobby';
-import { GameInfo, GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
+import {
+  GameInfo,
+  PlayerInfo,
+} from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
-import { GameService } from '../game/game.service';
 
 //In this class we define actions needed to play the game
 export class gameInstance {

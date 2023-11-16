@@ -83,9 +83,7 @@ export class EventsGateway {
   /** Remote games functions */
 
   @SubscribeMessage('privateGame')
-  CreatePrivateLobby(
-    @MessageBody() body: playPayload,
-  ) {
+  CreatePrivateLobby(@MessageBody() body: playPayload) {
     const opponent = this.clientList.find(
       (el) => el.nickName === body.opponentNickname,
     );
@@ -102,7 +100,7 @@ export class EventsGateway {
     opponent.client.emit('gameInvitation', {
       gameId: gameId,
       host: player.nickName,
-      hostAvatar: player.avatar
+      hostAvatar: player.avatar,
     });
   }
 

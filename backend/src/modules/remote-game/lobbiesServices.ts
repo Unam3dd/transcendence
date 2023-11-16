@@ -39,8 +39,10 @@ export class LobbyServices {
   ): Lobby {
     let newLobby: Lobby | Tournament;
 
-    if (maxSize === 2) newLobby = new Lobby(maxSize, this, server, this.gameService);
-    if (maxSize > 2) newLobby = new Tournament(maxSize, this, server, this.gameService);
+    if (maxSize === 2)
+      newLobby = new Lobby(maxSize, this, server, this.gameService);
+    if (maxSize > 2)
+      newLobby = new Tournament(maxSize, this, server, this.gameService);
 
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(player);

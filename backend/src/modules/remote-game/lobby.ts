@@ -1,7 +1,11 @@
 import { v4 } from 'uuid';
 import { gameInstance } from './game';
 import { LobbyServices } from './lobbiesServices';
-import { GameInfo, GamePayload, PlayerInfo } from 'src/interfaces/game.interfaces';
+import {
+  GameInfo,
+  GamePayload,
+  PlayerInfo,
+} from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 import { Server } from 'socket.io';
 import { GameService } from '../game/game.service';
@@ -23,7 +27,7 @@ export class Lobby {
     public readonly maxSize: number,
     public readonly lobbyManager: LobbyServices,
     public readonly server: Server,
-    public readonly gameService: GameService
+    public readonly gameService: GameService,
   ) {
     this.id = v4();
     this.size = maxSize;
@@ -70,15 +74,21 @@ export class Lobby {
   }
 
   async sendGameResult(player: PlayerInfo) {
-    let payload: GamePayload = {
+    const payload: GamePayload = {
       lobby: this.id,
       size: this.size,
       nickname: player.nickName,
-      victory: true 
-    }
+      victory: true,
+    };
     let looser: string;
-    if (this.players[0] === player) looser = this.players[1].nickName;
-    else looser = this.players[0].nickName;
+    player.socket.emit('result', true);
+    if (this.players[0] === player) {
+      looser = this.players[1].nickName;
+      this.players[1].socket.emit('result');
+    } else {
+      looser = this.players[0].nickName;
+      this.players[0].socket.emit('result');
+    }
 
     await this.gameService.createRemote(payload);
     payload.victory = false;
@@ -95,8 +105,7 @@ export class Lobby {
     );
     if (this.players[0].nickName === player.nickName)
       this.sendGameResult(this.players[1]);
-    else
-      this.sendGameResult(this.players[0]);
+    else this.sendGameResult(this.players[0]);
     this.gameInstance.stopGame();
   }
 

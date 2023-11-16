@@ -11,7 +11,7 @@
     <section>
         <h5>Match History :</h5>
         <hr>
-        <div *ngIf="gameHistory.length != 0">
+        <div *ngIf="gameHistory.length !== 0">
         <content *ngFor="let game of gameHistory">
             
         <p *ngIf="game.size === 2"> 1v1 Game</p>
