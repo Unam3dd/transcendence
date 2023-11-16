@@ -10,10 +10,10 @@
     <label class="form-check-label" for="a2fCheck">A2F </label>
     <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="userData.a2f" disabled>
   </p>
-  <section>
+  <section class="matchHistory">
     <h5>Match History :</h5>
     <hr>
-    <div *ngIf="gameHistory.length !== 0">
+    <div class="history" *ngIf="gameHistory.length !== 0">
       <content *ngFor="let game of gameHistory">
         <p *ngIf="game.size === 2"> 1v1 Game</p>
         <p *ngIf="game.size > 2"> Tournament Game</p>
@@ -25,6 +25,7 @@
         <hr>
       </content>
     </div>
+    <hr>
   </section>
   <section>
     <h5>My Stats: </h5>

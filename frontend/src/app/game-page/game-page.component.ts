@@ -40,7 +40,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   roundCount: number = 1;
 
   display: boolean = false;
-  final: boolean = false;
+  endDuo: boolean = false;
 
   @ViewChild('chooseNickname', { static: true }) chooseNicknameTemplate!: TemplateRef<any>;
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
@@ -59,6 +59,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.endDuo = false;
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(params => {
@@ -295,7 +296,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       this.barLeftY += this.barSpeed;
     }
 
-    if (event.key === 'Enter') {
+    if (event.key === 'Enter' && this.endDuo === false) {
       if ((this.scoreP1 === 3 || this.scoreP2 === 3) && !this.gameStart) {
         this.scoreP1 = 0;
         this.scoreP2 = 0;
@@ -402,7 +403,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.scoreP1 === 3 || this.scoreP2 === 3) {
       clearInterval(this.gameInterval);
     }
-
     this.drawElements();
   }
 
@@ -457,7 +457,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       if (this.scoreP1 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        context.fillText('Win', (centerX / 2) - 20, 200);
+        //context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
         this.gameStart = false;
         if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
           this.matchResult(this.currentMatch[0].nickName);
@@ -467,7 +467,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       } else if (this.scoreP2 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
+        //context.fillText('Win', (centerX / 2) - 20, 200);
         this.gameStart = false;
         if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
           this.matchResult(this.currentMatch[1].nickName);
@@ -479,6 +479,18 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   gameReset(victory: boolean)
   {
+    this.endDuo = true;
+    const modalRef = this.modalService.open(EndMatchComponent, {
+        backdrop: 'static',
+        keyboard: false,
+    });
+    modalRef.componentInstance.result = true;
+    modalRef.componentInstance.local = true;
+    if (victory === true)
+      modalRef.componentInstance.winner = this.userNickame;
+    else
+      modalRef.componentInstance.winner = "Guest";
+
     this.scoreP2 = 0;
     this.scoreP1 = 0;
     clearInterval(this.gameInterval);
