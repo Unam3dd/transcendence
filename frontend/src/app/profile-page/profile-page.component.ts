@@ -17,6 +17,8 @@ export class ProfilePageComponent implements OnInit{
               private modalService: NgbModal) {}
 
   userData$!: Observable<UserInterface> | null;
+  newQRCode = false;
+  qrcodeURL = null;
   firstname = new FormControl('');
   lastname = new FormControl('');
   nickname = new FormControl('');

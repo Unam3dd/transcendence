@@ -71,17 +71,26 @@ export class ConnectionComponent {
 
       const { token } = JSON.parse(JSON.stringify(res.body));
 
-      const login = this.cookieService.getCookie('tmp_name');
+      const login: string | null = this.cookieService.getCookie('tmp_name');
+
+      if (!login) {
+        this.notif.error('Error', 'Your token is invalid !');
+        this.cookieService.removeCookie('tmp_name');
+        await this.timeService.sleep(2000);
+        window.location.href = LOGIN_PAGE;
+        return ;
+      }
 
       this.cookieService.setCookie('authorization', token);
 
-      this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
+      this.notif.success('You are connected !', `You are connected with ${atob(login)} welcome !`);
+      await this.timeService.sleep(2000);
       this.cookieService.removeCookie('tmp_name');
       window.location.href = 'http://localhost:4200/home';
     }, async () => {
       this.notif.error('Error', 'Your token is invalid !');
       this.cookieService.removeCookie('tmp_name');
-      await this.timeService.sleep(5000);
+      await this.timeService.sleep(2000);
       window.location.href = LOGIN_PAGE;
     })
   }

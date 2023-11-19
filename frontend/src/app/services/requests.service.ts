@@ -127,12 +127,12 @@ export class RequestsService {
     if (nickname) update.nickName = nickname;
     if (email) update.email = email;
     update.a2f = a2f;
-    update.is42 = false;
 
     this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
     {
       headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
-    }).subscribe(() => {
+    }).subscribe((data) => {
+      console.log(data);
       window.location.reload();
     });
 

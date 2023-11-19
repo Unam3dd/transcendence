@@ -1,12 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import * as speakeasy from 'speakeasy';
-import { UsersService } from '../users/users.service';
 import * as QRCode from 'qrcode';
 
 @Injectable()
 export class A2fService {
 
-    constructor (private readonly userService: UsersService) {}
+    constructor () {}
 
     generateSecret() {
         const secret = speakeasy.generateSecret({

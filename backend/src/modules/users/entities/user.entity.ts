@@ -99,7 +99,7 @@ export class User {
     nullable: true
   })
   @IsString({ message: 'a2fsecret must be a string !'})
-  a2fsecret: string;
+  a2fsecret: string | null;
 
   @CreateDateColumn()
   @IsDate({ message: 'createdAt must be a Date' })
