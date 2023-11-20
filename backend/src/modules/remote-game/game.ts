@@ -195,7 +195,6 @@ export class gameInstance {
   }
 
   public gameVictory(player: PlayerInfo): void {
-    const tournois = this.lobby.lobbyManager.findTournamentByPlayer(player);
 
     this.lobby.sendMessageToAll('endMatch', null);
     clearInterval(this.gameInterval);
@@ -203,8 +202,7 @@ export class gameInstance {
 
     this.lobby.state = gameState.finish;
 
-    if (tournois) tournois.handleVictory(player);
-    else if (!tournois) this.lobby.sendGameResult(player);
+    this.lobby.sendGameResult(player);
     this.lobby.lobbyManager.destroyLobby(this.lobby);
   }
 }

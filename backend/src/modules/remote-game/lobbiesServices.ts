@@ -1,18 +1,17 @@
 import { Socket, Server } from 'socket.io';
 import { Lobby } from './lobby';
-import { Tournament } from './tournament';
 import { PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 import { ClientInfo } from 'src/interfaces/user.interfaces';
 import { Injectable } from '@nestjs/common';
 import { GameService } from '../game/game.service';
 
-//This class handle all lobbies and tournaments
+//This class handle all lobbies
 @Injectable()
 export class LobbyServices {
-  public lobbies: Map<Lobby['id'], Lobby | Tournament> = new Map<
+  public lobbies: Map<Lobby['id'], Lobby> = new Map<
     Lobby['id'],
-    Lobby | Tournament
+    Lobby
   >();
 
   constructor(private readonly gameService: GameService) {}
@@ -22,7 +21,7 @@ export class LobbyServices {
     lobbySize: number,
     server: Server,
   ): void {
-    if (this.findLobbyByPlayer(player) || this.findTournamentByPlayer(player)) {
+    if (this.findLobbyByPlayer(player)) {
       console.log('Client is already in a lobby!');
       return;
     }
@@ -37,12 +36,10 @@ export class LobbyServices {
     player: PlayerInfo,
     server: Server,
   ): Lobby {
-    let newLobby: Lobby | Tournament;
+    let newLobby: Lobby;
 
     if (maxSize === 2)
-      newLobby = new Lobby(maxSize, this, server, this.gameService);
-    if (maxSize > 2)
-      newLobby = new Tournament(maxSize, this, server, this.gameService);
+      newLobby = new Lobby(this, server, this.gameService);
 
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(player);
@@ -66,12 +63,9 @@ export class LobbyServices {
       avatar: player.avatar,
       score: 0,
     };
-    if (
-      this.findLobbyByPlayer(opponentInfo) ||
-      this.findTournamentByPlayer(opponentInfo)
-    )
+    if (this.findLobbyByPlayer(opponentInfo))
       return null;
-    const newLobby = new Lobby(2, this, server, this.gameService);
+    const newLobby = new Lobby(this, server, this.gameService);
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(playerInfo);
     newLobby.addPrivateOpponent(opponentInfo.nickName);
@@ -79,11 +73,11 @@ export class LobbyServices {
   }
 
   // Search for a place in an existing lobby
-  public searchLobby(lobbySize: number): Lobby | Tournament | null {
+  public searchLobby(lobbySize: number): Lobby | null {
     for (const lobby of this.lobbies) {
       if (
-        lobbySize === lobby[1].maxSize &&
-        lobby[1].maxSize > lobby[1].players.length &&
+        lobbySize === lobby[1].fullSize &&
+        lobby[1].fullSize > lobby[1].players.length &&
         lobby[1].state === gameState.waiting
       )
         return lobby[1];
@@ -112,29 +106,15 @@ export class LobbyServices {
     const player = this.findUserBySocket(client);
     if (!player) return;
 
-    const tournois = this.findTournamentByPlayer(player);
-
     const lobby = this.findLobbyByPlayer(player);
-
-    if (tournois) tournois.playerDisconnect(player);
-    else if (lobby) lobby.playerDisconnect(player);
+    if (lobby) lobby.playerDisconnect(player);
   }
 
   public findLobbyByPlayer(player: PlayerInfo): Lobby | null {
     for (const lobby of this.lobbies) {
       for (const user of lobby[1].players) {
-        if (user.nickName === player.nickName && lobby[1].maxSize === 2)
+        if (user.nickName === player.nickName && lobby[1].fullSize === 2)
           return lobby[1] as Lobby;
-      }
-    }
-    return null;
-  }
-
-  public findTournamentByPlayer(player: PlayerInfo): Tournament | null {
-    for (const lobby of this.lobbies) {
-      for (const user of lobby[1].players) {
-        if (user.nickName === player.nickName && lobby[1].maxSize > 2)
-          return lobby[1] as Tournament;
       }
     }
     return null;

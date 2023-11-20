@@ -32,13 +32,6 @@ export class GameMenuComponent implements OnInit{
       this.findGame();
       this.router.navigate(['game/remote']);
     }
-    else if (mode === 'tournament_remote')
-    {
-      if (!size)
-        return ;
-      this.findTournament(+size);
-      this.router.navigate(['game/remote'], {queryParams: {mode: mode}});
-    }
     else if (mode === 'tournament_local')
     {
       this.modalService.dismissAll();
@@ -51,16 +44,8 @@ export class GameMenuComponent implements OnInit{
   }
 
   findGame(): void {
-    //this.ws.privateGame(this.client, "tata3"); // it was just a test to send a game invit to nickName tata3
+    //this.ws.privateGame(this.client, "toto3"); // it was just a test to send a game invit to nickName toto3
     this.ws.enterLobby(this.client, 2);
-  }
-  
-  findTournament(size: number): void {
-    this.modalService.dismissAll();
-    console.log("size: ", size);
-    if (size < 3 || size > 8)
-      size = 3;
-    this.ws.enterLobby(this.client, size);
   }
 
   openModal(content: any):void {

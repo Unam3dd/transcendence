@@ -17,33 +17,31 @@ export class Lobby {
 
   public readonly gameInstance = new gameInstance(this);
 
-  public readonly size: number;
-
   state: gameState;
+
+  fullSize: number = 2;
 
   invitedOpponent: string | null = null;
 
   constructor(
-    public readonly maxSize: number,
     public readonly lobbyManager: LobbyServices,
     public readonly server: Server,
     public readonly gameService: GameService,
   ) {
     this.id = v4();
-    this.size = maxSize;
     this.state = gameState.waiting;
 
-    if (maxSize === 2) console.log('Lobby created : ', this.id);
+    console.log('Lobby created : ', this.id);
   }
 
   public addClient(player: PlayerInfo): void {
-    if (this.players.length >= this.maxSize) return;
+    if (this.players.length >= this.fullSize) return;
     player.score = 0;
     player.socket.join(this.id);
     this.players.push(player);
     this.sendMessageToAll('gameMessage', 'Someone joined the lobby');
 
-    if (this.players.length === this.maxSize) this.gameInstance.launchGame();
+    if (this.players.length === this.fullSize) this.gameInstance.launchGame();
   }
 
   public removeClient(player: PlayerInfo): void {
@@ -61,10 +59,7 @@ export class Lobby {
   }
 
   public joinPrivateLobby(player: PlayerInfo) {
-    if (
-      this.lobbyManager.findLobbyByPlayer(player) ||
-      this.lobbyManager.findTournamentByPlayer(player)
-    )
+    if (this.lobbyManager.findLobbyByPlayer(player))
       return;
     if (this.invitedOpponent == null) return;
     if (player.nickName != this.invitedOpponent) {
@@ -78,7 +73,7 @@ export class Lobby {
       return ;
     const payload: GamePayload = {
       lobby: this.id,
-      size: this.size,
+      size: this.fullSize,
       nickname: player.nickName,
       victory: true,
     };

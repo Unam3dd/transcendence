@@ -164,12 +164,8 @@ export class EventsGateway {
     if (!player) return;
 
     const lobby = this.lobbyServices.findLobbyByPlayer(player);
-    if (lobby && lobby.players.length != lobby.maxSize)
+    if (lobby && lobby.players.length != lobby.fullSize)
       lobby.lobbyManager.leaveLobby(player, lobby);
-
-    const tournament = this.lobbyServices.findTournamentByPlayer(player);
-    if (tournament && tournament.players.length != tournament.maxSize)
-      this.lobbyServices.leaveLobby(player, tournament);
   }
 
   //Detect clients disconnection
