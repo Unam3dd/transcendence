@@ -1,3 +1,5 @@
+import { OnlineState } from "../enum/status.enum";
+
 export interface UserInterface {
     id?: number;
     login?: string | null;

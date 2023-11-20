@@ -1,14 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams, HttpResponse, HttpStatusCode } from "@angular/common/http";
 import {Observable, catchError, throwError, Subscription } from "rxjs";
-
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
-import {Router} from "@angular/router";
 import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
 @Injectable({
@@ -22,7 +20,7 @@ export class RequestsService {
   constructor(private http: HttpClient,
               private readonly cookieService: CookiesService,
               private jwtService: JwtService,
-              private router: Router) {}
+              ) {}
 
   //Handle requests errors
   private handleError(error: HttpErrorResponse){

@@ -10,7 +10,6 @@ import { WsClient } from './websocket.type';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
 import { NotificationsService } from 'angular2-notifications';
-import { RequestsService } from '../services/requests.service';
 import { EndMatchComponent } from '../modals/end-match/end-match.component';
 
 @Injectable({
@@ -21,7 +20,7 @@ export class WebsocketService {
   public client: any
  
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService, private readonly requestsService: RequestsService) 
+    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService) 
   {
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
@@ -38,7 +37,10 @@ export class WebsocketService {
       this.client.on('newArrival', (msg: string) => {
         console.log(msg);
       })
-
+  
+      this.client.on('disconnect', (msg: string) => {
+        console.log(msg);
+      })
 
       /** Game related listening events */
 
@@ -49,15 +51,11 @@ export class WebsocketService {
 
       this.client.on('declined', () => {
         this.notif.error('Game invitation has been declined');
-      })
+      });
 
       this.client.on('result', (payload: boolean) => {
         this.printGameResult(payload);
-      });
-  
-      this.client.on('disconnect', (msg: string) => {
-        console.log(msg);
-      })
+    });
   } 
 
   initializeWebsocketService() {
@@ -176,15 +174,4 @@ export class WebsocketService {
   }
   /** End remote games functions */
 
-  /** Friends Handling functions */
-
-  sendFriendsUpdate(recipient: string)
-  {
-    const payload = {
-      "recipient": recipient,
-    }
-    this.client.emit('updateFriends', payload);
-  }
-
-  /** End Friends Handling functions */
 }
