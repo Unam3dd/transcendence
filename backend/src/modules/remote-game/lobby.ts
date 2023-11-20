@@ -74,6 +74,8 @@ export class Lobby {
   }
 
   async sendGameResult(player: PlayerInfo) {
+    if (this.players.length != 2)
+      return ;
     const payload: GamePayload = {
       lobby: this.id,
       size: this.size,

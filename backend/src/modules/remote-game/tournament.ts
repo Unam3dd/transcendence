@@ -123,6 +123,8 @@ export class Tournament extends Lobby {
   }
 
   async sendTournamentResult(player: PlayerInfo, victory: boolean) {
+    if (this.state != gameState.playing)
+      return ;
     const payload: GamePayload = {
       lobby: this.id,
       size: this.size,

@@ -427,7 +427,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     const centerX: number = canvas.width / 2;
 
     if (context) {
-      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.clearRect(0, 0, canvas.width, canvas.height); 
 
       //Draw rackets
       context.fillStyle = 'white';

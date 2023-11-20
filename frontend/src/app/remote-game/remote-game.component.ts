@@ -94,13 +94,10 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   adjustCanvasDPI() {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
-
     const scale = window.devicePixelRatio;
-    canvas.width = 800;
-    canvas.height = 600;
 
-    //canvas.width = 800 * scale;
-    //canvas.height = 400 * scale;
+    canvas.width = canvas.clientWidth * scale;
+    canvas.height = canvas.clientHeight *scale;
 
     if (context) {
       context.scale(scale, scale);
@@ -110,13 +107,22 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   drawElements(payload: GameInfo): void {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
-    const centerX: number = 800 / 2;
+    const centerX: number = canvas.width / 2;
 
     this.playerLeft.score = payload.playerLeft.score as number;
     this.playerRight.score = payload.playerRight.score as number;
 
+    payload.barLeftY = payload.barLeftY * this.canvas.nativeElement.width / 800;
+    payload.barRightY = payload.barRightY * this.canvas.nativeElement.width / 800;
+    payload.barHeight = payload.barHeight * this.canvas.nativeElement.height / 400;
+    payload.barWidth = payload.barWidth * this.canvas.nativeElement.width / 800;
+  
+    payload.ballX =  payload.ballX * this.canvas.nativeElement.height / 400;
+    payload.ballY = payload.ballY * this.canvas.nativeElement.width / 800;
+    payload.ballRadius = payload.ballRadius * this.canvas.nativeElement.height / 400;
+
     if (context) {
-      context.clearRect(0, 0, 800, 400);
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
       //Draw rackets
       context.fillStyle = 'white';
@@ -140,7 +146,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       context.fillStyle = 'white';
       context.font = '80px Courier New, monospace';
       context.fillText(`${this.playerLeft.score}`, centerX / 2, 100);
-      context.fillText(`${this.playerRight.score}`, 3 * (800 / 4), 100);
+      context.fillText(`${this.playerRight.score}`, 3 * (this.canvas.nativeElement.width / 4), 100);
 
       //Win message
       if (this.playerRight.score == 3) {
@@ -148,13 +154,13 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
         console.log("this.playerRight.score", this.playerRight.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        context.fillText('Win', (centerX / 2) - 20, 200);
+        //context.fillText('Win', (centerX / 2) - 20, 200);
       } else if (this.playerLeft.score == 3) {
         this.gameStart = false;
         console.log("this.playerLeft.score", this.playerLeft.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        context.fillText('Win', (3 * (800 / 4)) - 20, 200);
+        //context.fillText('Win', (3 * (this.canvas.nativeElement.width / 4)) - 20, 200);
       }
     }
   }
@@ -162,7 +168,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   drawWaiting(): void{
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
-    const centerX: number = 800 / 2;
+    const centerX: number = this.canvas.nativeElement.width / 2;
 
     if (context) {
       context.fillStyle = 'white';
