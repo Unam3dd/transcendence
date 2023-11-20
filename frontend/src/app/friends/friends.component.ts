@@ -46,7 +46,7 @@ export class FriendsComponent implements OnInit {
   refreshList()
   {
     this.friendList = [];
-    this.requestsService.listFriends(false)?.subscribe((friends) => {
+    this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
       this.friendList = friends;
 
       this.approvedFriends = [];
@@ -71,36 +71,50 @@ export class FriendsComponent implements OnInit {
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
   approvedFriendsRequest(user: UserFriendsInfo) {
-    this.requestsService.updateFriendsStatus(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-      this.pendingFriends = this.pendingFriends.filter((element) => {
-        return element !== user
-      });
-      this.approvedFriends.push(user);
-    })
+
+    this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
+      if (!(friends.find((el) => el.user2 === user.id)))
+        return;
+      this.requestsService.updateFriendsStatus(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
+        this.pendingFriends = this.pendingFriends.filter((element) => {
+          return element !== user
+        });
+        this.approvedFriends.push(user);
+      })
+    });
   }
 
   //delete a friend in the friends lists, then refresh the array of friends with the removed element
   deleteFriends(user: UserFriendsInfo) {
-    this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-      this.approvedFriends = this.approvedFriends.filter((element) => {
-        return element !== user
-      });
-      this.pendingFriends = this.pendingFriends.filter((element) => {
-        return element !== user
-      });
+
+    this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
+      if (!(friends.find((el) => el.user2 === user.id)))
+        return;
+        this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
+          this.approvedFriends = this.approvedFriends.filter((element) => {
+            return element !== user
+          });
+          this.pendingFriends = this.pendingFriends.filter((element) => {
+            return element !== user
+          });
+        });
     });
   }
 
   blockFriends(user: UserFriendsInfo) {
-    this.requestsService.blockUser(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-      this.approvedFriends = this.approvedFriends.filter((element) => {
-        return element !== user
+    this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
+      if (!(friends.find((el) => el.user2 === user.id)))
+        return;
+      this.requestsService.blockUser(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
+        this.approvedFriends = this.approvedFriends.filter((element) => {
+          return element !== user
+        });
+        this.pendingFriends = this.pendingFriends.filter((element) => {
+          return element !== user
+        });
       });
-      this.pendingFriends = this.pendingFriends.filter((element) => {
-        return element !== user
-      });
+      this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe();
     });
-    this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe();
   }
 
   toggleContent() {
