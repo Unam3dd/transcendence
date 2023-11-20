@@ -74,6 +74,20 @@ export class UploadController {
   }
   @Get(':img')
   getImg(@Param('img') image: string, @Res() res: Response): void {
+    const imgExtension = path.extname(image);
+    const allowedExtension = ['.jpg', '.jpeg', '.png', '.gif'];
+    const dotCount = image.split('.').length - 1;
+    const dangerousChars = ['/', '\\'];
+
+    if (!allowedExtension.includes(imgExtension)) {
+      res.status(400).send('Invalid extension');
+    }
+    if (dotCount !== 1) {
+      res.status(400).send('Invalid name');
+    }
+    if (dangerousChars.some((char) => image.includes(char))) {
+      res.status(400).send('Invalid name');
+    }
     res.sendFile(path.resolve('src/assets/profile_pictures/' + image));
   }
 }
