@@ -98,7 +98,6 @@ export class WebsocketService {
       backdrop: 'static',
       keyboard: false,
     });
-    //console.log('Modal Reference:', modalRef);
     modalRef.componentInstance.invitation = payload.gameId;
     modalRef.componentInstance.host = payload.host;
     modalRef.componentInstance.hostAvatar = payload.hostAvatar;
@@ -175,4 +174,17 @@ export class WebsocketService {
     modalRef.componentInstance.result = victory;
     modalRef.componentInstance.local = false;
   }
+  /** End remote games functions */
+
+  /** Friends Handling functions */
+
+  sendFriendsUpdate(recipient: string)
+  {
+    const payload = {
+      "recipient": recipient,
+    }
+    this.client.emit('updateFriends', payload);
+  }
+
+  /** End Friends Handling functions */
 }

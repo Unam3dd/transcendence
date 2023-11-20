@@ -80,6 +80,15 @@ export class EventsGateway {
     this.server.emit('newJoinChat', body);
   }
 
+  /** Friends functions */
+
+  @SubscribeMessage('updateFriends')
+  updateFriends(@MessageBody() payload: any)
+  {
+    const user = this.clientList.find((el) => el.nickName === payload.recipient);
+    user.client.emit('updateFriends');
+  }
+
   /** Remote games functions */
 
   @SubscribeMessage('privateGame')
@@ -167,6 +176,8 @@ export class EventsGateway {
     if (lobby && lobby.players.length != lobby.fullSize)
       lobby.lobbyManager.leaveLobby(player, lobby);
   }
+
+    /** End of Remote games functions */
 
   //Detect clients disconnection
 

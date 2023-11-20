@@ -42,4 +42,5 @@ export interface PrivateMessage extends Message {
 
 export interface UserFriendsInfo extends UserSanitizeInterface {
     showOpt: boolean;
+    applicant?: boolean;
 }
