@@ -128,15 +128,7 @@ export class RequestsService {
     if (email) update.email = email;
     update.a2f = a2f;
 
-    this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
-    {
-      headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
-    }).subscribe((data) => {
-      console.log(data);
-      window.location.reload();
-    });
-
-    return (this.updateSubscription);
+    return (this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,{headers: new HttpHeaders().append('authorization', `Bearer ${token}`)}));
   }
 
   deleteUser(): Observable<UserInterface> | null {

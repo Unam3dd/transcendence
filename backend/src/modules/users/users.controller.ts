@@ -66,7 +66,7 @@ export class UsersController {
 
       return res
         .status(HttpStatus.OK)
-        .send({ token: await this.authService.generateJwtByUser(user)});
+        .send({ token: await this.authService.generateJwtByUser(user), qrcode: null});
     } catch (e) {
       console.log(e);
       return res.status(HttpStatus.NOT_MODIFIED).send();

@@ -1,5 +1,10 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
   <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
+  <simple-notifications></simple-notifications>
+  <div class="qrcode" *ngIf="this.qrcodeURL">
+    <p>QRCode A2F</p>
+    <img src="{{ this.qrcodeURL }}"/>
+  </div>
   <div class="line">
     <p id="key">Login:</p>
     <p id="value">{{userData.login}}</p>
@@ -19,10 +24,6 @@
   <div class="line">
     <p id="key">Email:</p>
     <p id="value">{{userData.email}}</p>
-  </div>
-  <div class="qrcode" *ngIf="newQRCode">
-    <p>QRCode for A2f</p>
-    <img src={{ qrcodeURL }}>
   </div>
   <p class="form-check form-switch">
     <label class="form-check-label" for="a2fCheck">A2F </label>

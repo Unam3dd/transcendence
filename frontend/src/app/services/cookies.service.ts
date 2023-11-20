@@ -33,6 +33,10 @@ export class CookiesService {
     window.location.href = `${LOGIN_PAGE}`;
   }
 
+  removeOnlyCookie(key: string) {
+    document.cookie = `${key}=;expires=${new Date(0).toUTCString()}; Path=/`;
+  }
+
   getToken(): string | null {
     const authorization = this.getCookie('authorization');
 
