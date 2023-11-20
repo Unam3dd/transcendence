@@ -5,7 +5,6 @@ import {
   Param,
   UseInterceptors,
   UploadedFile,
-  ParseFilePipeBuilder,
   HttpStatus,
   Req,
   Res,
@@ -27,10 +26,24 @@ export class UploadController {
       storage: diskStorage({
         destination: './src/assets/profile_pictures',
         filename: (req, file, cb) => {
-          const filename = `${Date.now()}-${file.originalname.replace(
-            / /g,
-            '',
-          )}`;
+          const fileExtension = path.extname(file.originalname).toLowerCase();
+          const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif'];
+          const dotCount = file.originalname.split('.').length - 1;
+          const dangerousChars = ['/', '\\'];
+
+          if (!allowedExtensions.includes(fileExtension)) {
+            return cb(new Error('File extension not authorized'), '');
+          }
+
+          if (dotCount !== 1) {
+            return cb(new Error('File name not authorized'), '');
+          }
+
+          if (dangerousChars.some((char) => file.originalname.includes(char))) {
+            return cb(new Error('File name contains inappropriate characters'), '');
+          }
+
+          const filename = `${Date.now()}-${file.originalname.replace(/ /g,'')}`;
           cb(null, filename);
         },
       }),
@@ -61,7 +74,6 @@ export class UploadController {
   }
   @Get(':img')
   getImg(@Param('img') image: string, @Res() res: Response): void {
-    //const imgPath = "../../assets/profile_pictures/" + image;
     res.sendFile(path.resolve('src/assets/profile_pictures/' + image));
   }
 }
