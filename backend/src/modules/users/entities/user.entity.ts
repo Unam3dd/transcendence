@@ -84,7 +84,7 @@ export class User {
     type: 'varchar',
     nullable: false,
   })
-  @IsUrl({}, { message: 'avatar must be an url !' })
+  @IsString({ message: 'avatar must be a string !'})
   avatar: string;
 
   @Column({

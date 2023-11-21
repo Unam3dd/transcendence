@@ -1,3 +1,5 @@
+import { OnlineState } from "../enum/status.enum";
+
 export interface UserInterface {
     id?: number;
     login?: string | null;
@@ -43,4 +45,5 @@ export interface PrivateMessage extends Message {
 
 export interface UserFriendsInfo extends UserSanitizeInterface {
     showOpt: boolean;
+    applicant?: boolean;
 }

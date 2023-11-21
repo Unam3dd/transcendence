@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams, HttpResponse } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams, HttpResponse, HttpStatusCode } from "@angular/common/http";
 import {Observable, catchError, throwError, Subscription } from "rxjs";
-
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
 import { NESTJS_URL } from '../env';
@@ -11,6 +10,7 @@ import { Friends } from '../interfaces/friends.interface';
 import {Router} from "@angular/router";
 import { Status } from '../enum/status.enum';
 import { NotificationsService } from 'angular2-notifications';
+import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +23,7 @@ export class RequestsService {
   constructor(private http: HttpClient,
               private readonly cookieService: CookiesService,
               private jwtService: JwtService,
-              private router: Router) {}
+              ) {}
 
   //Handle requests errors
   private handleError(error: HttpErrorResponse){
@@ -131,6 +131,23 @@ export class RequestsService {
     return (this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,{headers: new HttpHeaders().append('authorization', `Bearer ${token}`)}));
   }
 
+  uploadUserImage(img: File) {
+
+    //Recovers Cookie and gives authorization
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
+
+    const formData = new FormData();
+
+    formData.append('file', img);
+
+    return this.http.post(`${NESTJS_URL}/upload`, formData,
+        {
+          headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
+        });
+  }
+
   deleteUser(): Observable<UserInterface> | null {
     const JWT_TOKEN = this.cookieService.getToken();
 
@@ -200,14 +217,14 @@ export class RequestsService {
 
 /** Block Requests */
 
-  blockUser(targetId: number): Observable<HttpResponse<Status>> | undefined {
+  blockUser(targetId: number): Observable<HttpResponse<HttpStatusCode>> | undefined {
     const token = this.cookieService.getToken();
 
     if (!token) return ;
 
     const userId = this.getId(token);
 
-    return this.http.post<HttpResponse<Status>>(`${NESTJS_URL}/block/add`, {
+    return this.http.post<HttpResponse<HttpStatusCode>>(`${NESTJS_URL}/block/add`, {
       user1: userId, user2: targetId }, { headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
@@ -226,6 +243,28 @@ export class RequestsService {
     const login: string | null = this.cookieService.getCookie('tmp_name');
 
     return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token }, { headers: new HttpHeaders().append('tmp_name', `${login}`), observe: 'response'});
+  }
+
+  /** Game Requests */
+
+  addGameResult(gameResult: PlayerResult)
+  {
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
+
+    return this.http.post<HttpResponse<HttpStatusCode>>(`${NESTJS_URL}/game/add`, gameResult, { headers:
+      new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
+  }
+
+  listGame(userId: number)
+  {
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
+
+    return this.http.get<GameResult[]>(`${NESTJS_URL}/game/list/${userId}`, {headers:
+      new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 }
 

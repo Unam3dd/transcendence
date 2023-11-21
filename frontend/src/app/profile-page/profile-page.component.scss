@@ -21,6 +21,15 @@
   color: black;
   display: inline-block;
   font-weight: bold;
+
+ .matchHistory {
+  width: 350px;
+}
+
+.history {
+  max-height: 200px;
+  width: 100%;
+  overflow: auto;
 }
 
 .line #value {
