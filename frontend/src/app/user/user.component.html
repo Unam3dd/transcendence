@@ -8,21 +8,10 @@
     <img class="avatar" [src]="user.avatar" alt="avatar picture">
     <p>Login: {{user.login}}</p>
     <p>Nickname: {{user.nickName}}</p>
-    <section class="matchHistory">
-        <h5>Match History :</h5>
-        <hr>
-        <div class="history" *ngIf="gameHistory.length !== 0">
-            <content *ngFor="let game of gameHistory">
-                
-            <p *ngIf="game.size === 2"> 1v1 Game</p>
-            <p *ngIf="game.size > 2"> Tournament Game</p>
-            <p *ngIf="game.local"> Local Game</p>
-            <p *ngIf="!game.local">Remote Game</p>
-            <p *ngIf="game.victory">Win</p>
-            <p *ngIf="!game.victory">Loose</p>
-            <p>{{game.createdAt}}</p>
-            <hr>
-            </content>
-        </div>
-    </section>
+    <section>
+        <h5>User Stats</h5>
+        <p>Win: {{this.win}}</p>
+        <p>Loose: {{this.loose}}</p>
+        <p>Winrate: {{this.winrate}} %</p>
+      </section>
 </section>

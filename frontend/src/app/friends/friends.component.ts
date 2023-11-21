@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
 import { Friends } from '../interfaces/friends.interface';
-import { UserFriendsInfo, UserSanitizeInterface } from '../interfaces/user.interface';
+import { UserFriendsInfo } from '../interfaces/user.interface';
 import { NavigationEnd, Router } from '@angular/router'
-import { Subject, Subscription, shareReplay, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { WsClient } from '../websocket/websocket.type';
 import { WebsocketService } from '../websocket/websocket.service';
 

@@ -6,7 +6,6 @@ export interface Friends{
     user2: number,
     status: boolean,
     applicant: boolean
-    state?: OnlineState;
   }
 
   export interface Block {
