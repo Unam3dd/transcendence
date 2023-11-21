@@ -5,7 +5,6 @@ import { UserInterface } from '../interfaces/user.interface';
 import { CookiesService } from '../services/cookies.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
-import { TimerService } from '../services/timer.service';
 import { NotificationsService } from 'angular2-notifications';
 
 @Component({
