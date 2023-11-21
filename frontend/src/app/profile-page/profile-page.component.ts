@@ -55,7 +55,7 @@ export class ProfilePageComponent implements OnInit{
 
   countWin(gameList: GameResult[]): number {
     let counter: number = 0;
-  
+
     gameList.forEach(element => {
       if (element.victory)
         counter++;

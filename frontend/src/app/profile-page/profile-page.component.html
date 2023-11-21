@@ -1,6 +1,8 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
   <button (click)="Logout()">Logout</button>
-  <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
+  <div class="avatar-container">
+    <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
+  </div>
   <p>Login: {{userData.login}}</p>
   <p>Firstname: {{userData.firstName}}</p>
   <p>Lastname: {{userData.lastName}}</p>
