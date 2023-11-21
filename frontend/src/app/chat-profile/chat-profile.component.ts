@@ -21,13 +21,18 @@ export class ChatProfileComponent {
     })
   }
 
-  onChannelClicked(recipient?: string) {
+  onChannelClicked(recipient?: ClientInfoInterface | null) {
+
+    console.log(this.listClients);
+    console.log(recipient);
+
     if (!recipient) {
       //if not on general already, call for general conversation
       console.log("general is called");
+      this.ws.targetRecipient = null;
     } else {
       //if not on recipient already, call for recipient conversation
-      console.log(recipient)
+      this.ws.targetRecipient = recipient;
     }
 
   }

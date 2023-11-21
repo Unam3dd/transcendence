@@ -7,6 +7,10 @@ export interface UserSanitize {
   avatar: string;
 }
 
+export interface ListUserSanitizeInterface extends UserSanitize {
+  clientID: string;
+}
+
 export interface ClientInfo extends UserSanitize
 {
   client: Socket;

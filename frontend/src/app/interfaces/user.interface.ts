@@ -23,7 +23,7 @@ export interface UserSanitizeInterface {
 }
 
 export interface ClientInfoInterface extends UserSanitizeInterface {
-    client: Socket;
+    clientID: string;
 }
 
 export interface JWTPayload {
@@ -36,10 +36,10 @@ export interface JWTPayload {
 }
 
 export interface Message {
-    author: UserSanitizeInterface;
+    author: ClientInfoInterface;
     content: string;
     createdAt: Date;
-    recipient: UserSanitizeInterface | null;
+    recipient: ClientInfoInterface| null;
 }
 
 export interface UserFriendsInfo extends UserSanitizeInterface {

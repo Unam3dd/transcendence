@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
-import { JWTPayload, UserSanitizeInterface, Message } from '../interfaces/user.interface';
+import { JWTPayload, UserSanitizeInterface, Message, ClientInfoInterface } from '../interfaces/user.interface';
 import { WS_GATEWAY } from '../env';
-import { io } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
 
@@ -14,8 +14,13 @@ export class WebsocketService {
 
   public client: any
 
+  public targetRecipient: any
+
+  public received_messages: Message[] = [];
+
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
+      
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
@@ -56,11 +61,16 @@ export class WebsocketService {
 
       if (!user) return ;
 
+      const client: Socket = this.getClient();
+
       const message: Message = {
-        author: user,
+        author: {
+          ...user,
+          clientID: client.id
+        },
         content: data,
         createdAt: new Date(),
-        recipient: null
+        recipient: this.targetRecipient
       }
 
       this.client.emit(path, message);

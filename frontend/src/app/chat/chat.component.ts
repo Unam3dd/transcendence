@@ -4,7 +4,6 @@ import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import { NotificationsService } from 'angular2-notifications';
 import { FormBuilder } from '@angular/forms';
-import { Message } from '../interfaces/user.interface';
 
 @Component({
   selector: 'app-chat',
@@ -13,9 +12,9 @@ import { Message } from '../interfaces/user.interface';
 })
 export class ChatComponent implements OnInit {
 
-  constructor (private ws: WebsocketService, private notif: NotificationsService, private formBuilder: FormBuilder) {}
+  constructor (public ws: WebsocketService, private notif: NotificationsService, private formBuilder: FormBuilder) {}
 
-  received_messages: Message[] = [];
+  
   msg = this.formBuilder.group({
     content: ''
   });
@@ -32,7 +31,7 @@ export class ChatComponent implements OnInit {
     })
 
     client.on('newMessage', (msg) => {
-      this.received_messages.push(msg);
+      this.ws.received_messages.push(msg);
     })
 
     this.ws.sendHelloChat(client);

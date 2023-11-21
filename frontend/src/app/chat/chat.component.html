@@ -5,7 +5,7 @@
   <div class="conversation">
 
     <ul class="messages">
-      <div class="capsule" *ngFor="let msg of received_messages">
+      <div class="capsule" *ngFor="let msg of this.ws.received_messages">
         <div class="picture-column">
           <div class="thumbnail">  
             <img src={{msg.author.avatar}}/>

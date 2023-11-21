@@ -6,7 +6,7 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ClientInfo } from 'src/interfaces/user.interfaces';
+import { ClientInfo, ListUserSanitizeInterface } from 'src/interfaces/user.interfaces';
 import { UserSanitize } from 'src/interfaces/user.interfaces';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
@@ -52,6 +52,7 @@ export class EventsGateway {
   @SubscribeMessage('message')
   receiveNewMessage(
     @MessageBody() message: string) {
+    console.log(message);
     this.server.emit('newMessage', message);
   }
 
@@ -80,15 +81,16 @@ export class EventsGateway {
 
   @SubscribeMessage('listClient')
   ListClient() {
-    let loginArray: UserSanitize[] = [];
+    let loginArray: ListUserSanitizeInterface[] = [];
 
     this.clientList.forEach((el: ClientInfo) => {
       
-      const usanitize: UserSanitize = {
+      const usanitize: ListUserSanitizeInterface = {
         id: el.id,
         login: el.login,
         nickName: el.nickName,
-        avatar: el.avatar
+        avatar: el.avatar,
+        clientID: el.client.id
       };
 
       loginArray.push(usanitize);
