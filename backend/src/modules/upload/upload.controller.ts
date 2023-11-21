@@ -88,6 +88,6 @@ export class UploadController {
     if (dangerousChars.some((char) => image.includes(char))) {
       res.status(400).send('Invalid name');
     }
-    res.sendFile(path.resolve('src/assets/profile_pictures/' + image));
+    res.sendFile(path.resolve(`src/assets/profile_pictures/${image}`));
   }
 }
