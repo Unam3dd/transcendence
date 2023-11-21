@@ -18,17 +18,21 @@ import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
+import { RemoteGameComponent } from './remote-game/remote-game.component';
 import { Options, SimpleNotificationsModule } from 'angular2-notifications';
+import { GameInvitationComponent } from './modals/game-invitation/game-invitation.component';
+import { SelectPlayerModalComponent } from './modals/select-player-modal/select-player-modal.component';
+import { EndMatchComponent } from './modals/end-match/end-match.component';
 
 const NotifcationOpt: Options = {
   position: ["top", "right"],
   showProgressBar: true,
   timeOut: 3000
 }
-
+ 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
     ws.initializeWebsocketService();
@@ -43,6 +47,7 @@ function initializeWebSocket(ws: WebsocketService) {
     ConnectionComponent,
     HomePageComponent,
     GamePageComponent,
+    RemoteGameComponent,
     ProfilePageComponent,
     FooterComponent,
     ChatComponent,
@@ -50,7 +55,10 @@ function initializeWebSocket(ws: WebsocketService) {
     ChatPageComponent,
     UserComponent,
     RegisterComponent,
-    GameMenuComponent
+    GameMenuComponent,
+    GameInvitationComponent,
+    SelectPlayerModalComponent,
+    EndMatchComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +76,8 @@ function initializeWebSocket(ws: WebsocketService) {
     useFactory: initializeWebSocket,
     deps: [WebsocketService],
     multi: true
-  }],
+  },
+  NgbActiveModal],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

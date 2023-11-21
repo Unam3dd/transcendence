@@ -5,6 +5,7 @@ import { UserInterface } from '../interfaces/user.interface';
 import { CookiesService } from '../services/cookies.service';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FormControl} from "@angular/forms";
+import { GameResult } from '../interfaces/game.interface';
 
 @Component({
   selector: 'app-profile-page',
@@ -17,11 +18,18 @@ export class ProfilePageComponent implements OnInit{
               private modalService: NgbModal) {}
 
   userData$!: Observable<UserInterface> | null;
+  myId:number = 0;
   firstname = new FormControl('');
   lastname = new FormControl('');
   nickname = new FormControl('');
   email = new FormControl('');
   a2f!: FormControl<boolean | null>;
+
+  gameObserver$: Observable<GameResult[]> | undefined;
+  gameHistory: GameResult[] = [];
+  win: number = 0;
+  loose: number = 0;
+  winrate: number = 0.0;
 
   // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
@@ -33,7 +41,35 @@ export class ProfilePageComponent implements OnInit{
 
         this.a2f = new FormControl(a2fValue);
       }
+
+      this.gameObserver$ = this.requestService.listGame(userData.id as number);
+
+      this.gameObserver$?.subscribe((gameList: GameResult[]) => {
+        this.gameHistory = gameList;
+        this.win = this.countWin(gameList);
+        this.loose = this.countLoose(gameList);
+        this.winrate = (this.win / gameList.length) * 100;
+      });
     });
+  }
+
+  countWin(gameList: GameResult[]): number {
+    let counter: number = 0;
+  
+    gameList.forEach(element => {
+      if (element.victory)
+        counter++;
+    })
+    return (counter);
+  }
+
+  countLoose(gameList: GameResult[]): number{
+    let counter: number = 0;
+    gameList.forEach(element => {
+      if (!element.victory)
+        counter++;
+    });
+    return (counter);
   }
 
   Logout() {
