@@ -24,7 +24,7 @@ export class ProfilePageComponent implements OnInit{
   nickname = new FormControl('');
   email = new FormControl('');
   a2f!: FormControl<boolean | null>;
-
+  file: File | null = null;
   gameObserver$: Observable<GameResult[]> | undefined;
   gameHistory: GameResult[] = [];
   win: number = 0;
@@ -86,7 +86,21 @@ export class ProfilePageComponent implements OnInit{
   }
 
   //update function for update the profile
+  onFileSelected(event: any) {
+    this.file = event.target.files[0] as File;
+  }
+
   updateDatas() {
+    if (this.file) {
+      this.requestService.uploadUserImage(this.file)?.subscribe(() => {
+        this.updateDatasWithoutImage();
+      });
+    } else {
+      this.updateDatasWithoutImage();
+    }
+  }
+
+  updateDatasWithoutImage() {
     const firstname: string = this.firstname.value as string;
     const lastname: string = this.lastname.value as string;
     const nickname: string = this.nickname.value as string;
@@ -95,4 +109,5 @@ export class ProfilePageComponent implements OnInit{
 
     this.requestService.updateUserDatas(firstname, lastname, nickname, email, a2f);
   }
+
 }

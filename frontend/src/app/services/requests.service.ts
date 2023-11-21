@@ -136,6 +136,23 @@ export class RequestsService {
     return (this.updateSubscription);
   }
 
+  uploadUserImage(img: File) {
+
+    //Recovers Cookie and gives authorization
+    const token = this.cookieService.getToken();
+
+    if (!token) return ;
+
+    const formData = new FormData();
+
+    formData.append('file', img);
+
+    return this.http.post(`${NESTJS_URL}/upload`, formData,
+        {
+          headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
+        });
+  }
+
   deleteUser(): Observable<UserInterface> | null {
     const JWT_TOKEN = this.cookieService.getToken();
 

@@ -10,6 +10,9 @@
     <label class="form-check-label" for="a2fCheck">A2F </label>
     <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="userData.a2f" disabled>
   </p>
+  <p>Friends: my-friends</p>
+  <p>History: my-games-history</p>
+  <p>(Achievements: my-achievements)</p>
   <section class="matchHistory">
     <h5>Match History</h5>
     <hr>
@@ -69,6 +72,10 @@
       <div class="mb-3">
         <div *ngIf="userData$ | async as userData">
           <div>
+            <div class="mb-3">
+              <label for="formFile" class="form-label">Upload avatar</label>
+              <input class="form-control" type="file" id="formFile" (change)="onFileSelected($event)">
+            </div>
             <div>
               <span>Firstname</span>
               <input placeholder="{{userData.firstName}}" class="form-control" [formControl]="firstname">
