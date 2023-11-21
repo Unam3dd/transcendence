@@ -78,7 +78,7 @@ export class UploadController {
     const allowedExtension = ['.jpg', '.jpeg', '.png', '.gif'];
     const dotCount = image.split('.').length - 1;
     const dangerousChars = ['/', '\\'];
-    const pathImg = `src/assets/profile_pictures/${image}`;
+    const pathImg = path.resolve(`src/assets/profile_pictures/${image}`);
 
     if (!allowedExtension.includes(imgExtension)) {
       res.status(400).send('Invalid extension');
@@ -92,6 +92,6 @@ export class UploadController {
     if (!pathImg) {
       res.status(400).send('File not found');
     }
-    res.sendFile(path.resolve(pathImg));
+    res.sendFile(pathImg);
   }
 }
