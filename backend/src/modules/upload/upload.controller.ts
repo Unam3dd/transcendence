@@ -74,24 +74,12 @@ export class UploadController {
   }
   @Get(':img')
   getImg(@Param('img') image: string, @Res() res: Response): void {
-    const imgExtension = path.extname(image);
-    const allowedExtension = ['.jpg', '.jpeg', '.png', '.gif'];
-    const dotCount = image.split('.').length - 1;
-    const dangerousChars = ['/', '\\'];
-    const pathImg = path.resolve(`src/assets/profile_pictures/${image}`);
+    const image_filename = path.resolve(`src/assets/profile_pictures/${image.replaceAll("\\.", "").replaceAll("/", "")}`);
 
-    if (!allowedExtension.includes(imgExtension)) {
-      res.status(400).send('Invalid extension');
+    try {
+      res.sendFile(image_filename);
+    } catch (err) {
+      console.log(err);
     }
-    if (dotCount !== 1) {
-      res.status(400).send('Invalid name');
-    }
-    if (dangerousChars.some((char) => image.includes(char))) {
-      res.status(400).send('Invalid name');
-    }
-    if (!pathImg) {
-      res.status(400).send('File not found');
-    }
-    res.sendFile(pathImg);
   }
 }
