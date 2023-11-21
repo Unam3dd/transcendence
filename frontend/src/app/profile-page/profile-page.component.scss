@@ -2,9 +2,27 @@
   width: 200px;
   height: auto;
   overflow: hidden;
+  padding-bottom: 10px;
+  padding-left: 20px;
+  border-radius: 50px;
 }
 
-.matchHistory {
+.profile-page #logout {
+  position: absolute;
+}
+
+.line {
+  max-height: 30px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.line #key {
+  color: black;
+  display: inline-block;
+  font-weight: bold;
+
+ .matchHistory {
   width: 350px;
 }
 
@@ -14,3 +32,8 @@
   overflow: auto;
 }
 
+.line #value {
+  display: inline-block;
+  margin-left: 5px;
+  color: black;
+}

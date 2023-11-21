@@ -16,6 +16,7 @@ export class CookiesService {
   }
 
   getCookie(name: string): string | null {
+    this.cookies = document.cookie.split(' ');
     for (const cookie of this.cookies) {
       const [key, value] = cookie.split('=');
       if (key === name) return (value);
@@ -30,6 +31,10 @@ export class CookiesService {
   removeCookie(key: string) {
     document.cookie = `${key}=;expires=${new Date(0).toUTCString()}; Path=/`;
     window.location.href = `${LOGIN_PAGE}`;
+  }
+
+  removeOnlyCookie(key: string) {
+    document.cookie = `${key}=;expires=${new Date(0).toUTCString()}; Path=/`;
   }
 
   getToken(): string | null {

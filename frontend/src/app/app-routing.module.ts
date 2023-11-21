@@ -19,7 +19,7 @@ const routes: Routes = [
   {path: 'game/remote', component: RemoteGameComponent},
   {path: 'chat', component: ChatPageComponent},
   {path: 'user/:userId', component: UserComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'register', component: RegisterComponent},
 ];
 
 @NgModule({

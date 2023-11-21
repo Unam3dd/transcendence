@@ -7,13 +7,16 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { isEmpty } from 'class-validator';
 import { UserError } from './users.type';
 import { UserSanitize } from 'src/interfaces/user.interfaces';
+import * as speakeasy from 'speakeasy';
+import * as QRCode from 'qrcode';
 
 // This class will do all operations needed for our requests like writing, modifiyng or accessing data from database
 @Injectable()
 export class UsersService {
+
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    private usersRepository: Repository<User>
   ) {}
 
   // Return an array with all users from database
@@ -75,6 +78,11 @@ export class UsersService {
 
     if (!target) throw new UserError('User not found');
 
+    if (user.a2f != target.a2f && !user.a2f) user.a2fsecret = null;
+
+    if (user.a2f != target.a2f && user.a2f)
+      user.a2fsecret = JSON.stringify(this.generateSecret());
+
     const updated = Object.assign(target, user);
 
     await this.usersRepository.update(updated.id, updated);
@@ -87,8 +95,6 @@ export class UsersService {
     const target = await this.usersRepository.findOne({ where: { id } });
 
     if (!target) throw new UserError('User not found !');
-
-    console.log(target);
 
     await this.usersRepository.remove(target);
 
@@ -103,5 +109,17 @@ export class UsersService {
 
     const [header, payload, signature] = jwt.split('.');
     return [atob(header), atob(payload), signature];
+  }
+
+  generateSecret() {
+    const secret = speakeasy.generateSecret({
+        name: 'transcendence'
+    });
+
+    return ({ otpauthUrl: secret.otpauth_url, base32: secret.base32});
+  }
+
+  async respondWithQRCode(otpauthUrl: string) {
+    return (await QRCode.toDataURL(otpauthUrl));
   }
 }

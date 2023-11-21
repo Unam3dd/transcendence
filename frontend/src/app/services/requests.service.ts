@@ -7,6 +7,9 @@ import { NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
+import {Router} from "@angular/router";
+import { Status } from '../enum/status.enum';
+import { NotificationsService } from 'angular2-notifications';
 import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
 @Injectable({
@@ -124,16 +127,8 @@ export class RequestsService {
     if (nickname) update.nickName = nickname;
     if (email) update.email = email;
     update.a2f = a2f;
-    update.is42 = false;
 
-    this.updateSubscription = this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,
-    {
-      headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
-    }).subscribe(() => {
-      window.location.reload();
-    });
-
-    return (this.updateSubscription);
+    return (this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,{headers: new HttpHeaders().append('authorization', `Bearer ${token}`)}));
   }
 
   uploadUserImage(img: File) {
@@ -237,11 +232,17 @@ export class RequestsService {
   /** Register new User without 42 API */
 
   registerUser(userData: UserInterface) {
-    return this.http.post(`${NESTJS_URL}/auth/register`, userData, { observe: 'response'}).pipe(catchError(this.handleError));
+    return this.http.post(`${NESTJS_URL}/auth/register`, userData, { observe: 'response', responseType: 'text'}).pipe(catchError(this.handleError));
   }
 
   loginUser(login: string, password: string) {
-    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response' })
+    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response', responseType: 'json'}).pipe(catchError(this.handleError));
+  }
+
+  sendA2fToken(token: string | null | undefined): Observable<HttpResponse<Object>> {
+    const login: string | null = this.cookieService.getCookie('tmp_name');
+
+    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token }, { headers: new HttpHeaders().append('tmp_name', `${login}`), observe: 'response'});
   }
 
   /** Game Requests */
