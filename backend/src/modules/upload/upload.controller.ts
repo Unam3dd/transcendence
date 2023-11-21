@@ -73,8 +73,13 @@ export class UploadController {
     }
   }
   @Get(':img')
-  getImg(@Param('img') image: string, @Res() res: Response): void {
-    const image_filename = path.resolve(`src/assets/profile_pictures/${image.replaceAll("\\.", "").replaceAll("/", "")}`);
+  getImg(@Param('img') image: string, @Res() res: Response) {
+    
+    const filename = image.replaceAll("\\.", "").replaceAll("/", "");
+
+    if (!filename) return (res.status(HttpStatus.BAD_REQUEST).send({}));
+
+    const image_filename = path.resolve(`./src/assets/profile_pictures/${filename}`);
 
     try {
       res.sendFile(image_filename);
