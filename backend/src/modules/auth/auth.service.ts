@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
 import * as argon2 from "argon2";
 import { A2fService } from '../a2f/a2f.service';
-import * as argon2 from 'argon2';
 
 @Injectable()
 export class AuthService {
