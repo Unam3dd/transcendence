@@ -1,6 +1,7 @@
-export enum Status {
-    UNDEFINED,
-    ONLINE,
-    OFFLINE,
-    GAME,
-}  
+export enum OnlineState
+{
+  offline,
+  online,
+  ingame
+}
+  
