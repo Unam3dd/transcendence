@@ -5,7 +5,7 @@ import { UsersService } from '../users/users.service';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { JwtService } from '@nestjs/jwt';
 import { User } from '../users/entities/user.entity';
-import * as argon2 from "argon2";
+import * as argon2 from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -67,6 +67,7 @@ export class AuthService {
       sub: user.id,
       login: user.login,
       nickName: user.nickName,
+      avatar: user.avatar,
     };
 
     return await this.jwtService.signAsync(payload, {
@@ -81,6 +82,7 @@ export class AuthService {
       sub: user.id,
       login: user.login,
       nickName: user.nickName,
+      avatar: user.avatar,
     };
 
     return await this.jwtService.signAsync(payload, {
