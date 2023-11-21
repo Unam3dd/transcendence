@@ -33,6 +33,7 @@ ul {
 
 .channel {
     display: flex;
+    position: relative;
     padding: 10px;
 }
 
@@ -41,6 +42,7 @@ ul {
 }
 
 .thumbnail {
+    z-index: 1;
     width: 35px;
     height: 35px;
     overflow: hidden;
@@ -83,4 +85,22 @@ ul {
     padding-left: 10px;
     text-shadow: 0px 2px 2px black;
     // background-color: blue;
+}
+
+.channel::before {
+    content: '';
+    position: absolute;
+    top: 1px;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0);
+    transition: background-color 0.2s ease;
+    pointer-events: none;
+  }
+  
+.channel:hover::before {
+    z-index: 0;
+    background-color: rgba(255, 255, 255, 0.1);
 }

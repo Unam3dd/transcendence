@@ -19,7 +19,7 @@
 
   <ul class="channel-list">
 
-    <li class="channel">
+    <li class="channel" (click)="onChannelClicked()">
       <div class="thumbnail">  
         <div class="initial">G</div>
       </div>
@@ -28,7 +28,7 @@
 
     <li></li>
 
-    <li class="channel" *ngFor="let user of this.listClients">
+    <li class="channel" *ngFor="let user of this.listClients" (click)="onChannelClicked( user.login )">
       <div class="thumbnail">  
         <img src={{user.avatar}}/>
       </div>
