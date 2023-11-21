@@ -1,19 +1,20 @@
 <div class="global">
 
   <div id="active-chat-title">Active chat title</div>
-  <!-- <simple-notifications></simple-notifications> -->
   <div class="conversation">
 
     <ul class="messages">
       <div class="capsule" *ngFor="let msg of this.ws.received_messages">
-        <div class="picture-column">
-          <div class="thumbnail">  
-            <img src={{msg.author.avatar}}/>
+        <div *ngIf="!msg.recipient">
+          <div class="picture-column">
+            <div class="thumbnail">  
+              <img src={{msg.author.avatar}}/>
+            </div>
           </div>
-        </div>
-        <div class="message-zone">
-          <div class="author-name">{{msg.author.nickName}} :</div>
-          <div class="message-content">{{msg.content}}</div>
+          <div class="message-zone">
+            <div class="author-name">{{msg.author.nickName}} :</div>
+            <div class="message-content">{{msg.content}}</div>
+          </div>
         </div>
       </div>
     </ul>
