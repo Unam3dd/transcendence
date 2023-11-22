@@ -23,3 +23,9 @@ export interface JWTPayload {
   iat: number;
   exp: number;
 }
+
+export interface BlockedUser {
+  id: number;
+  user1: number;
+  user2: number;
+}

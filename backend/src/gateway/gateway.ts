@@ -7,10 +7,14 @@ import {
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { ClientInfo, ListUserSanitizeInterface } from 'src/interfaces/user.interfaces';
-import { UserSanitize } from 'src/interfaces/user.interfaces';
+import { BlockService } from 'src/modules/block/block.service';
+import { BlockedUser } from 'src/interfaces/user.interfaces';
 
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
+
+  constructor (private block: BlockService) {}
+
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
   server: Server;
@@ -96,5 +100,15 @@ export class EventsGateway {
       loginArray.push(usanitize);
     });
     this.server.emit('listClient', loginArray);
+  }
+
+  @SubscribeMessage('listBlocked')
+  async ListBlocked(@ConnectedSocket() client: Socket) {
+
+    const targetClient = this.clientList.find((el) => el.client.id === client.id);
+
+    const blockedList = await this.block.listBlock(targetClient.id);
+
+    client.emit('getListBlocked', <BlockedUser[]>(blockedList));
   }
 }

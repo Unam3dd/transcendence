@@ -6,6 +6,8 @@ import { WS_GATEWAY } from '../env';
 import { Socket, io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
+import { RequestsService } from '../services/requests.service';
+import { BlockedUser } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -21,8 +23,10 @@ export class WebsocketService {
   public client_name: string = 'General';
   public author_name: string = '';
 
+  public BlockUserList: BlockedUser[] = [];
+
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService) {
+    private readonly jwtService: JwtService, private req: RequestsService) {
       
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();

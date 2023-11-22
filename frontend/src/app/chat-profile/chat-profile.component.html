@@ -16,6 +16,7 @@
         <img src={{user.avatar}}/>
       </div>
       <span class="profile-name">{{ user.nickName }} ({{ user.login }})</span>
+      <button (click)="this.blockUser(user.id)">Block</button>
     </li>
     
   </ul>

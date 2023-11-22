@@ -44,4 +44,9 @@ export class ChatComponent implements OnInit {
     this.ws.sendMessage('message', this.msg.value.content);
     this.msg.reset();
   }
+
+  IsBlocked(id: number) {
+    const user = this.ws.BlockUserList.find((el) => el.user2 === id);
+    return (user != null);
+  }
 }
