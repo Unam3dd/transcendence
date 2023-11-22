@@ -1,10 +1,11 @@
 <div class="global">
 
-  <div id="active-chat-title">Active chat title</div>
+  <div id="active-chat-title">{{ this.ws.client_name }}</div>
   <div class="conversation">
 
     <ul class="messages">
       <div class="capsule" *ngFor="let msg of this.ws.received_messages">
+        
         <div *ngIf="!msg.recipient">
           <div class="picture-column">
             <div class="thumbnail">  
@@ -16,6 +17,20 @@
             <div class="message-content">{{msg.content}}</div>
           </div>
         </div>
+
+        <div *ngIf="msg.recipient">
+          <p style="color: white">Private Message</p>
+          <div class="picture-column">
+            <div class="thumbnail">  
+              <img src={{msg.author.avatar}}/>
+            </div>
+          </div>
+          <div class="message-zone">
+            <div class="author-name">{{msg.author.nickName}} :</div>
+            <div class="message-content">{{msg.content}}</div>
+          </div>
+        </div>
+
       </div>
     </ul>
 

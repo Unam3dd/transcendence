@@ -18,6 +18,8 @@ export class WebsocketService {
 
   public received_messages: Message[] = [];
 
+  public client_name: string = 'General';
+
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
       
