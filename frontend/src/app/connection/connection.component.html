@@ -1,9 +1,10 @@
 <div>
   <simple-notifications></simple-notifications>
   <div class="connection42API">
+    <h4>Connect with 42 !</h4>
     <button (click)="connection42API()">42</button>
   </div>
-  <div class="connection">
+  <div class="connection" *ngIf="!double_factor">
     <form [formGroup]="form" (ngSubmit)="connection()">
       <input id="login" type="text" placeholder="Login" formControlName="login" minlength="3" maxlength="120">
       <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
@@ -14,4 +15,13 @@
   <div class="registration">
     <a id="link" [routerLink]="['/register']">Not Registered ? Go</a>
   </div>
+</div>
+
+<div class="a2f" *ngIf="double_factor">
+  <h4>Double Authentication</h4>
+  <simple-notifications></simple-notifications>
+    <form [formGroup]="tokenForm" (ngSubmit)="a2f()">
+      <input id="token" type="text" placeholder="token" formControlName="token" required>
+      <button id="button-token" (click)="a2f" type="submit">Send Token !</button>
+    </form>
 </div>

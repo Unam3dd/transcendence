@@ -6,6 +6,9 @@ import { RequestsService } from '../services/requests.service';
 import { TimerService } from '../services/timer.service';
 import { CookiesService } from '../services/cookies.service';
 import { NotificationsService } from 'angular2-notifications';
+import { HttpStatusCode } from '@angular/common/http';
+import { LOGIN_PAGE } from '../env';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-connection',
@@ -18,12 +21,18 @@ export class ConnectionComponent {
     private req: RequestsService,
     private readonly notif: NotificationsService,
     private readonly timeService: TimerService,
-    private cookieServcie: CookiesService) {}
+    private cookieService: CookiesService) {}
 
   form = this.formsBuilder.group({
     login: '',
     password: ''
   });
+
+  tokenForm = this.formsBuilder.group({
+    token: ''
+  })
+
+  double_factor: boolean = false;
 
   connection42API() {
     window.location.href=`https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`
@@ -36,9 +45,17 @@ export class ConnectionComponent {
 
     this.req.loginUser(<string>login, <string>password).subscribe(async (res) => {
 
+      const { a2f } = JSON.parse(JSON.stringify(res.body));
+
+      if (res.status == HttpStatusCode.Ok && a2f) {
+        this.cookieService.setCookie('tmp_name', `${btoa(<string>login)}`);
+        this.double_factor = true;
+        return ;
+      }
+
       const { token } = JSON.parse(JSON.stringify(res.body));
 
-      this.cookieServcie.setCookie('authorization', token);
+      this.cookieService.setCookie('authorization', token);
 
       this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
       await this.timeService.sleep(2000);
@@ -46,6 +63,35 @@ export class ConnectionComponent {
     }, async () => {
       this.notif.error('Error', 'Your login or password is not correct !');
       return ;
+    })
+  }
+
+  a2f() {
+    this.req.sendA2fToken(this.tokenForm.value.token).subscribe(async (res) => {
+
+      const { token } = JSON.parse(JSON.stringify(res.body));
+
+      const login: string | null = this.cookieService.getCookie('tmp_name');
+
+      if (!login) {
+        this.notif.error('Error', 'Your token is invalid !');
+        this.cookieService.removeCookie('tmp_name');
+        await this.timeService.sleep(2000);
+        window.location.href = LOGIN_PAGE;
+        return ;
+      }
+
+      this.cookieService.setCookie('authorization', token);
+
+      this.notif.success('You are connected !', `You are connected with ${atob(login)} welcome !`);
+      await this.timeService.sleep(2000);
+      this.cookieService.removeCookie('tmp_name');
+      window.location.href = 'http://localhost:4200/home';
+    }, async () => {
+      this.notif.error('Error', 'Your token is invalid !');
+      this.cookieService.removeCookie('tmp_name');
+      await this.timeService.sleep(2000);
+      window.location.href = LOGIN_PAGE;
     })
   }
 }

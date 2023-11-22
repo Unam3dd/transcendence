@@ -26,6 +26,7 @@ import { Options, SimpleNotificationsModule } from 'angular2-notifications';
 import { GameInvitationComponent } from './modals/game-invitation/game-invitation.component';
 import { SelectPlayerModalComponent } from './modals/select-player-modal/select-player-modal.component';
 import { EndMatchComponent } from './modals/end-match/end-match.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const NotifcationOpt: Options = {
   position: ["top", "right"],
@@ -59,6 +60,7 @@ function initializeWebSocket(ws: WebsocketService) {
     GameInvitationComponent,
     SelectPlayerModalComponent,
     EndMatchComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,

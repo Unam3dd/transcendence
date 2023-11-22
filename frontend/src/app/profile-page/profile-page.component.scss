@@ -2,7 +2,6 @@
   width: 150px;
   height: 150px;
   overflow: hidden;
-  border-radius: 50%;
 }
 
 .avatar-container img {
@@ -11,7 +10,23 @@
   object-fit: cover;
 }
 
-.matchHistory {
+.profile-page #logout {
+  position: absolute;
+}
+
+.line {
+  max-height: 30px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.line #key {
+  color: black;
+  display: inline-block;
+  font-weight: bold;
+}
+
+ .matchHistory {
   width: 350px;
 }
 
@@ -21,3 +36,8 @@
   overflow: auto;
 }
 
+.line #value {
+  display: inline-block;
+  margin-left: 5px;
+  color: black;
+}

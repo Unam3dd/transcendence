@@ -16,6 +16,7 @@ import {
 } from '@nestjs/swagger';
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { UsersService } from '../users/users.service';
+import { A2fService } from '../a2f/a2f.service';
 
 @ApiTags('Auth Module')
 @Controller('auth')
@@ -24,6 +25,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly apiService: ApiService,
     private readonly userService: UsersService,
+    private readonly a2fService: A2fService
   ) {}
 
   @ApiOperation({ summary: 'Authentication with the 42 Api' })
@@ -78,10 +80,21 @@ export class AuthController {
 
     data.avatar =
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
+    
+    const status = await this.authService.CreateNewAccount(data);
 
-    return (await this.authService.CreateNewAccount(data))
-      ? res.status(HttpStatus.CREATED).send()
-      : res.status(HttpStatus.CONFLICT).send();
+    if (!status) return (res.status(HttpStatus.CONFLICT).send());
+
+    if (data.a2f) {
+      const user = await this.userService.findOneByLogin(data.login);
+      const { otpauthUrl } = JSON.parse(user.a2fsecret);
+
+      const qrcode = await this.a2fService.respondWithQRCode(otpauthUrl);
+
+      return (res.status(HttpStatus.CREATED).send(qrcode));
+    }
+  
+    return (res.status(HttpStatus.OK).send());
   }
 
   @Post('login')
@@ -91,9 +104,11 @@ export class AuthController {
     const user = await this.userService.findOneByLogin(login);
 
     if (isEmpty(user) || user.is42 || !(await argon2.verify(user.password, password)))
-      return res.status(401).send();
+      return res.status(HttpStatus.UNAUTHORIZED).send();
 
-    return res.status(200).send({
+    if (user.a2f) return res.status(HttpStatus.OK).send({ a2f: true });
+
+    return res.status(HttpStatus.OK).send({
       token: `Bearer ${await this.authService.generateJwt(user.login)}`,
     });
   }

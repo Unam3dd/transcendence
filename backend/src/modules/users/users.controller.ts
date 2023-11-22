@@ -32,6 +32,7 @@ import {
 import { UserSanitize } from 'src/interfaces/user.interfaces';
 import { User } from './entities/user.entity';
 import { AuthService } from '../auth/auth.service';
+import { A2fService } from '../a2f/a2f.service';
 
 @UseGuards(AuthGuard)
 @ApiTags('Users Module')
@@ -40,6 +41,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
+    private readonly a2fService: A2fService
   ) {}
 
   // Recieving a PUT request to update informations about an user
@@ -56,10 +58,17 @@ export class UsersController {
 
       const user: User = await this.usersService.findOne(User.id);
 
+      if (user.a2f) {
+        const { otpauthUrl } = JSON.parse(user.a2fsecret);
+        return (res.status(HttpStatus.OK).send({ token: await this.authService.generateJwtByUser(user),
+        qrcode: await this.a2fService.respondWithQRCode(otpauthUrl)}));
+      }
+
       return res
         .status(HttpStatus.OK)
-        .send({ token: await this.authService.generateJwtByUser(user) });
+        .send({ token: await this.authService.generateJwtByUser(user), qrcode: null});
     } catch (e) {
+      console.log(e);
       return res.status(HttpStatus.NOT_MODIFIED).send();
     }
   }
