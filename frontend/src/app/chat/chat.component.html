@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div *ngIf="msg.recipient && (this.msg.author.login === this.ws.getUserInformation()?.login || this.msg.author.login === this.ws.targetRecipient?.login) && (this.msg.recipient.login === this.ws.getUserInformation()?.login || this.msg.recipient.login === this.ws.targetRecipient?.login)">
+        <div *ngIf="this.ws.targetRecipient && msg.recipient && (this.msg.author.login === this.ws.getUserInformation()?.login || this.msg.author.login === this.ws.targetRecipient?.login) && (this.msg.recipient.login === this.ws.getUserInformation()?.login || this.msg.recipient.login === this.ws.targetRecipient?.login)">
           <div class="picture-column">
             <div class="thumbnail">  
               <img src={{msg.author.avatar}}/>
