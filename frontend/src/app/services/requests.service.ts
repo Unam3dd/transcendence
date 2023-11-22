@@ -7,9 +7,6 @@ import { NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
-import {Router} from "@angular/router";
-import { Status } from '../enum/status.enum';
-import { NotificationsService } from 'angular2-notifications';
 import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
 @Injectable({

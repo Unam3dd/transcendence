@@ -88,8 +88,6 @@ export class ProfilePageComponent implements OnInit{
     this.cookieService.removeCookie('authorization');
   }
 
-  //update function for update the profile
-  async updateDatas() {
   onFileSelected(event: any) {
     this.file = event.target.files[0] as File;
   }
@@ -104,7 +102,7 @@ export class ProfilePageComponent implements OnInit{
     }
   }
 
-  updateDatasWithoutImage() {
+  async updateDatasWithoutImage() {
     const firstname: string = this.firstname.value as string;
     const lastname: string = this.lastname.value as string;
     const nickname: string = this.nickname.value as string;
