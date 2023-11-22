@@ -58,7 +58,7 @@ export class ProfilePageComponent implements OnInit{
 
   countWin(gameList: GameResult[]): number {
     let counter: number = 0;
-  
+
     gameList.forEach(element => {
       if (element.victory)
         counter++;
@@ -73,10 +73,6 @@ export class ProfilePageComponent implements OnInit{
         counter++;
     });
     return (counter);
-  }
-
-  Logout() {
-    this.cookieService.removeCookie('authorization');
   }
 
   openModal(content: any) {
