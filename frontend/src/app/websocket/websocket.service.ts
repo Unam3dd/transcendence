@@ -14,11 +14,12 @@ export class WebsocketService {
 
   public client: any
 
-  public targetRecipient: any
+  public targetRecipient: ClientInfoInterface | null = null;
 
   public received_messages: Message[] = [];
 
   public client_name: string = 'General';
+  public author_name: string = '';
 
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService) {
