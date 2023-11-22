@@ -72,10 +72,6 @@ export class ProfilePageComponent implements OnInit{
     return (counter);
   }
 
-  Logout() {
-    this.cookieService.removeCookie('authorization');
-  }
-
   openModal(content: any) {
     this.modalService.open(content);
   }

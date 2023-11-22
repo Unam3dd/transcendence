@@ -1,5 +1,4 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
-  <button (click)="Logout()">Logout</button>
   <div class="avatar-container">
     <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
   </div>

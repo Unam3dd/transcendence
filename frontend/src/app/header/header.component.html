@@ -1,20 +1,41 @@
 <header class="navbar navbar-expand-lg">
   <div class="container-fluid">
     <button class="btn btn-dark" type="button" *ngIf="userData$ | async" (click)="moveToHome()">
-      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
-        <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
-      </svg>
+      <i class="bi bi-house display-6"></i>
     </button>
     <div class="navbar-brand mx-auto">
       <h1>TRANSCENDENCE</h1>
     </div>
-    <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbarOffcanvas" aria-controls="navbarOffcanvas" *ngIf="userData$ | async as userData">
+    <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar" *ngIf="userData$ | async as userData" [disabled]="!userData.email">
       <div class="avatar-container">
         <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
       </div>
     </button>
-    <div class="offcanvas-lg offcanvas-end" tabindex="-1" id="navbarOffcanvas">
-      blabla
-    </div>
   </div>
 </header>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="navbar" aria-labelledby="navbarLabel" *ngIf="userData$ | async as userData">
+  <div class="offcanvas-header">
+    <div class="d-flex align-items-center">
+      <div class="avatar-navbar me-3">
+        <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
+      </div>
+      <h5 class="offcanvas-title ml-2" id="sidebarLabel">
+        {{userData.nickName}}
+      </h5>
+    </div>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <hr>
+  <div class="offcanvas-body">
+    <button class="btn btn-dark navbarBtn" data-bs-dismiss="offcanvas" (click)="moveToProfile()">Profile</button>
+    <br>
+    <button class="btn btn-dark navbarBtn mt-3" data-bs-dismiss="offcanvas" (click)="moveToGame()">Game</button>
+    <br>
+    <button class="btn btn-dark navbarBtn mt-3" data-bs-dismiss="offcanvas" (click)="moveToChat()">Chat</button>
+  </div>
+  <hr>
+  <div class="m-3">
+    <button class="btn btn-danger" type="button" (click)="Logout()">Logout</button>
+  </div>
+</div>
