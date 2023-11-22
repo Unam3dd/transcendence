@@ -20,3 +20,12 @@ export const routeGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: 
   else
     return router.createUrlTree(['/']);
 };
+
+export const loginGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {
+  const router = inject(Router);
+
+  if (checkAuth())
+    return router.createUrlTree(['/home']);
+  else
+    return true;
+};
