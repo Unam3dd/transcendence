@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
-import { Friends } from '../interfaces/friends.interface';
 import { UserFriendsInfo } from '../interfaces/user.interface';
 import { NavigationEnd, Router } from '@angular/router'
 import { Subject, Subscription, takeUntil } from 'rxjs';
@@ -19,14 +18,14 @@ export class FriendsComponent implements OnInit {
 
   client: WsClient = this.ws.getClient();
 
-  friendList: Friends[] = [];
+  friendList: UserFriendsInfo[] = [];
   approvedFriends: UserFriendsInfo[] = [];
   pendingFriends: UserFriendsInfo[] = [];
 
   unsubscribeObs = new Subject<void>();
 
   test = new Subscription();
-  showContent: boolean = false;
+  showContent: boolean = true;
   display: boolean = true;
 
   ngOnInit() {
@@ -39,34 +38,46 @@ export class FriendsComponent implements OnInit {
           this.display = true;
       }
     });
-  
-    this.refreshList();
+
+    this.client.emit('listFriends');
+
+    this.client.on('getListFriends', (payload: UserFriendsInfo[]) => {
+      this.friendList = payload;
+      if (!this.friendList)
+        return ;
+      this.refreshList();
+    })
+
+    this.client.on('getStatus', (payload: UserFriendsInfo[]) => {
+      console.log("lala")
+      if (this.approvedFriends.length === 0)
+        return ;
+      for (let el of payload)
+      {
+        const found = this.approvedFriends.find( (user) => user.id === el.id)
+        if (found)
+        {
+          found.onlineState = el.onlineState;
+        }
+      }
+    });
   }
 
-  refreshList()
-  {
-    this.friendList = [];
-    this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
-      this.friendList = friends;
+  refreshList() {
+    this.approvedFriends = [];
+    this.pendingFriends = [];
 
-      this.approvedFriends = [];
-      this.pendingFriends = [];
+    if (!this.friendList)
+      return ;
 
-      friends.forEach((element) => {
-        this.requestsService.getUserInfo(element.user2)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((user) => {
-          const friendsInfo: UserFriendsInfo = { 
-            ...user, 
-            'applicant': element.applicant,
-            'showOpt': false
-          }
-          if (element.status === false && element.applicant === false) {
-            this.pendingFriends.push(friendsInfo);
-          }
-          else
-            this.approvedFriends.push(friendsInfo);
-          });
-        });
-    });
+    this.friendList.forEach((element) => {
+        if (element.status === false && element.applicant === false) {
+          this.pendingFriends.push(element);
+        }
+        else
+          this.approvedFriends.push(element);
+      });
+      this.client.emit('refreshStatus');
   }
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
@@ -119,7 +130,6 @@ export class FriendsComponent implements OnInit {
 
   toggleContent() {
     this.showContent = !this.showContent;
-    this.ngOnInit();
   }
 
   toggleOption(user: UserFriendsInfo) {
@@ -129,6 +139,8 @@ export class FriendsComponent implements OnInit {
 
   ngOnDestroy()
   {
+    this.client.off('getStatus');
+    this.client.off('getLisFriends');
     this.unsubscribeObs.next();
     this.unsubscribeObs.complete();
   }

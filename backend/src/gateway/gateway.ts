@@ -7,14 +7,17 @@ import {
   ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { OnlineState } from 'src/enum/status.enum';
 import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
-import { ClientInfo, UserSanitize } from 'src/interfaces/user.interfaces';
+import { ClientInfo, FriendsUser, UserFriendsInfo, UserSanitize, UserStatus } from 'src/interfaces/user.interfaces';
 import { LobbyServices } from 'src/modules/remote-game/lobbiesServices';
+import { FriendsService } from 'src/modules/friends/friends.service';
+import { UsersService } from 'src/modules/users/users.service';
 
 @Injectable()
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
-  constructor(private readonly lobbyServices: LobbyServices) {}
+  constructor(private readonly lobbyServices: LobbyServices, private readonly friendsService: FriendsService, private readonly usersService: UsersService) {}
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
   server: Server;
@@ -43,9 +46,10 @@ export class EventsGateway {
         this.clientList.push({
           ...JSON.parse(msg),
           client,
+          onlineState: OnlineState.online
         });
       }
-
+      this.statusChange(client, OnlineState.online);
       this.server.emit('newArrival', `${login} has join the transcendence !`);
     } catch (e) {
       console.error(e);
@@ -175,6 +179,58 @@ export class EventsGateway {
 
     /** End of Remote games functions */
 
+    @SubscribeMessage('statusChange') 
+    statusChange(@ConnectedSocket() client: Socket, onlineState: OnlineState) {
+
+      const targetClient = this.clientList.find((el) => el.client.id === client.id);
+      let payload: UserStatus[] = []
+      const info: UserStatus = {
+        'id': targetClient.id,
+        'onlineState': onlineState,
+      }
+      payload.push(info);
+      this.server.emit('getStatus', payload);
+    }
+
+    @SubscribeMessage('refreshStatus')
+    refreshStatus(@ConnectedSocket() client: Socket) {
+
+      let payload: UserStatus[] = [];
+
+      for (const el of this.clientList)
+      {
+        const info: UserStatus = {
+          'id': el.id,
+          'onlineState': el.onlineState,
+        }
+        payload.push(info);
+      }
+      client.emit('getStatus', payload);
+    }
+
+    @SubscribeMessage('listFriends')
+    async ListFriends(@ConnectedSocket() client: Socket) {
+
+      let userFriendsInfo: UserFriendsInfo[] = [];
+  
+      const targetClient = this.clientList.find((el) => el.client.id === client.id);
+  
+      const friendsList = await this.friendsService.listFriends(targetClient.id, false);
+      
+      for (const el of friendsList) {
+        const user = await this.usersService.findOneSanitize(el.user2);
+
+        const friendInfo: UserFriendsInfo = {
+          ...user,
+          'applicant': el.applicant,
+          'status': el.status,
+          'onlineState': OnlineState.offline,
+          'showOpt': false
+        }
+        userFriendsInfo.push(friendInfo);
+      }
+      client.emit('getListFriends', userFriendsInfo);
+    }
   //Detect clients disconnection
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
@@ -183,6 +239,7 @@ export class EventsGateway {
     this.lobbyServices.clientDisconnect(client);
     for (const el of this.clientList) {
       if (el.client.id === client.id) {
+        this.statusChange(client, OnlineState.offline);
         el.client.disconnect();
         this.server.emit('newDepart', `${el.nickName} (${el.login}) has left transcendence`);
         const index = this.clientList.indexOf(el);
