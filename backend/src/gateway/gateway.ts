@@ -1,3 +1,4 @@
+import { Injectable } from '@nestjs/common';
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -9,11 +10,14 @@ import { Server, Socket } from 'socket.io';
 import { ClientInfo, ListUserSanitizeInterface } from 'src/interfaces/user.interfaces';
 import { BlockService } from 'src/modules/block/block.service';
 import { BlockedUser } from 'src/interfaces/user.interfaces';
+import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
+import { ClientInfo, UserSanitize } from 'src/interfaces/user.interfaces';
+import { LobbyServices } from 'src/modules/remote-game/lobbiesServices';
 
+@Injectable()
 @WebSocketGateway(3001, { namespace: 'events', cors: true })
 export class EventsGateway {
-
-  constructor (private block: BlockService) {}
+  constructor(private readonly lobbyServices: LobbyServices, private block: BlockService) {}
 
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
@@ -33,16 +37,16 @@ export class EventsGateway {
   }
 
   @SubscribeMessage('join')
-  newArrival(@MessageBody() msg: string, @ConnectedSocket() client: Socket) {
+  newArrival(@ConnectedSocket() client: Socket, @MessageBody() msg: string) {
     try {
       const { id, login } = JSON.parse(msg);
 
       const found = this.clientList.find((el) => el.id === id);
-
+  
       if (!found) {
         this.clientList.push({
           ...JSON.parse(msg),
-          client
+          client,
         });
       }
 
@@ -60,17 +64,118 @@ export class EventsGateway {
     this.server.emit('newMessage', message);
   }
 
+  @SubscribeMessage('disconnect')
+  disconnectUser(
+    @MessageBody() body: string,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const { login } = JSON.parse(body);
+
+    if (!client.disconnected) client.disconnect();
+    this.server.emit('newDepart', `${login} has just left the transcendence !`);
+  }
+
   @SubscribeMessage('newJoinChat')
   JoinChat(@MessageBody() body: string) {
     this.server.emit('newJoinChat', body);
     this.ListClient();
+
+  /** Remote games functions */
+
+  @SubscribeMessage('privateGame')
+  CreatePrivateLobby(@MessageBody() body: playPayload) {
+    const opponent = this.clientList.find(
+      (el) => el.nickName === body.opponentNickname,
+    );
+    const player = this.clientList.find((el) => el.nickName === body.nickName);
+    if (!opponent || !player) return;
+
+    const gameId = this.lobbyServices.createPrivateLobby(
+      player,
+      opponent,
+      this.server,
+    );
+    if (!gameId) return;
+
+    opponent.client.emit('gameInvitation', {
+      gameId: gameId,
+      host: player.nickName,
+      hostAvatar: player.avatar,
+    });
   }
 
+  @SubscribeMessage('declinePrivateGame')
+  declinePrivateGame(@MessageBody() body: playPayload) {
+    const lobby = this.lobbyServices.lobbies.get(body.gameId);
+    if (!lobby) return;
+    lobby.sendMessageToAll('declined', null);
+    this.lobbyServices.destroyLobby(lobby);
+  }
+
+  @SubscribeMessage('joinPrivateGame')
+  joinPrivateGame(
+    @MessageBody() body: playPayload,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const player = this.clientList.find((el) => el.nickName === body.nickName);
+    if (!player) return;
+    const playerInfo: PlayerInfo = {
+      socket: client,
+      nickName: player.nickName,
+      avatar: player.avatar,
+      score: 0,
+    };
+    const lobby = this.lobbyServices.lobbies.get(body.gameId);
+    if (!lobby) return;
+    lobby.joinPrivateLobby(playerInfo);
+  }
+
+  @SubscribeMessage('joinGame')
+  CreateLobby(
+    @MessageBody() body: playPayload,
+    @ConnectedSocket() client: Socket,
+  ) {
+    const player = this.clientList.find((el) => el.nickName === body.nickName);
+    if (!player) return;
+    const playerInfo: PlayerInfo = {
+      socket: client,
+      nickName: player.nickName,
+      avatar: player.avatar,
+      score: 0,
+    };
+    this.lobbyServices.findLobby(playerInfo, body.size, this.server);
+  }
+
+  @SubscribeMessage('pressButton')
+  pressButton(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() body: playPayload,
+  ) {
+    const player = this.lobbyServices.findUserBySocket(client);
+    if (!player) return;
+    const lobby = this.lobbyServices.findLobbyByPlayer(player);
+    if (!lobby) return;
+    lobby.gameInstance.pressButton(player, body.button);
+  }
+
+  @SubscribeMessage('quitLobby')
+  quitLobby(@ConnectedSocket() client: Socket) {
+    const player = this.lobbyServices.findUserBySocket(client);
+    if (!player) return;
+
+    const lobby = this.lobbyServices.findLobbyByPlayer(player);
+    if (lobby && lobby.players.length != lobby.fullSize)
+      lobby.lobbyManager.leaveLobby(player, lobby);
+  }
+
+   /** End of Remote games functions */
+
   //Detect clients disconnection
+
   handleDisconnect(@ConnectedSocket() client: Socket) {
 
-    console.log('New user just disconnected !');
-
+    console.log('new user just disconnected !');
+    this.lobbyServices.clientDisconnect(client);
     for (const el of this.clientList) {
       if (el.client.id === client.id) {
         el.client.disconnect();
@@ -95,11 +200,12 @@ export class EventsGateway {
         nickName: el.nickName,
         avatar: el.avatar,
         clientID: el.client.id
-      };
-
+        return;
+      }
+      
       loginArray.push(usanitize);
-    });
-    this.server.emit('listClient', loginArray);
+    }
+     this.server.emit('listClient', loginArray);
   }
 
   @SubscribeMessage('listBlocked')

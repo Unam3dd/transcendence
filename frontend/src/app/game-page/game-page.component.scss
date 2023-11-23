@@ -1,6 +1,29 @@
+.roundInfo {
+  padding-bottom: 5%;
+}
+
+.fight {
+  width: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+
+.roundInfo{
+  width: 50%;
+  display: flex;
+  text-align: center;
+  align-items: center;
+}
+
 .gameDiv {
   height: 70%;
   width: 70%;
+}
+
+.username {
+  margin-left: 15px;
+  margin-right: 15px;
 }
 
 .game {

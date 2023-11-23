@@ -84,7 +84,7 @@ export class User {
     type: 'varchar',
     nullable: false,
   })
-  @IsUrl({}, { message: 'avatar must be an url !' })
+  @IsString({ message: 'avatar must be a string !'})
   avatar: string;
 
   @Column({
@@ -93,6 +93,13 @@ export class User {
   })
   @IsBoolean({ message: 'is42Account must be a boolean !' })
   is42: boolean;
+
+  @Column({
+    type: 'varchar',
+    nullable: true
+  })
+  @IsString({ message: 'a2fsecret must be a string !'})
+  a2fsecret: string | null;
 
   @CreateDateColumn()
   @IsDate({ message: 'createdAt must be a Date' })

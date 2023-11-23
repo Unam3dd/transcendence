@@ -6,20 +6,23 @@ import {ProfilePageComponent} from "./profile-page/profile-page.component";
 import {GamePageComponent} from "./game-page/game-page.component";
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
-import {UpdateProfileComponent} from "./update-profile/update-profile.component";
 import { RegisterComponent } from './register/register.component';
 import {GameMenuComponent} from "./game-menu/game-menu.component";
+import { RemoteGameComponent } from './remote-game/remote-game.component';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { routeGuard } from './route.guard';
 
 const routes: Routes = [
   {path: '', component: ConnectionComponent},
-  {path: 'home', component: HomePageComponent},
-  {path: 'profile', component: ProfilePageComponent},
-  {path: 'profile/update', component: UpdateProfileComponent},
-  {path: 'game-menu', component: GameMenuComponent},
-  {path: 'game', component: GamePageComponent},
-  {path: 'chat', component: ChatPageComponent},
-  {path: 'user/:userId', component: UserComponent},
-  {path: 'register', component: RegisterComponent}
+  {path: 'home', component: HomePageComponent, canActivate:[routeGuard],},
+  {path: 'profile', component: ProfilePageComponent, canActivate:[routeGuard],},
+  {path: 'game-menu', component: GameMenuComponent, canActivate:[routeGuard],},
+  {path: 'game', component: GamePageComponent, canActivate:[routeGuard],},
+  {path: 'game/remote', component: RemoteGameComponent, canActivate:[routeGuard],},
+  {path: 'chat', component: ChatPageComponent, canActivate:[routeGuard],},
+  {path: 'user/:userId', component: UserComponent, canActivate:[routeGuard],},
+  {path: 'register', component: RegisterComponent},
+  {path: '**', component: NotFoundComponent},
 ];
 
 @NgModule({

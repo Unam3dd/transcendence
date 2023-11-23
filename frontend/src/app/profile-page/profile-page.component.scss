@@ -1,12 +1,43 @@
-.avatar {
+.avatar-container {
   width: 150px;
   height: 150px;
-  border-radius: 50%;
   overflow: hidden;
 }
 
-.avatar img {
+.avatar-container img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+.profile-page #logout {
+  position: absolute;
+}
+
+.line {
+  max-height: 30px;
+  overflow: hidden;
+  margin-right: 10px;
+}
+
+.line #key {
+  color: black;
+  display: inline-block;
+  font-weight: bold;
+}
+
+ .matchHistory {
+  width: 350px;
+}
+
+.history {
+  max-height: 200px;
+  width: 100%;
+  overflow: auto;
+}
+
+.line #value {
+  display: inline-block;
+  margin-left: 5px;
+  color: black;
 }

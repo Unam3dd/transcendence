@@ -17,7 +17,7 @@ export class HomePageComponent implements OnInit {
   userData$!: Observable<UserInterface> | null;
   nickname = new FormControl('');
   count = 0;
-  email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{3}$/)]);
+  email = new FormControl('', [Validators.required, Validators.pattern(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/)]);
 
   constructor(private router: Router,
               private requestsService: RequestsService,

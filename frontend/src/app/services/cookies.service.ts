@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { isJWT } from 'class-validator';
+import { LOGIN_PAGE } from '../env';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class CookiesService {
   }
 
   getCookie(name: string): string | null {
+    this.cookies = document.cookie.split(' ');
     for (const cookie of this.cookies) {
       const [key, value] = cookie.split('=');
       if (key === name) return (value);
@@ -24,6 +26,15 @@ export class CookiesService {
 
   setCookie(key: string, value: string) {
     document.cookie = `${key}=${encodeURI(value)}`;
+  }
+
+  removeCookie(key: string) {
+    document.cookie = `${key}=;expires=${new Date(0).toUTCString()}; Path=/`;
+    window.location.href = `${LOGIN_PAGE}`;
+  }
+
+  removeOnlyCookie(key: string) {
+    document.cookie = `${key}=;expires=${new Date(0).toUTCString()}; Path=/`;
   }
 
   getToken(): string | null {

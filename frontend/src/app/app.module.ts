@@ -13,24 +13,28 @@ import { FooterComponent } from './footer/footer.component';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import { ChatComponent } from './chat/chat.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
-import { UpdateProfileComponent } from './update-profile/update-profile.component';
 import { WebsocketModule } from './websocket/websocket.module';
 import { WebsocketService } from './websocket/websocket.service';
 import { FriendsComponent } from './friends/friends.component';
 import { ChatPageComponent } from './chat-page/chat-page.component';
 import { UserComponent } from './user/user.component';
-import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {NgbActiveModal, NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
+import { RemoteGameComponent } from './remote-game/remote-game.component';
 import { Options, SimpleNotificationsModule } from 'angular2-notifications';
 import { ChatProfileComponent } from './chat-profile/chat-profile.component';
+import { GameInvitationComponent } from './modals/game-invitation/game-invitation.component';
+import { SelectPlayerModalComponent } from './modals/select-player-modal/select-player-modal.component';
+import { EndMatchComponent } from './modals/end-match/end-match.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 const NotifcationOpt: Options = {
   position: ["top", "right"],
   showProgressBar: true,
-  clickToClose: true
+  timeOut: 3000
 }
-
+ 
 function initializeWebSocket(ws: WebsocketService) {
   return async () => {
     ws.initializeWebsocketService();
@@ -45,16 +49,20 @@ function initializeWebSocket(ws: WebsocketService) {
     ConnectionComponent,
     HomePageComponent,
     GamePageComponent,
+    RemoteGameComponent,
     ProfilePageComponent,
     FooterComponent,
     ChatComponent,
-    UpdateProfileComponent,
     FriendsComponent,
     ChatPageComponent,
     UserComponent,
     RegisterComponent,
     GameMenuComponent,
     ChatProfileComponent,
+    GameInvitationComponent,
+    SelectPlayerModalComponent,
+    EndMatchComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
@@ -72,7 +80,8 @@ function initializeWebSocket(ws: WebsocketService) {
     useFactory: initializeWebSocket,
     deps: [WebsocketService],
     multi: true
-  }],
+  },
+  NgbActiveModal],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

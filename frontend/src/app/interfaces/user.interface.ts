@@ -1,4 +1,5 @@
 import { Socket } from "socket.io-client";
+import { OnlineState } from "../enum/status.enum";
 
 export interface UserInterface {
     id?: number;
@@ -11,6 +12,7 @@ export interface UserInterface {
     a2f?: boolean | null;
     avatar?: string | null;
     is42: boolean;
+    a2fsecret: string | null;
     createdAt?: Date;
     updatedAt?: Date;
 }
@@ -50,4 +52,5 @@ export interface BlockedUser {
     id: number;
     user1: number;
     user2: number;
+    applicant?: boolean;
 }

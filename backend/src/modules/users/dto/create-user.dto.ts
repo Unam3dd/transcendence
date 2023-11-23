@@ -48,10 +48,14 @@ export class CreateUserDto {
   a2f: boolean;
 
   @IsOptional()
-  @IsUrl({}, { message: 'URL is required !' })
+  @IsString({ message: 'String or URL is required !' })
   avatar: string;
 
   @IsOptional()
   @IsBoolean({ message: 'Boolean is required !' })
   is42: boolean;
+
+  @IsOptional()
+  @IsString({ message: 'a2fsecret must be a string !'})
+  a2fsecret: string;
 }
