@@ -46,11 +46,11 @@ export interface Message {
 
 export interface UserFriendsInfo extends UserSanitizeInterface {
     showOpt: boolean;
+    applicant?: boolean;
 }
 
 export interface BlockedUser {
     id: number;
     user1: number;
     user2: number;
-    applicant?: boolean;
 }

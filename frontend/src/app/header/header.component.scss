@@ -1,28 +1,11 @@
-.global {
+header {
+  background-color: #232323;
   height: 80px;
-  line-height: 80px;
-  text-align: center;
-  background-image: radial-gradient(at 50% -100%, rgb(120, 120, 120) 30%, rgb(23, 23, 23) 65%);
-  color: #ffd24a;
-  text-shadow: 0px 2px 4px #1d180d;
 }
 
 h1 {
   color: white;
   margin: 0;
-  font-size: 250%;
-  font-weight: 100;
-  letter-spacing: 9px;
-}
-
-header {
-  width: 100%;
-  position: absolute;
-  top: 0;
-  background: linear-gradient(#957640aa 0%, #ffecb3aa 30%, #cfc09faa 40%, #816221aa 60%, #ffecb3aa 90%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 .avatar-container {

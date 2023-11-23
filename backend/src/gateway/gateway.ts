@@ -11,7 +11,6 @@ import { ClientInfo, ListUserSanitizeInterface } from 'src/interfaces/user.inter
 import { BlockService } from 'src/modules/block/block.service';
 import { BlockedUser } from 'src/interfaces/user.interfaces';
 import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
-import { ClientInfo, UserSanitize } from 'src/interfaces/user.interfaces';
 import { LobbyServices } from 'src/modules/remote-game/lobbiesServices';
 
 @Injectable()
@@ -79,6 +78,7 @@ export class EventsGateway {
   JoinChat(@MessageBody() body: string) {
     this.server.emit('newJoinChat', body);
     this.ListClient();
+  }
 
   /** Remote games functions */
 
@@ -199,12 +199,11 @@ export class EventsGateway {
         login: el.login,
         nickName: el.nickName,
         avatar: el.avatar,
-        clientID: el.client.id
-        return;
+        clientID: el.client.id,
       }
       
       loginArray.push(usanitize);
-    }
+    });
      this.server.emit('listClient', loginArray);
   }
 

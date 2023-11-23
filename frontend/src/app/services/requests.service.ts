@@ -7,8 +7,6 @@ import { NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
-import {Router} from "@angular/router";
-import { Status } from '../enum/status.enum';
 import { BlockedUser } from '../interfaces/user.interface';
 import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
