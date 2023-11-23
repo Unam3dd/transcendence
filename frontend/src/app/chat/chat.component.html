@@ -6,7 +6,7 @@
     <ul class="messages">
       <div class="capsule" *ngFor="let msg of this.ws.received_messages">
 
-        <div *ngIf="!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null">
+        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
           <div class="picture-column">
             <div class="thumbnail">  
               <img src={{msg.author.avatar}}/>
@@ -18,7 +18,7 @@
           </div>
         </div>
 
-        <div *ngIf="!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login)">
+        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login))">
           <div class="picture-column">
             <div class="thumbnail">  
               <img src={{msg.author.avatar}}/>

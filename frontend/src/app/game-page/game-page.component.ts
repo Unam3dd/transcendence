@@ -8,6 +8,8 @@ import { SelectPlayerModalComponent } from '../modals/select-player-modal/select
 import { v4 } from 'uuid';
 import { NotificationsService } from 'angular2-notifications';
 import { EndMatchComponent } from '../modals/end-match/end-match.component';
+import { WebsocketService } from '../websocket/websocket.service';
+import { Socket } from 'socket.io-client';
 
 enum GameMode {
   SOLO = 'solo',
@@ -24,6 +26,7 @@ enum GameMode {
 export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   userNickame: string = '';
+  client = {} as Socket;
 
   gameId: string = '';
   gameSize: number = 0;
@@ -47,7 +50,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService) {
+  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
     
     this.requestsService.getLoggedUserInformation()?.subscribe((data) => {
       this.userNickame = data.nickName as string;
@@ -180,6 +183,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.roundStart = true;
     this.currentMatch.push(this.currentRound[0]);
     this.currentMatch.push(this.currentRound[1]);
+    this.client = this.ws.getClient();
+    this.ws.sendSystemMessage('message','A new match between ' + this.currentRound[0].nickName + ' and ' + this.currentRound[1].nickName + ' will begin' );
     this.launchGame();
   }
 
@@ -203,6 +208,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     {
       this.currentMatch.push(this.currentRound[0]);
       this.currentMatch.push(this.currentRound[1]);
+      //send Message to chat
+      this.ws.sendSystemMessage('message','A new match between ' + this.currentRound[0].nickName + ' and ' + this.currentRound[1].nickName + ' will begin' );
       console.log("next Match in 3 secondes!");
       setTimeout(() => {
         this.launchGame();

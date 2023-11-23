@@ -95,6 +95,33 @@ export class WebsocketService {
       this.client.emit(path, message);
     }
 
+    sendSystemMessage(path: string, data: string) {
+      const user: UserSanitizeInterface | null = this.getUserInformation();
+
+      if (!user) return ;
+
+      const client: Socket = this.getClient();
+
+      const clientInfo: ClientInfoInterface = {
+        ...user,
+        clientID: client.id
+      }
+
+      const message: Message = {
+        author: {
+          login: 'sy',
+          id: 0,
+          avatar: '',
+          clientID: '',
+          nickName: ''
+        },
+        content: data,
+        createdAt: new Date(),
+        recipient: null
+      }
+      this.client.emit(path, message);
+    }
+
     listClient() {
       const client = this.getClient();
 

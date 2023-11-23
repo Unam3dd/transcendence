@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { WebsocketService } from '../websocket/websocket.service';
 import { BlockedUser, ClientInfoInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-chat-profile',
@@ -12,7 +13,7 @@ export class ChatProfileComponent {
 
   listClients: ClientInfoInterface[] = [];
 
-  constructor (public ws: WebsocketService, public req: RequestsService) {}
+  constructor (public ws: WebsocketService, public req: RequestsService, private readonly router: Router) {}
 
   ngOnInit() {
     const client = this.ws.getClient();
@@ -62,5 +63,25 @@ export class ChatProfileComponent {
 
       client.emit('listBlocked');
     })
+  }
+
+  inviteUser(nickName: string) {
+    const client = this.ws.getClient();
+
+    this.ws.privateGame(client, nickName);
+    this.router.navigate(['game/remote']);
+  }
+
+  visitUser(id: number)
+  {
+    const page: string = '/user/' + id;
+    this.router.navigate([page]);
+  }
+
+  ngOnDestroy()
+  {
+    const client = this.ws.getClient();
+    client.off('listClient');
+    client.off('getListBlocked');
   }
 }

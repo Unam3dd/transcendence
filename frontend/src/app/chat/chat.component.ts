@@ -31,6 +31,7 @@ export class ChatComponent implements OnInit {
     })
 
     client.on('newMessage', (msg) => {
+      console.log(msg);
       this.ws.received_messages.push(msg);
     })
 
@@ -48,5 +49,14 @@ export class ChatComponent implements OnInit {
   IsBlocked(id: number) {
     const user = this.ws.BlockUserList.find((el) => el.user2 === id);
     return (user != null);
+  }
+
+  ngOnDestroy()
+  {
+    const client: WsClient = this.ws.getClient();
+
+    client.off('newJoinChat');
+    client.off('newDepart');
+    client.off('newMessage');
   }
 }
