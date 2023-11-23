@@ -7,6 +7,7 @@ import { NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
+import { BlockedUser } from '../interfaces/user.interface';
 import { GameResult, PlayerResult } from '../interfaces/game.interface';
 
 @Injectable({
@@ -224,6 +225,14 @@ export class RequestsService {
     return this.http.post<HttpResponse<HttpStatusCode>>(`${NESTJS_URL}/block/add`, {
       user1: userId, user2: targetId }, { headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
+  }
+
+  listBlockedUser(): Observable<BlockedUser[]> | null {
+    const token = this.cookieService.getToken();
+
+    if (!token) return (null);
+
+    return (this.http.get<BlockedUser[]>(`${NESTJS_URL}/block/list`, { headers: new HttpHeaders().append('authorization', `Bearer ${token}`)})).pipe(catchError(this.handleError));
   }
 
   /** Register new User without 42 API */

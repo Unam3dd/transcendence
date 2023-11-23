@@ -8,6 +8,10 @@ export interface UserSanitize {
   avatar: string;
 }
 
+export interface ListUserSanitizeInterface extends UserSanitize {
+  clientID: string;
+}
+
 export interface ClientInfo extends UserSanitize {
   client: Socket;
   onlineState: OnlineState;
@@ -40,3 +44,10 @@ export interface UserStatus {
   id: number;
   onlineState: OnlineState;
 }
+
+export interface BlockedUser {
+  id: number;
+  user1: number;
+  user2: number;
+}
+

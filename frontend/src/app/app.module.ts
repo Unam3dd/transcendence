@@ -23,6 +23,7 @@ import { RegisterComponent } from './register/register.component';
 import { GameMenuComponent } from './game-menu/game-menu.component';
 import { RemoteGameComponent } from './remote-game/remote-game.component';
 import { Options, SimpleNotificationsModule } from 'angular2-notifications';
+import { ChatProfileComponent } from './chat-profile/chat-profile.component';
 import { GameInvitationComponent } from './modals/game-invitation/game-invitation.component';
 import { SelectPlayerModalComponent } from './modals/select-player-modal/select-player-modal.component';
 import { EndMatchComponent } from './modals/end-match/end-match.component';
@@ -57,6 +58,7 @@ function initializeWebSocket(ws: WebsocketService) {
     UserComponent,
     RegisterComponent,
     GameMenuComponent,
+    ChatProfileComponent,
     GameInvitationComponent,
     SelectPlayerModalComponent,
     EndMatchComponent,
