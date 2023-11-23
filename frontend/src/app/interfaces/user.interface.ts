@@ -1,3 +1,4 @@
+import { Socket } from "socket.io-client";
 import { OnlineState } from "../enum/status.enum";
 
 export interface UserInterface {
@@ -23,6 +24,10 @@ export interface UserSanitizeInterface {
     avatar: string;
 }
 
+export interface ClientInfoInterface extends UserSanitizeInterface {
+    clientID: string;
+}
+
 export interface JWTPayload {
     sub: number;
     login: string;
@@ -33,17 +38,19 @@ export interface JWTPayload {
 }
 
 export interface Message {
-    author: UserSanitizeInterface;
+    author: ClientInfoInterface;
     content: string;
     createdAt: Date;
-    channel: string | number;
-}
-
-export interface PrivateMessage extends Message {
-    recipient: UserSanitizeInterface;
+    recipient: ClientInfoInterface| null;
 }
 
 export interface UserFriendsInfo extends UserSanitizeInterface {
     showOpt: boolean;
     applicant?: boolean;
+}
+
+export interface BlockedUser {
+    id: number;
+    user1: number;
+    user2: number;
 }

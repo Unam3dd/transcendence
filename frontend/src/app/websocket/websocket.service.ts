@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
 import { CookiesService } from '../services/cookies.service';
 import { JwtService } from '../services/jwt.service';
-import { JWTPayload, UserSanitizeInterface } from '../interfaces/user.interface';
+import { JWTPayload, UserSanitizeInterface, Message, ClientInfoInterface } from '../interfaces/user.interface';
 import { gameInvitationPayload } from '../interfaces/game.interface';
 import { WS_GATEWAY } from '../env';
-import { io } from 'socket.io-client';
+import { Socket, io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
+import { RequestsService } from '../services/requests.service';
+import { BlockedUser } from '../interfaces/user.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
 import { NotificationsService } from 'angular2-notifications';
@@ -18,6 +20,15 @@ import { EndMatchComponent } from '../modals/end-match/end-match.component';
 export class WebsocketService {
 
   public client: any
+
+  public targetRecipient: ClientInfoInterface | null = null;
+
+  public received_messages: Message[] = [];
+
+  public client_name: string = 'General';
+  public author_name: string = '';
+
+  public BlockUserList: BlockedUser[] = [];
  
   constructor(private readonly cookieService: CookiesService,
     private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService) 
@@ -64,6 +75,43 @@ export class WebsocketService {
 
   getClient(): WsClient { return (this.client); }
 
+  sendMessage(path: string, data: any) {
+      const user: UserSanitizeInterface | null = this.getUserInformation();
+
+      if (!user) return ;
+
+      const client: Socket = this.getClient();
+
+      const message: Message = {
+        author: {
+          ...user,
+          clientID: client.id
+        },
+        content: data,
+        createdAt: new Date(),
+        recipient: this.targetRecipient
+      }
+
+      this.client.emit(path, message);
+    }
+
+    listClient() {
+      const client = this.getClient();
+
+      client.emit('listClient', null);
+    }
+
+    resetAllListener() {
+      const client = this.getClient();
+
+      client.removeAllListeners();
+    }
+
+    removeListener(channel: string) {
+      const client = this.getClient();
+      client.removeListener(channel);
+    }
+  
   sendHelloChat(client: WsClient): void {
     const user = this.getUserInformation()
 

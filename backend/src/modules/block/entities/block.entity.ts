@@ -4,11 +4,9 @@ import {
   Entity,
   OneToOne,
   PrimaryGeneratedColumn,
-  Unique,
 } from 'typeorm';
 
 @Entity()
-@Unique(['user1', 'user2'])
 export class Block {
   @PrimaryGeneratedColumn('increment')
   id: number;

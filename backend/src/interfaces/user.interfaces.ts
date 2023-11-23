@@ -7,6 +7,10 @@ export interface UserSanitize {
   avatar: string;
 }
 
+export interface ListUserSanitizeInterface extends UserSanitize {
+  clientID: string;
+}
+
 export interface ClientInfo extends UserSanitize {
   client: Socket;
 }
@@ -17,4 +21,10 @@ export interface JWTPayload {
   nickName: string;
   iat: number;
   exp: number;
+}
+
+export interface BlockedUser {
+  id: number;
+  user1: number;
+  user2: number;
 }
