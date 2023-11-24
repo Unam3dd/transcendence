@@ -34,7 +34,7 @@
                         <p class="username d-flex align-items-center h-100">{{user.nickName}}</p>
                     </div>
                 </div>
-
+                <p>{{user.onlineState}}</p>
                 <div *ngIf="user.showOpt" class="option">
                     <i class="bi-messager" style="font-size: 1.2rem; color: rgb(86, 95, 228);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
                     <i class="bi-person-fill-x" style="font-size: 1.2rem; color: rgb(216, 84, 52);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>

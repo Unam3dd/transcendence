@@ -7,6 +7,7 @@ import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import { HttpClient } from '@angular/common/http';
+import { OnlineState } from '../enum/status.enum';
 
 @Component({
   selector: 'app-game-menu',
@@ -29,6 +30,7 @@ export class GameMenuComponent implements OnInit{
   moveToGame(mode: string, size: string | null) {
     if (mode === 'remote')
     {
+     // this.ws.changeStatus(this.client, OnlineState.ingame);
       this.findGame();
       this.router.navigate(['game/remote']);
     }
@@ -37,10 +39,14 @@ export class GameMenuComponent implements OnInit{
       this.modalService.dismissAll();
       if (!size)
         return ;
+      this.ws.changeStatus(this.client, OnlineState.ingame);
       this.router.navigate(['game'], {queryParams: {mode: mode, size: size}});
     }
     else
+    {
+      this.ws.changeStatus(this.client, OnlineState.ingame);
       this.router.navigate(['game'], {queryParams: {mode: mode}});
+    }
   }
 
   findGame(): void {

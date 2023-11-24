@@ -13,6 +13,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
 import { NotificationsService } from 'angular2-notifications';
 import { EndMatchComponent } from '../modals/end-match/end-match.component';
+import { OnlineState } from '../enum/status.enum';
 
 @Injectable({
   providedIn: 'root'
@@ -65,6 +66,7 @@ export class WebsocketService {
       });
 
       this.client.on('result', (payload: boolean) => {
+        this.changeStatus(this.client, OnlineState.online);
         this.printGameResult(payload);
     });
   } 
@@ -92,6 +94,33 @@ export class WebsocketService {
         recipient: this.targetRecipient
       }
 
+      this.client.emit(path, message);
+    }
+
+    sendSystemMessage(path: string, data: string) {
+      const user: UserSanitizeInterface | null = this.getUserInformation();
+
+      if (!user) return ;
+
+      const client: Socket = this.getClient();
+
+      const clientInfo: ClientInfoInterface = {
+        ...user,
+        clientID: client.id
+      }
+
+      const message: Message = {
+        author: {
+          login: 'sy',
+          id: 0,
+          avatar: '',
+          clientID: '',
+          nickName: ''
+        },
+        content: data,
+        createdAt: new Date(),
+        recipient: null
+      }
       this.client.emit(path, message);
     }
 
@@ -195,6 +224,7 @@ export class WebsocketService {
       "nickName": user.nickName,
       "size": size,
     }
+    this.changeStatus(this.client, OnlineState.ingame);
     client.emit('joinGame', payload);
   }
 
@@ -219,6 +249,11 @@ export class WebsocketService {
     });
     modalRef.componentInstance.result = victory;
     modalRef.componentInstance.local = false;
+  }
+
+  changeStatus(client: WsClient, state: OnlineState)
+  {
+    client.emit('statusChange', state);
   }
   /** End remote games functions */
 

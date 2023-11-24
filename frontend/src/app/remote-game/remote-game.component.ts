@@ -204,7 +204,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     this.client.off('interval');
     this.client.off('gameMessage');
     this.client.off('stopGame');
-    this.client.off('sendTiemr');
+    this.client.off('sendTimer');
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }

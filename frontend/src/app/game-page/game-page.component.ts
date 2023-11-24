@@ -8,6 +8,9 @@ import { SelectPlayerModalComponent } from '../modals/select-player-modal/select
 import { v4 } from 'uuid';
 import { NotificationsService } from 'angular2-notifications';
 import { EndMatchComponent } from '../modals/end-match/end-match.component';
+import { WebsocketService } from '../websocket/websocket.service';
+import { Socket } from 'socket.io-client';
+import { OnlineState } from '../enum/status.enum';
 
 enum GameMode {
   SOLO = 'solo',
@@ -24,6 +27,7 @@ enum GameMode {
 export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   userNickame: string = '';
+  client = {} as Socket;
 
   gameId: string = '';
   gameSize: number = 0;
@@ -47,7 +51,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService) {
+  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
     
     this.requestsService.getLoggedUserInformation()?.subscribe((data) => {
       this.userNickame = data.nickName as string;
@@ -179,6 +183,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.roundStart = true;
     this.currentMatch.push(this.currentRound[0]);
     this.currentMatch.push(this.currentRound[1]);
+    this.client = this.ws.getClient();
+    this.ws.sendSystemMessage('message',`A new match between ${this.currentRound[0].nickName} and ${this.currentRound[1].nickName} will begin`);
     this.launchGame();
   }
 
@@ -203,6 +209,9 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       this.currentMatch.push(this.currentRound[0]);
       this.currentMatch.push(this.currentRound[1]);
       this.launchGame();
+
+      //send Message to chat
+      this.ws.sendSystemMessage('message', `A new match between ${this.currentRound[0].nickName} and ${this.currentRound[1].nickName} will begin`);
     }
   }
 
@@ -266,6 +275,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       this.pushGameResult(true);
     else
       this.pushGameResult(false);
+    this.ws.client.emit('statusChange', OnlineState.online);
     const modalRef = this.modalService.open(EndMatchComponent, {
         backdrop: 'static',
         keyboard: false,
@@ -534,6 +544,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.scoreP2 = 0;
     this.scoreP1 = 0;
     clearInterval(this.gameInterval);
+    this.ws.changeStatus(this.ws.getClient(), OnlineState.online);
     this.pushGameResult(victory);
   }
 
