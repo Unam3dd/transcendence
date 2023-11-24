@@ -1,4 +1,5 @@
 import { Socket } from 'socket.io';
+import { OnlineState } from 'src/enum/status.enum';
 
 export interface UserSanitize {
   id: number;
@@ -13,6 +14,7 @@ export interface ListUserSanitizeInterface extends UserSanitize {
 
 export interface ClientInfo extends UserSanitize {
   client: Socket;
+  onlineState: OnlineState;
 }
 
 export interface JWTPayload {
@@ -23,8 +25,29 @@ export interface JWTPayload {
   exp: number;
 }
 
+export interface FriendsUser{
+  id: number,
+  user1: number,
+  user2: number,
+  status: boolean,
+  applicant: boolean
+}
+
+export interface UserFriendsInfo extends UserSanitize {
+  showOpt?: boolean;
+  status: boolean;
+  applicant: boolean;
+  onlineState: OnlineState;
+}
+
+export interface UserStatus {
+  id: number;
+  onlineState: OnlineState;
+}
+
 export interface BlockedUser {
   id: number;
   user1: number;
   user2: number;
 }
+
