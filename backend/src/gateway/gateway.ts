@@ -176,32 +176,19 @@ export class EventsGateway {
    /** End of Remote games functions */
 
     @SubscribeMessage('statusChange') 
-    statusChange(@ConnectedSocket() client: Socket, onlineState: OnlineState) {
+    statusChange(@ConnectedSocket() client: Socket, @MessageBody() newState: OnlineState) {
 
       const targetClient = this.clientList.find((el) => el.client.id === client.id);
+      if(!targetClient)
+        return ;
+      targetClient.onlineState = newState;
       let payload: UserStatus[] = []
       const info: UserStatus = {
-        'id': targetClient.id,
-        'onlineState': onlineState,
+        id: targetClient.id,
+        onlineState: newState,
       }
       payload.push(info);
       this.server.emit('getStatus', payload);
-    }
-
-    @SubscribeMessage('refreshStatus')
-    refreshStatus(@ConnectedSocket() client: Socket) {
-
-      let payload: UserStatus[] = [];
-
-      for (const el of this.clientList)
-      {
-        const info: UserStatus = {
-          'id': el.id,
-          'onlineState': el.onlineState,
-        }
-        payload.push(info);
-      }
-      client.emit('getStatus', payload);
     }
 
     @SubscribeMessage('listFriends')
@@ -210,24 +197,39 @@ export class EventsGateway {
       let userFriendsInfo: UserFriendsInfo[] = [];
   
       const targetClient = this.clientList.find((el) => el.client.id === client.id);
+      if(!targetClient)
+        return ;
   
       const friendsList = await this.friendsService.listFriends(targetClient.id, false);
       
       for (const el of friendsList) {
+        let state: OnlineState;
         const user = await this.usersService.findOneSanitize(el.user2);
+
+        const userInfo = this.clientList.find((el) => el.id === user.id)
+        if (userInfo)
+          state = userInfo.onlineState
+        else
+          state = OnlineState.offline
 
         const friendInfo: UserFriendsInfo = {
           ...user,
           'applicant': el.applicant,
           'status': el.status,
-          'onlineState': OnlineState.offline,
-          'showOpt': false
+          'onlineState': state,
         }
-        userFriendsInfo.push(friendInfo);
+        userFriendsInfo.push(friendInfo);  
       }
       client.emit('getListFriends', userFriendsInfo);
     }
-  //Detect clients disconnection
+
+    @SubscribeMessage('updateFriend')
+    deleteFriend(@MessageBody() user:UserFriendsInfo) {
+      const deleted = this.clientList.find((el) => el.id === user.id)
+      if (!deleted)
+        return ;
+      this.ListFriends(deleted.client);
+    }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
 
@@ -269,7 +271,8 @@ export class EventsGateway {
   async ListBlocked(@ConnectedSocket() client: Socket) {
 
     const targetClient = this.clientList.find((el) => el.client.id === client.id);
-
+    if (!targetClient)
+      return ;
     const blockedList = await this.block.listBlock(targetClient.id);
 
     client.emit('getListBlocked', <BlockedUser[]>(blockedList));

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
-import { UserFriendsInfo } from '../interfaces/user.interface';
+import { UserFriendsInfo, UserUpdateStatus } from '../interfaces/user.interface';
 import { NavigationEnd, Router } from '@angular/router'
 import { Subject, Subscription, takeUntil } from 'rxjs';
 import { WsClient } from '../websocket/websocket.type';
@@ -42,14 +42,17 @@ export class FriendsComponent implements OnInit {
     this.client.emit('listFriends');
 
     this.client.on('getListFriends', (payload: UserFriendsInfo[]) => {
+      console.log("list")
+      this.friendList = [];
       this.friendList = payload;
       if (!this.friendList)
         return ;
       this.refreshList();
     })
 
-    this.client.on('getStatus', (payload: UserFriendsInfo[]) => {
-      console.log("lala")
+    this.client.on('getStatus', (payload: UserUpdateStatus[]) => {
+      console.log("je recois un status change")
+      console.log(payload);
       if (this.approvedFriends.length === 0)
         return ;
       for (let el of payload)
@@ -58,6 +61,7 @@ export class FriendsComponent implements OnInit {
         if (found)
         {
           found.onlineState = el.onlineState;
+          console.log(found.onlineState);
         }
       }
     });
@@ -67,17 +71,16 @@ export class FriendsComponent implements OnInit {
     this.approvedFriends = [];
     this.pendingFriends = [];
 
-    if (!this.friendList)
+    if (this.friendList.length === 0)
       return ;
 
     this.friendList.forEach((element) => {
-        if (element.status === false && element.applicant === false) {
+        if (element.status === false) {
           this.pendingFriends.push(element);
         }
         else
           this.approvedFriends.push(element);
       });
-      this.client.emit('refreshStatus');
   }
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
@@ -91,6 +94,7 @@ export class FriendsComponent implements OnInit {
           return element !== user
         });
         this.approvedFriends.push(user);
+        this.client.emit('updateFriend', user);
       })
     });
   }
@@ -108,6 +112,7 @@ export class FriendsComponent implements OnInit {
           this.pendingFriends = this.pendingFriends.filter((element) => {
             return element !== user
           });
+          this.client.emit('updateFriend', user);
         });
     });
   }
@@ -124,17 +129,22 @@ export class FriendsComponent implements OnInit {
           return element !== user
         });
       });
-      this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe();
+      this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(()=> {
+        this.client.emit('updateFriend', user);
+      });
     });
   }
 
   toggleContent() {
     this.showContent = !this.showContent;
+    if (!this.showContent)
+    {
+      this.client.emit('listFriends');
+    }
   }
 
   toggleOption(user: UserFriendsInfo) {
     user.showOpt = !user.showOpt;
-    this.ngOnDestroy();
   }
 
   ngOnDestroy()
