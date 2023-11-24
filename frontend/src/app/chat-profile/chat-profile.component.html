@@ -16,7 +16,9 @@
         <img src={{user.avatar}}/>
       </div>
       <span class="profile-name">{{ user.nickName }} ({{ user.login }})</span>
-      <button (click)="this.blockUser(user.id)">Block</button>
+      <button>Block</button><!-- <button (click)="this.blockUser(user.id)">Block</button> -->
+      <!-- <button (click)="this.inviteUser(user.nickName)">Invitation</button> -->
+      <button (click)="this.visitUser(user.id)">Profile</button>
     </li>
     
   </ul>
