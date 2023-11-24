@@ -29,7 +29,6 @@ export class EndMatchComponent {
   constructor(public activeModal: NgbActiveModal, private router: Router,) {}
 
   public next(){
-    console.log("go to menu page");
     this.activeModal.dismiss();
     this.router.navigate(['game-menu']);
   }

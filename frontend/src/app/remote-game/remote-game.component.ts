@@ -48,6 +48,10 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       this.gameStart = false;
     })
 
+    this.client.on('sendTimer', (count: number) => {
+      this.printTiming(count);
+    })
+
     this.client.on('interval', (payload: GameInfo) => {
       if(!this.gameStart){
         this.gameStart = true;
@@ -154,13 +158,11 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
         console.log("this.playerRight.score", this.playerRight.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        //context.fillText('Win', (centerX / 2) - 20, 200);
       } else if (this.playerLeft.score == 3) {
         this.gameStart = false;
         console.log("this.playerLeft.score", this.playerLeft.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        //context.fillText('Win', (3 * (this.canvas.nativeElement.width / 4)) - 20, 200);
       }
     }
   }
@@ -178,6 +180,20 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     }
   }
 
+  printTiming(i: number){
+    const canvas = this.canvas.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (context) {
+      context.clearRect(0, 0, canvas.width, canvas.height); 
+      context.fillStyle = 'white';
+      context.font = '50px Courier New, monospace';
+      context.textBaseline = 'middle';
+      context.textAlign = "center";
+      context.fillText(`${i}`, (canvas.width / 2), canvas.height / 2);
+    }
+  }
+
   public cancel(): void
   {
     this.client.emit('quitLobby');
@@ -188,7 +204,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     this.client.off('interval');
     this.client.off('gameMessage');
     this.client.off('stopGame');
-    console.log("ng destroy");
+    this.client.off('sendTiemr');
     this.unsubscribe.next();
     this.unsubscribe.complete();
   }
