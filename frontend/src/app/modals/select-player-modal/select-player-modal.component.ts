@@ -33,7 +33,6 @@ export class SelectPlayerModalComponent {
   processModal() {
 
     const nickname = this.form.value.nickname as string;
-    console.log(nickname);
     if (nickname.trim().length >= 3 && nickname.trim().length <= 12)
       this.activeModal.close(nickname);
     else

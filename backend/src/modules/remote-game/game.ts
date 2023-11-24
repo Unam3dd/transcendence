@@ -29,9 +29,21 @@ export class gameInstance {
   gameStart: boolean = false;
 
   public launchGame(): void {
+
+    let count: number = 3;
     this.lobby.state = gameState.playing;
-    this.initGame();
-    this.startGame();
+    this.lobby.sendTimerToAll(count);
+    const countInterval = setInterval(() => {
+      count--;
+      this.lobby.sendTimerToAll(count);
+      if (count === 0) {
+        clearInterval(countInterval);
+        if (this.lobby.state === 2) {
+          this.initGame();
+          this.startGame();
+        }
+      }
+    }, 1000);
   }
 
   public initGame() {
@@ -112,7 +124,6 @@ export class gameInstance {
       else this.gameVictory(this.lobby.players[1]);
       return;
     }
-
     this.sendPosition();
   }
 

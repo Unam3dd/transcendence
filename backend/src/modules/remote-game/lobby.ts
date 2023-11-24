@@ -113,4 +113,9 @@ export class Lobby {
   public sendGameEventToAll(event: string, param: GameInfo): void {
     this.server.to(this.id).emit(event, param);
   }
+
+  public sendTimerToAll(count: number)
+  {
+    this.server.to(this.id).emit('sendTimer', count);
+  }
 }

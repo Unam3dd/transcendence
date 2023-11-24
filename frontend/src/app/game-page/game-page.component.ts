@@ -163,7 +163,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   {
     this.players = [];
     this.router.navigate(["/game-menu"]);
-    console.log(this.players);
     return ;
   }
 
@@ -185,7 +184,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.currentMatch.push(this.currentRound[0]);
     this.currentMatch.push(this.currentRound[1]);
     this.client = this.ws.getClient();
-    this.ws.sendSystemMessage('message','A new match between ' + this.currentRound[0].nickName + ' and ' + this.currentRound[1].nickName + ' will begin' );
+    this.ws.sendSystemMessage('message',`A new match between ${this.currentRound[0].nickName} and ${this.currentRound[1].nickName} will begin`);
     this.launchGame();
   }
 
@@ -209,12 +208,10 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     {
       this.currentMatch.push(this.currentRound[0]);
       this.currentMatch.push(this.currentRound[1]);
+      this.launchGame();
+
       //send Message to chat
-      this.ws.sendSystemMessage('message','A new match between ' + this.currentRound[0].nickName + ' and ' + this.currentRound[1].nickName + ' will begin' );
-      console.log("next Match in 3 secondes!");
-      setTimeout(() => {
-        this.launchGame();
-      }, 3000);
+      this.ws.sendSystemMessage('message', `A new match between ${this.currentRound[0].nickName} and ${this.currentRound[1].nickName} will begin`);
     }
   }
 
@@ -230,15 +227,25 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       this.currentRound.pop();
     }
     this.printOrder = this.makePairs(this.currentRound);
-    console.log("next Round in 5 secondes!");
-    setTimeout(() => {
-      this.roundStart = true;
-      this.nextMatch();
-    }, 5000);
+    this.nextRoundStart();
+  }
+
+  nextRoundStart()
+  {
+    let count: number = 5;
+    this.printNextRound(count);
+    const countInterval = setInterval(() => {
+      count--;
+      this.printNextRound(count);
+      if (count === 0) {
+        clearInterval(countInterval);
+        this.roundStart = true;
+        this.nextMatch();
+      }
+    }, 1000);
   }
 
   matchResult(winner: string) {
-    console.log("winner is :", winner);
     if (this.roundCount === this.roundTotal)
     {
       this.tournamentEnd(winner);
@@ -264,7 +271,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   tournamentEnd(winner: string)
   {
-    console.log("tournament end match result");
     if (winner === this.userNickame)
       this.pushGameResult(true);
     else
@@ -318,7 +324,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
         this.startGame();
       }
     }
-    this.drawElements();
+    //this.drawElements();
   }
 
   launchGame(){
@@ -338,7 +344,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   keyEvent(event: KeyboardEvent) {
     if (this.gameMode === GameMode.SOLO) {
       this.localKeyEvent(event);
-      console.log('Mode solo activated');
     } else if (this.gameMode === GameMode.LOCAL) {
       this.localKeyEvent(event);
     } else if (this.gameMode === GameMode.TOURNAMENT_LOCAL && this.gameStart) {
@@ -416,9 +421,18 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   startGame() {
-    this.gameInterval = setInterval(() => {
-      this.moveBall();
-    }, 20);
+    let count: number = 3;
+    this.printTiming(count);
+    const countInterval = setInterval(() => {
+      count--;
+      this.printTiming(count);
+      if (count === 0) {
+        clearInterval(countInterval);
+        this.gameInterval = setInterval(() => {
+          this.moveBall();
+        }, 20);
+      }
+    }, 1000);
   }
 
   randomDirection() {
@@ -466,7 +480,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       if (this.scoreP1 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        //context.fillText('Win', (3 * (canvas.width / 4)) - 20, 200);
         this.gameStart = false;
         if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
           this.matchResult(this.currentMatch[0].nickName);
@@ -476,13 +489,41 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       } else if (this.scoreP2 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
-        //context.fillText('Win', (centerX / 2) - 20, 200);
         this.gameStart = false;
         if (this.gameMode === GameMode.TOURNAMENT_LOCAL)
           this.matchResult(this.currentMatch[1].nickName);
         else
           this.gameReset(false);
       }
+    }
+  }
+
+  printTiming(i: number){
+    const canvas = this.canvas.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (context) {
+      context.clearRect(0, 0, canvas.width, canvas.height); 
+      context.fillStyle = 'white';
+      context.font = '50px Courier New, monospace';
+      context.textBaseline = 'middle';
+      context.textAlign = "center";
+      context.fillText(`${i}`, (canvas.width / 2), canvas.height / 2);
+    }
+  }
+
+  printNextRound(count: number)
+  {
+    const canvas = this.canvas.nativeElement;
+    const context = canvas.getContext('2d');
+
+    if (context) {
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      context.fillStyle = 'white';
+      context.font = '50px Courier New, monospace';
+      context.textBaseline = 'middle';
+      context.fillText('Next Round in', (canvas.width / 2), (canvas.height / 2) - canvas.height * 0.2);
+      context.fillText(`${count}`, (canvas.width / 2), (canvas.height / 2) + canvas.height * 0.1);
     }
   }
 
