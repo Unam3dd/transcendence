@@ -31,15 +31,17 @@ export class gameInstance {
   public launchGame(): void {
 
     let count: number = 3;
+    this.lobby.state = gameState.playing;
     this.lobby.sendTimerToAll(count);
     const countInterval = setInterval(() => {
       count--;
       this.lobby.sendTimerToAll(count);
       if (count === 0) {
         clearInterval(countInterval);
-          this.lobby.state = gameState.playing;
+        if (this.lobby.state === 2) {
           this.initGame();
           this.startGame();
+        }
       }
     }, 1000);
   }

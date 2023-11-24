@@ -42,7 +42,6 @@ export class FriendsComponent implements OnInit {
     this.client.emit('listFriends');
 
     this.client.on('getListFriends', (payload: UserFriendsInfo[]) => {
-      console.log("list")
       this.friendList = [];
       this.friendList = payload;
       if (!this.friendList)
@@ -51,8 +50,6 @@ export class FriendsComponent implements OnInit {
     })
 
     this.client.on('getStatus', (payload: UserUpdateStatus[]) => {
-      console.log("je recois un status change")
-      console.log(payload);
       if (this.approvedFriends.length === 0)
         return ;
       for (let el of payload)
