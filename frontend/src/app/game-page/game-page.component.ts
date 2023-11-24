@@ -10,6 +10,7 @@ import { NotificationsService } from 'angular2-notifications';
 import { EndMatchComponent } from '../modals/end-match/end-match.component';
 import { WebsocketService } from '../websocket/websocket.service';
 import { Socket } from 'socket.io-client';
+import { OnlineState } from '../enum/status.enum';
 
 enum GameMode {
   SOLO = 'solo',
@@ -268,6 +269,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       this.pushGameResult(true);
     else
       this.pushGameResult(false);
+    this.ws.client.emit('statusChange', OnlineState.online);
     const modalRef = this.modalService.open(EndMatchComponent, {
         backdrop: 'static',
         keyboard: false,
@@ -501,6 +503,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.scoreP2 = 0;
     this.scoreP1 = 0;
     clearInterval(this.gameInterval);
+    this.ws.changeStatus(this.ws.getClient(), OnlineState.online);
     this.pushGameResult(victory);
   }
 

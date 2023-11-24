@@ -46,7 +46,22 @@ export interface Message {
 
 export interface UserFriendsInfo extends UserSanitizeInterface {
     showOpt: boolean;
-    applicant?: boolean;
+    status: boolean;
+    applicant: boolean;
+    onlineState: OnlineState;
+}
+
+export interface UserUpdateStatus {
+    id: number;
+    onlineState: OnlineState;
+  }
+
+export interface Friends{
+    id: number,
+    user1: number,
+    user2: number,
+    status: boolean,
+    applicant: boolean
 }
 
 export interface BlockedUser {

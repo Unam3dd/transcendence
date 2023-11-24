@@ -10,10 +10,10 @@ import { RegisterComponent } from './register/register.component';
 import {GameMenuComponent} from "./game-menu/game-menu.component";
 import { RemoteGameComponent } from './remote-game/remote-game.component';
 import { NotFoundComponent } from './not-found/not-found.component';
-import { routeGuard } from './route.guard';
+import { loginGuard, routeGuard } from './route.guard';
 
 const routes: Routes = [
-  {path: '', component: ConnectionComponent},
+  {path: '', component: ConnectionComponent, canActivate:[loginGuard]},
   {path: 'home', component: HomePageComponent, canActivate:[routeGuard],},
   {path: 'profile', component: ProfilePageComponent, canActivate:[routeGuard],},
   {path: 'game-menu', component: GameMenuComponent, canActivate:[routeGuard],},
@@ -21,8 +21,8 @@ const routes: Routes = [
   {path: 'game/remote', component: RemoteGameComponent, canActivate:[routeGuard],},
   {path: 'chat', component: ChatPageComponent, canActivate:[routeGuard],},
   {path: 'user/:userId', component: UserComponent, canActivate:[routeGuard],},
-  {path: 'register', component: RegisterComponent},
-  {path: '**', component: NotFoundComponent},
+  {path: 'register', component: RegisterComponent, canActivate:[loginGuard]},
+  {path: '**', component: NotFoundComponent, canActivate:[routeGuard],},
 ];
 
 @NgModule({
