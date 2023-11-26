@@ -1,8 +1,9 @@
-<section class="friends container align-items-center" *ngIf="display === true">
-    <div *ngIf="showContent">
+<section *ngIf="userData$ | async">
+    <div class="position-fixed bottom-0 end-0 p-3 content overflow-auto"  *ngIf="showContent ">
 
         <section *ngIf="pendingFriends.length !== 0" >
             <h5>Pending Friends</h5>
+            <hr>
             <content *ngFor="let user of pendingFriends"> 
 
                 <div class="row align-content-center" (click)="toggleOption(user)" (keyup)="toggleOption(user)" tabindex="0">
@@ -10,7 +11,7 @@
                         <img class="avatar" [src]="user.avatar" alt="avatar picture">
                     </div>
                     <div class="col-9">
-                        <p class="username d-flex align-items-center h-100">{{user.nickName}}</p>
+                        <p class="username d-flex align-items-center mb-0 h-100">{{truncateText(user, 12)}}</p>
                     </div>
                 </div>
 
@@ -19,28 +20,36 @@
                     <i class="bi-person-fill-x" style="font-size: 1.2rem; color: rgb(216, 84, 52);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
                     <i class="bi-person-fill-slash" style="font-size: 1.2rem; color: rgb(110, 109, 103);" tabindex="0" (click)="blockFriends(user)" (keyup)="blockFriends(user)"></i>
                 </div>
+                <hr>
             </content>
         </section>
 
         <section *ngIf="approvedFriends.length !== 0">
             <h5>Friends</h5>
+            <hr>
             <content *ngFor="let user of approvedFriends">
-
+                {{printUser(user)}}
                 <div class="row align-content-center" (click)="toggleOption(user)" (keyup)="toggleOption(user)" tabindex="0">
                     <div class="col-3">
                         <img class="avatar" [src]="user.avatar" alt="avatar picture"> 
+                        <div class="status-circle {{ (user.onlineState === 1 || user.onlineState === 2) ? 'bg-success' : 'bg-secondary' }}"></div>
                     </div>
-                    <div class="col-9">   
-                        <p class="username d-flex align-items-center h-100">{{user.nickName}}</p>
+                    <div *ngIf="user.onlineState === 2;  else notInGame" class="col-9">   
+                            <p class="username d-flex align-items-center mb-0">{{truncateText(user, 15)}}</p>
+                            <p *ngIf="user.onlineState === 2" class="gameState mb-0">In a game</p>
                     </div>
+                    <ng-template #notInGame>
+                        <div class="col-9 d-flex align-items-center">   
+                            <p class="username mb-0 d-flex align-items-center">{{truncateText(user, 15)}}</p>
+                        </div>
+                    </ng-template>
                 </div>
-                <p>{{user.onlineState}}</p>
                 <div *ngIf="user.showOpt" class="option">
                     <i class="bi-messager" style="font-size: 1.2rem; color: rgb(86, 95, 228);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
                     <i class="bi-person-fill-x" style="font-size: 1.2rem; color: rgb(216, 84, 52);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
                     <i class="bi-person-fill-slash" style="font-size: 1.2rem; color: rgb(110, 109, 103);" tabindex="0" (click)="blockFriends(user)" (keyup)="blockFriends(user)"></i>
                 </div>
-    
+                <hr>
             </content>
         </section>
 
@@ -49,5 +58,7 @@
         </section>
 
     </div>
-    <button class="friendsButton" (click)="toggleContent()">Friends List</button>
+    <div class="position-fixed bottom-0 end-0 p-3">
+        <button class="btn btn-dark avatar-container" (click)="toggleContent()"><i class="bi bi-people-fill display-6"></i></button>
+    </div>
 </section>
