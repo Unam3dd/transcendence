@@ -92,7 +92,7 @@ export class FriendsComponent implements OnInit {
           return element !== user
         });
         this.approvedFriends.push(user);
-        this.client.emit('updateFriend', user);
+        this.client.emit('updateFriend', user.id);
       })
     });
   }
@@ -109,7 +109,7 @@ export class FriendsComponent implements OnInit {
         
       this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
         this.removeFriend(user);
-        this.client.emit('updateFriend', user);
+        this.client.emit('updateFriend', user.id);
       });
     });
   }
@@ -122,7 +122,7 @@ export class FriendsComponent implements OnInit {
         this.removeFriend(user);
       });
       this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(()=> {
-        this.client.emit('updateFriend', user);
+        this.client.emit('updateFriend', user.id);
       });
     });
   }

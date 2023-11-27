@@ -231,11 +231,11 @@ export class EventsGateway {
     }
 
     @SubscribeMessage('updateFriend')
-    deleteFriend(@MessageBody() user:UserFriendsInfo) {
-      const deleted = this.clientList.find((el) => el.id === user.id)
-      if (!deleted)
+    updateFriend(@MessageBody() userId:number) {
+      const updated = this.clientList.find((el) => el.id === userId)
+      if (!updated)
         return ;
-      this.ListFriends(deleted.id);
+      this.ListFriends(updated.id);
     }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {

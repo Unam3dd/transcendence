@@ -4,6 +4,7 @@ import { UserSanitizeInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
 import { GameResult } from '../interfaces/game.interface';
 import { Subject, takeUntil } from 'rxjs';
+import { WebsocketService } from '../websocket/websocket.service';
 
 @Component({
   selector: 'app-user',
@@ -13,6 +14,8 @@ import { Subject, takeUntil } from 'rxjs';
 export class UserComponent implements OnInit {
 
   user = {} as UserSanitizeInterface;
+  myId: number = 0;
+  client = this.ws.getClient();
   gameHistory: GameResult[] = [];
   win: number = 0;
   loose: number = 0;
@@ -21,7 +24,7 @@ export class UserComponent implements OnInit {
   unsubscribeObs = new Subject<void>();
 
   constructor(private readonly route: ActivatedRoute,
-    private readonly requestServices: RequestsService, private readonly router: Router) {}
+    private readonly requestServices: RequestsService, private readonly router: Router, private readonly ws: WebsocketService) {}
 
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
@@ -32,9 +35,12 @@ export class UserComponent implements OnInit {
       this.user = user;
 
       this.requestServices.getLoggedUserInformation()?.pipe(takeUntil(this.unsubscribeObs)).subscribe((info) => {
+        if (!info)
+          return ;
         if (info.id === this.user.id)
           this.router.navigate(['/profile']);
-        
+        if (info.id)
+          this.myId = info.id;
         this.requestServices.listGame(userIdFromRoute)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((games) => {
           this.gameHistory = games;
           this.win = this.countWin(games);
@@ -66,13 +72,17 @@ export class UserComponent implements OnInit {
 
   public addFriends()
   {
+
     this.requestServices.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
       if (friends.find((el) => el.user2 === this.user.id))
         return ;
       this.requestServices.listBlockedUser()?.pipe(takeUntil(this.unsubscribeObs)).subscribe((blocked) => {
         if (blocked.find((el) => el.user2 === this.user.id))
           return ;
-        this.requestServices.addFriends(this.user.id)?.subscribe();
+        this.requestServices.addFriends(this.user.id)?.subscribe( () => {
+          this.client.emit('updateFriend', this.user.id);
+          this.client.emit('updateFriend', this.myId);
+        });
       });
     });
   }
