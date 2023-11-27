@@ -1,13 +1,9 @@
-<div class="container-fluid p-0 m-0">
-  <div class="row p-0 m-0">
-    <app-header class="col p-0 m-0"></app-header>
-  </div>
-  <div class="row p-0 m-0">
-    <simple-notifications></simple-notifications>
-    <router-outlet class="col p-0 m-0"></router-outlet>
+<app-header></app-header>
+<div class="container-fluid content">
+  <simple-notifications></simple-notifications>
+  <router-outlet></router-outlet>
+  <div class="mt-3 mb-3">
     <app-friends></app-friends>
   </div>
-  <div class="row p-0 m-0">
-    <app-footer class="col fixed-bottom p-0 m-0"></app-footer>
-  </div>
 </div>
+<app-footer></app-footer>
