@@ -17,10 +17,10 @@
                     </div>
                 </div>
 
-                <div *ngIf="user.showOpt && !user.applicant" class="option">
-                    <i class="bi-person-add" style="font-size: 1.2rem; color: rgb(37, 209, 75);" tabindex="0" (click)="approvedFriendsRequest(user)" (keyup)="approvedFriendsRequest(user)"></i>
+                <div *ngIf="user.showOpt" class="option">
+                    <i *ngIf="!user.applicant" class="bi-person-add" style="font-size: 1.2rem; color: rgb(37, 209, 75);" tabindex="0" (click)="approvedFriendsRequest(user)" (keyup)="approvedFriendsRequest(user)"></i>
                     <i class="bi-person-fill-x" style="font-size: 1.2rem; color: rgb(216, 84, 52);" tabindex="0" (click)="deleteFriends(user)" (keyup)="deleteFriends(user)"></i>
-                    <i class="bi-person-fill-slash" style="font-size: 1.2rem; color: rgb(110, 109, 103);" tabindex="0" (click)="blockFriends(user)" (keyup)="blockFriends(user)"></i>
+                    <i *ngIf="!user.applicant" class="bi-person-fill-slash" style="font-size: 1.2rem; color: rgb(110, 109, 103);" tabindex="0" (click)="blockFriends(user)" (keyup)="blockFriends(user)"></i>
                 </div>
                 <hr>
             </content>

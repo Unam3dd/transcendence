@@ -1,6 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { CookiesService } from './services/cookies.service';
+import * as JwtDecode from 'jwt-decode'
 
 function checkAuth(): boolean {
   const cookieService = inject(CookiesService);
@@ -8,8 +9,15 @@ function checkAuth(): boolean {
   const token = cookieService.getToken();
   if (!token)
     return false;
-  else
-    return true
+
+  const jwt = JwtDecode.jwtDecode(token);
+  if (jwt.exp && Date.now() / 1000 > jwt.exp)
+  {
+    cookieService.removeCookie('authorization')
+    return false;
+  }
+
+  return true
 }
 
 export const routeGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {

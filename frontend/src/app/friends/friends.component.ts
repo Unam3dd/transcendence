@@ -61,20 +61,24 @@ export class FriendsComponent implements OnInit {
     });
   }
 
-  refreshList() {
+  public refreshList() {
     this.approvedFriends = [];
     this.pendingFriends = [];
 
     if (this.friendList.length === 0)
       return ;
 
-    this.friendList.forEach((element) => {
-        if (element.status === false) {
+    this.friendList.forEach(async (element) => {
+      this.requestsService.listBlockedUser()?.pipe(takeUntil(this.unsubscribeObs)).subscribe((blocked) => {
+        if (blocked.find((el) => el.user2 === element.id))
+          return
+        else if (element.status === false) {
           this.pendingFriends.push(element);
         }
         else
-        this.approvedFriends.push(element);
+          this.approvedFriends.push(element);
       });
+    });
   }
 
   //approve a friend request, remove user from pending array then adding the user in the approved array

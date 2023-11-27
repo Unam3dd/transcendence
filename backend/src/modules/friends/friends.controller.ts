@@ -25,6 +25,8 @@ export class FriendsController {
 
   @Post('/add')
   async add_friends(@Body() body: CreateFriendsDto, @Res() res: Response) {
+    if (body.user1 === body.user2)
+      return res.status(HttpStatus.CONFLICT).send();
     await this.friendsService.addFriends(body);
     res.status(HttpStatus.OK).send();
   }
