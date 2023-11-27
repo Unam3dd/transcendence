@@ -32,6 +32,7 @@ export class GameMenuComponent implements OnInit{
     {
      // this.ws.changeStatus(this.client, OnlineState.ingame);
       this.findGame();
+      this.ws.changeStatus(this.client, OnlineState.ingame);
       this.router.navigate(['game/remote']);
     }
     else if (mode === 'tournament_local')

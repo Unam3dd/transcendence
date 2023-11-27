@@ -1,27 +1,49 @@
-.friends {
-    position: fixed !important;
-    width: 180px;
-    margin-bottom: 50px;
-    bottom: 75px;
-    right: 0;
-    max-height: 350px;
-    overflow: auto;
+.content {
+  max-height: 350px;
+  margin-bottom: 80px !important;
 }
 
-.friends section {
-    display: block;
-}
-
-.avatar {
+.avatar-container {
   width: 50px;
   height: 50px;
-  margin-right: 25px;
+  overflow: hidden;
   border-radius: 50%;
 }
 
+.friends-button {
+  width: 75px;
+  height: 75px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
 .username{
-  font-size: 18px;
+  font-size: 15px;
   margin-left: 25px;
+}
+
+/* app-friends.component.css */
+.status-circle {
+  position: absolute;
+  margin-left: 33px;
+  transform: translate(-28%, -117%);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.gameState {
+  font-size: 10px;
+  margin-left: 25px;
+  font-style: italic;
 }
 
 .option {
@@ -31,12 +53,3 @@
 .option mat-icon {
   color: green;
 }
-
-.friendsButton{
-  position: fixed !important;
-  width: 180px;
-  margin-right: 20px;
-  bottom: 75px;
-  right: 0;
-}
-  

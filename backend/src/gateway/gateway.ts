@@ -163,6 +163,11 @@ export class EventsGateway {
     lobby.gameInstance.pressButton(player, body.button);
   }
 
+  @SubscribeMessage('quitGame') 
+  quitGame(@ConnectedSocket() client: Socket) {
+      this.lobbyServices.clientDisconnect(client);
+  }
+
   @SubscribeMessage('quitLobby')
   quitLobby(@ConnectedSocket() client: Socket) {
     const player = this.lobbyServices.findUserBySocket(client);
@@ -192,43 +197,45 @@ export class EventsGateway {
     }
 
     @SubscribeMessage('listFriends')
-    async ListFriends(@ConnectedSocket() client: Socket) {
+    async ListFriends(@MessageBody() userId: number) {
 
       let userFriendsInfo: UserFriendsInfo[] = [];
-  
-      const targetClient = this.clientList.find((el) => el.client.id === client.id);
+
+      const targetClient = this.clientList.find((el) => el.id === userId);
       if(!targetClient)
         return ;
-  
       const friendsList = await this.friendsService.listFriends(targetClient.id, false);
       
       for (const el of friendsList) {
         let state: OnlineState;
         const user = await this.usersService.findOneSanitize(el.user2);
 
-        const userInfo = this.clientList.find((el) => el.id === user.id)
-        if (userInfo)
-          state = userInfo.onlineState
-        else
-          state = OnlineState.offline
+        if (user)
+        {
 
-        const friendInfo: UserFriendsInfo = {
-          ...user,
-          'applicant': el.applicant,
-          'status': el.status,
-          'onlineState': state,
+          const userInfo = this.clientList.find((el) => el.id === user.id)
+          if (userInfo)
+            state = userInfo.onlineState
+          else
+            state = OnlineState.offline
+          const friendInfo: UserFriendsInfo = {
+            ...user,
+            'applicant': el.applicant,
+            'status': el.status,
+            'onlineState': state,
+          }
+          userFriendsInfo.push(friendInfo);  
         }
-        userFriendsInfo.push(friendInfo);  
       }
-      client.emit('getListFriends', userFriendsInfo);
+      targetClient.client.emit('getListFriends', userFriendsInfo);
     }
 
     @SubscribeMessage('updateFriend')
-    deleteFriend(@MessageBody() user:UserFriendsInfo) {
-      const deleted = this.clientList.find((el) => el.id === user.id)
-      if (!deleted)
+    updateFriend(@MessageBody() userId:number) {
+      const updated = this.clientList.find((el) => el.id === userId)
+      if (!updated)
         return ;
-      this.ListFriends(deleted.client);
+      this.ListFriends(updated.id);
     }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {

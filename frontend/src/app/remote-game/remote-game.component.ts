@@ -2,9 +2,10 @@ import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Subject, takeUntil } from "rxjs";
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { GameInfo } from '../interfaces/game.interface';
 import { RequestsService } from '../services/requests.service';
+import { OnlineState } from '../enum/status.enum';
 
 export interface Player {
   nickName: string,
@@ -36,11 +37,21 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       this.mode = params['mode'];
     });
 
-    console.log("constructor");
+    this.router.events.subscribe( (event) => {
+      if (event instanceof NavigationEnd) {
+        //this.client.emit('quitGame');
+        if (event.url != '/game/remote')
+        {
+          //console.log(event.url);
+          this.ws.client.emit('statusChange', OnlineState.online);
+          this.client.emit('quitGame');
+        }
+      }
+    })
   }
 
+
   ngOnInit(): void {
-    console.log("init");
 
     this.drawWaiting();
     this.client.on('gameMessage', (data: string) => {
@@ -155,12 +166,10 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
       //Win message
       if (this.playerRight.score == 3) {
         this.gameStart = false;
-        console.log("this.playerRight.score", this.playerRight.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
       } else if (this.playerLeft.score == 3) {
         this.gameStart = false;
-        console.log("this.playerLeft.score", this.playerLeft.score)
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
       }
@@ -207,5 +216,6 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     this.client.off('sendTimer');
     this.unsubscribe.next();
     this.unsubscribe.complete();
+    window.location.reload();
   }
 }

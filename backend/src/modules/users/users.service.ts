@@ -48,6 +48,8 @@ export class UsersService {
   public async findOneSanitize(id: number): Promise<UserSanitize | null> {
     const user: User = await this.usersRepository.findOne({ where: { id } });
 
+    if (!user)
+      return null;
     return <UserSanitize>{
       id: user.id,
       login: user.login,

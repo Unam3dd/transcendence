@@ -112,7 +112,7 @@ export class ProfilePageComponent implements OnInit{
       const { token, qrcode } = JSON.parse(JSON.stringify(data));
       this.qrcodeURL = qrcode;
       this.cookieService.removeOnlyCookie('authorization');
-      this.cookieService.setCookie('authorization', encodeURI(`Bearer ${token}`));
+      this.cookieService.setCookie('authorization', JSON.parse(JSON.stringify(`Bearer ${token}`)));
     })
   }
 
