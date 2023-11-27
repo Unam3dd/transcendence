@@ -1,68 +1,22 @@
-// .register #login {
-//     position: absolute;
-//     top: 22%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register #firstname {
-//     position: absolute;
-//     top: 25%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register #lastname {
-//     position: absolute;
-//     top: 28%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register #nickname {
-//     position: absolute;
-//     top: 31%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register #email {
-//     position: absolute;
-//     top: 34%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register #password {
-//     position: absolute;
-//     top: 37%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register #a2f {
-//     position: absolute;
-//     display: inline-block;
-//     top: 42%;
-//     left: 58%;
-//     text-align: center;
-// }
-
-// .register p {
-//     position: absolute;
-//     display: inline-block;
-//     top: 40%;
-//     left: 50%;
-//     text-align: center;
-// }
-
-// .register button {
-//     position: absolute;
-//     top: 50%;
-//     left: 50%;
-//     text-align: center;
-// }
-
 .input-group-text {
-    width: 100px;
+  width: 100px;
+}
+
+.card {
+  background-color: #404040;
+  color: white;
+}
+
+.card.register {
+  min-width: 50vh;
+}
+
+.card input {
+  background-color: #505050;
+  color: white;
+}
+
+.card .input-group-text {
+  background-color: #303030;
+  color: white;
 }

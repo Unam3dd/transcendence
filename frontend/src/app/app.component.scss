@@ -1,5 +1,13 @@
-// .content {
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-// }
+body, html {
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  display: flex;
+  justify-content: center;
+  background-image: url("../assets/images/background.jpg");
+  background-size: cover;
+  background-position: center center;
+  min-height: 85vh;
+}
