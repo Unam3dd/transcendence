@@ -4,3 +4,30 @@
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.avatar-container50 {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+} 
+
+.avatar-container60 {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container100 {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

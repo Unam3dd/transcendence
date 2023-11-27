@@ -1,14 +1,11 @@
-<div class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <div class="container-fluid">
-    <button class="btn mx-auto p-0 m-0" style="height: 60px;" type="button" *ngIf="userData$ | async" (click)="moveToHome()">
-      <h1 class="text-light p-0 m-0" style="font-weight: 300;">T R A N S C E N D E N C E</h1>
-      <!-- <div class="bi bi-house display-5"></div> -->
+<div class="navbar navbar-expand-lg navbar-dark bg-dark p-0 m-0" style="height: 70px;">
+  <div class="container-fluid p-0 m-0" style="height: 70px;">
+    <button class="btn mx-auto p-0 m-0" style="height: 70px;" type="button" (click)="moveToHome()">
+      <h1 class="text-nowrap text-light p-0 m-0" style="font-weight: 300;">T R A N S C E N D E N C E</h1>
     </button>
-    <!-- <div class="navbar-brand mx-auto">
-    </div> -->
     <button class="btn position-absolute p-0 m-0" style="right: 10px; top: 10px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar" *ngIf="userData$ | async as userData" [disabled]="!userData.email">
-      <div class="avatar-container" style="width: 50px; height: 50px; overflow: hidden;">
-        <img class="rounded-circle avatar img-fluid" style="  width: 100%; height: 100%; object-fit: cover;" [src]="userData.avatar" alt="avatar picture">
+      <div class="avatar-container50">
+        <img class="rounded-circle avatar" [src]="userData.avatar" alt="avatar picture">
       </div>
     </button>
   </div>
@@ -17,24 +14,24 @@
 <div class="offcanvas offcanvas-end" tabindex="-1" id="navbar" aria-labelledby="navbarLabel" *ngIf="userData$ | async as userData">
   <div class="offcanvas-header">
     <div class="d-flex align-items-center">
-      <div class="avatar-navbar me-3">
-        <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
+      <div class="avatar-container100 me-3">
+        <img class="avatar" [src]="userData.avatar" alt="avatar picture">
       </div>
       <h5 class="offcanvas-title ml-2" id="sidebarLabel">
         {{userData.nickName}}
       </h5>
     </div>
-    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
-  <hr>
+  <hr class="m-0">
   <div class="offcanvas-body">
-    <button class="btn btn-dark navbarBtn" data-bs-dismiss="offcanvas" (click)="moveToProfile()">Profile</button>
-    <br>
-    <button class="btn btn-dark navbarBtn mt-3" data-bs-dismiss="offcanvas" (click)="moveToGame()">Game</button>
-    <br>
-    <button class="btn btn-dark navbarBtn mt-3" data-bs-dismiss="offcanvas" (click)="moveToChat()">Chat</button>
+    <div class="navbar-nav flex-column">
+      <button class="btn btn-dark navbarBtn btn-lg font-weight-bold" data-bs-dismiss="offcanvas" (click)="moveToProfile()">Profile</button>
+      <button class="btn btn-dark navbarBtn btn-lg font-weight-bold" data-bs-dismiss="offcanvas" (click)="moveToGame()">Game</button>
+      <button class="btn btn-dark navbarBtn btn-lg font-weight-bold" data-bs-dismiss="offcanvas" (click)="moveToChat()">Chat</button>
+    </div>
   </div>
-  <hr>
+  <hr class="m-0">
   <div class="m-3">
     <button class="btn btn-danger" type="button" (click)="Logout()">Logout</button>
   </div>
