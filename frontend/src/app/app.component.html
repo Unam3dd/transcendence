@@ -1,7 +1,19 @@
-<app-header></app-header>
+<!-- <app-header></app-header>
 <div class="content">
-  <!-- I added notifications here so we can get notifications everywhere in the app, idk if we should keep that ?-->
   <simple-notifications></simple-notifications>
   <router-outlet></router-outlet>
 </div>
-<app-footer></app-footer>
+<app-footer></app-footer> -->
+
+<div class="container-fluid p-0 m-0">
+  <div class="row p-0 m-0">
+    <app-header class="col p-0 m-0"></app-header>
+  </div>
+  <div class="row p-0 m-0">
+    <simple-notifications></simple-notifications>
+    <router-outlet class="col p-0 m-0"></router-outlet>
+  </div>
+  <div class="row p-0 m-0">
+    <app-footer class="col fixed-bottom p-0 m-0"></app-footer>
+  </div>
+</div>

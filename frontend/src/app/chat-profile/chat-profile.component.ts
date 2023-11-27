@@ -39,7 +39,7 @@ export class ChatProfileComponent {
     if (!recipient) {
       //if not on general already, call for general conversation
       this.ws.targetRecipient = null;
-      this.ws.client_name = 'general';
+      this.ws.client_name = 'General';
 
       for (let user of this.ws.BlockUserList) {
         this.listClients = this.listClients.filter(client => client.id !== user.user2);
