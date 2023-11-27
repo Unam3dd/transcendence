@@ -26,7 +26,7 @@ export class FriendsComponent implements OnInit {
   userData$!: Observable<UserInterface> | null;
 
   test = new Subscription();
-  showContent: boolean = true;
+  showContent: boolean = false;
 
   ngOnInit() {
 
@@ -62,23 +62,19 @@ export class FriendsComponent implements OnInit {
   }
 
   refreshList() {
-    //this.approvedFriends = [];
-    let tmpApproved: UserFriendsInfo[] = [];
-    //this.pendingFriends = [];
-    let tmpPending: UserFriendsInfo[] = [];
+    this.approvedFriends = [];
+    this.pendingFriends = [];
 
     if (this.friendList.length === 0)
       return ;
 
     this.friendList.forEach((element) => {
         if (element.status === false) {
-          tmpPending.push(element);
+          this.pendingFriends.push(element);
         }
         else
-        tmpApproved.push(element);
+        this.approvedFriends.push(element);
       });
-      this.pendingFriends = tmpPending;
-      this.approvedFriends = tmpApproved;
   }
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
@@ -102,16 +98,15 @@ export class FriendsComponent implements OnInit {
 
     this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
       if (!(friends.find((el) => el.user2 === user.id)))
+      {
+        this.removeFriend(user);
         return;
-        this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-          this.approvedFriends = this.approvedFriends.filter((element) => {
-            return element !== user
-          });
-          this.pendingFriends = this.pendingFriends.filter((element) => {
-            return element !== user
-          });
-          this.client.emit('updateFriend', user);
-        });
+      }
+        
+      this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
+        this.removeFriend(user);
+        this.client.emit('updateFriend', user);
+      });
     });
   }
 
@@ -120,12 +115,7 @@ export class FriendsComponent implements OnInit {
       if (!(friends.find((el) => el.user2 === user.id)))
         return;
       this.requestsService.blockUser(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-        this.approvedFriends = this.approvedFriends.filter((element) => {
-          return element !== user
-        });
-        this.pendingFriends = this.pendingFriends.filter((element) => {
-          return element !== user
-        });
+        this.removeFriend(user);
       });
       this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(()=> {
         this.client.emit('updateFriend', user);
@@ -133,21 +123,30 @@ export class FriendsComponent implements OnInit {
     });
   }
 
+  removeFriend(user: UserFriendsInfo)
+  {
+    this.approvedFriends = this.approvedFriends.filter((element) => {
+      return element !== user
+    });
+    this.pendingFriends = this.pendingFriends.filter((element) => {
+      return element !== user
+    });
+  }
+
   toggleContent() {
     this.showContent = !this.showContent;
+    if (this.showContent && this.userData$) {
+      this.userData$.pipe(takeUntil(this.unsubscribeObs)).subscribe( (user) => {
+        this.client.emit('listFriends', user.id);
+      });
+    }
   }
 
   toggleOption(user: UserFriendsInfo) {
     user.showOpt = !user.showOpt;
   }
 
-  printUser(user: UserFriendsInfo)
-   {
-    console.log("dansle ngfor", user);
-   }
-
   truncateText(user: UserFriendsInfo, limit: number): string {
-   // console.log(user);
     return user.nickName.length > limit ? user.nickName.substring(0, limit) + '...' : user.nickName;
   }
 

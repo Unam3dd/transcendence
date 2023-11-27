@@ -8,7 +8,9 @@
 
                 <div class="row align-content-center" (click)="toggleOption(user)" (keyup)="toggleOption(user)" tabindex="0">
                     <div class="col-3">
-                        <img class="avatar" [src]="user.avatar" alt="avatar picture">
+                        <div class="avatar-container" >
+                            <img class="img-fluid" [src]="user.avatar" alt="avatar picture">
+                        </div>
                     </div>
                     <div class="col-9">
                         <p class="username d-flex align-items-center mb-0 h-100">{{truncateText(user, 12)}}</p>
@@ -28,10 +30,11 @@
             <h5>Friends</h5>
             <hr>
             <content *ngFor="let user of approvedFriends">
-                {{printUser(user)}}
                 <div class="row align-content-center" (click)="toggleOption(user)" (keyup)="toggleOption(user)" tabindex="0">
                     <div class="col-3">
-                        <img class="avatar" [src]="user.avatar" alt="avatar picture"> 
+                        <div class="avatar-container" >
+                            <img class="img-fluid" [src]="user.avatar" alt="avatar picture">
+                        </div>
                         <div class="status-circle {{ (user.onlineState === 1 || user.onlineState === 2) ? 'bg-success' : 'bg-secondary' }}"></div>
                     </div>
                     <div *ngIf="user.onlineState === 2;  else notInGame" class="col-9">   
@@ -59,6 +62,6 @@
 
     </div>
     <div class="position-fixed bottom-0 end-0 p-3">
-        <button class="btn btn-dark avatar-container" (click)="toggleContent()"><i class="bi bi-people-fill display-6"></i></button>
+        <button class="btn btn-dark friends-button" (click)="toggleContent()"><i class="bi bi-people-fill display-6"></i></button>
     </div>
 </section>
