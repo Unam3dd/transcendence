@@ -44,3 +44,25 @@ body {
   height: 100%;
   object-fit: cover;
 }
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  margin: 20px 20px;
+  background: rgb(201, 186, 186);
+  border-radius: 7.5px;
+  box-shadow: 5px 5px 0 0 #000;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  margin: 20px 20px;
+  //border: solid 3px #000;
+  box-shadow: 5px 5px 0 0 #000;
+  border-radius: 7.5px;
+  background: white;
+}

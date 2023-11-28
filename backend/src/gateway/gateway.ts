@@ -64,7 +64,6 @@ export class EventsGateway {
   @SubscribeMessage('message')
   receiveNewMessage(
     @MessageBody() message: string) {
-    console.log(message);
     this.server.emit('newMessage', message);
   }
 

@@ -7,7 +7,6 @@ import { WS_GATEWAY } from '../env';
 import { Socket, io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
-import { RequestsService } from '../services/requests.service';
 import { BlockedUser } from '../interfaces/user.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';

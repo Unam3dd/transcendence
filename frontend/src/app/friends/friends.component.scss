@@ -1,6 +1,17 @@
 .content {
   max-height: 350px;
   margin-bottom: 120px !important;
+  border-radius: 5px;
+}
+
+.section-divider {
+  border-top: 1px solid white;
+  margin: 5px 0;
+}
+
+.card {
+  background-color: #404040;
+  color: white;
 }
 
 .avatar-container {
