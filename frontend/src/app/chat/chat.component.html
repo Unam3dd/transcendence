@@ -42,7 +42,7 @@
 
 </div> -->
 
-<div >
+<div style="background-color: lightcoral;">
 
   <div >{{ this.ws.client_name }}</div>
   <div >
@@ -50,13 +50,13 @@
     <ul >
       <div *ngFor="let msg of this.ws.received_messages">
 
-        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
-          <div >
-            <div >  
-              <img src={{msg.author.avatar}}/>
+        <div class="d-flex" *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
+          <div>
+            <div class="avatar-container50">  
+              <img class="avatar" src={{msg.author.avatar}}/>
             </div>
           </div>
-          <div >
+          <div>
             <div >{{msg.author.nickName}} :</div>
             <div >{{msg.content}}</div>
           </div>

@@ -22,20 +22,21 @@
   </ul>
 </div> -->
 
-<div>
+<div style="background-color: aqua;">
 
-  <ul>
+  <!-- <ul> -->
+    <ul>
 
-    <li (click)="onChannelClicked( null )">
-      <div >  
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
         <div >G</div>
       </div>
       <span >General</span>
     </li>
 
-    <li *ngFor="let user of this.listClients" (click)="onChannelClicked( user )">
-      <div >  
-        <img src={{user.avatar}}/>
+    <li class="d-flex" *ngFor="let user of this.listClients" (click)="onChannelClicked( user )">
+      <div class="avatar-container50">  
+        <img class="avatar" src={{user.avatar}}/>
       </div>
       <span >{{ user.nickName }} ({{ user.login }})</span>
       <button (click)="this.blockUser(user.id)">B</button>
@@ -43,5 +44,12 @@
       <button (click)="this.visitUser(user.id)">P</button>
     </li>
     
+      <!-- <li class="list-group-item">An item</li> -->
+      <!-- <li class="list-group-item">A second item</li> -->
+      <!-- <li class="list-group-item">A third item</li> -->
+      <!-- <li class="list-group-item">A fourth item</li> -->
+      <!-- <li class="list-group-item">And a fifth one</li> -->
+    <!-- </ul> -->
+
   </ul>
 </div>

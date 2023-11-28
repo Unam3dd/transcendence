@@ -1,14 +1,22 @@
-<!-- <div class="global">
-  <span class="left-column">
-    <app-chat-profile></app-chat-profile>
-  </span>
-  <span class="right-column">
-    <app-chat></app-chat>
-  </span>
-</div> -->
-<div class="container-fluid">
+<div class="container-fluid p-0 m-0">
   <div class="row">
-    <app-chat-profile class="col-md-6"></app-chat-profile>
-    <app-chat class="col-md-6"></app-chat>
+
+    <div class="col-12 p-0 m-0">
+      <button class="btn btn-secondary dropdown-toggle rounded-0 w-100 d-md-none p-0 m-0" type="button" data-bs-toggle="collapse" data-bs-target="#toBeCollapse" aria-expanded="false" aria-controls="toBeCollapse">
+        Show all channels
+      </button>
+    </div>
+    
+    <div class="collapse d-md-none col-12 p-0 m-0" id="toBeCollapse">
+      <app-chat-profile></app-chat-profile>
+    </div>
+    
+    <div class="offcanvas-md col-md-5 p-0 m-0">
+      <app-chat-profile></app-chat-profile>
+    </div>
+
+    <div class="col-md-7 p-0 m-0">
+      <app-chat></app-chat>
+    </div>
   </div>
 </div>
