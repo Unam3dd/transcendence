@@ -9,6 +9,10 @@
   color: white;
 }
 
+//=================================================================//
+//                        User with email                          //
+//=================================================================//
+
 .home-buttons button {
   background-color: rgba(#303030, 0.6);
   border: none;
@@ -18,3 +22,55 @@
 .home-buttons button:hover {
   background-color: #303030;
 }
+
+//=================================================================//
+//                             Hand img                            //
+//=================================================================//
+
+.hand {
+  position: absolute;
+  top: 50%;
+  left: -60%;
+  transform: translateY(-50%);
+  height: auto;
+  width: 65%;
+  opacity: 0;
+}
+
+//=================================================================//
+//                          Profile button                         //
+//=================================================================//
+
+.home-buttons .profile-container {
+  position: relative;
+}
+
+.home-buttons .profile-container:hover .hand{
+  opacity: 1;
+}
+
+//=================================================================//
+//                             Game button                         //
+//=================================================================//
+
+.home-buttons .game-container {
+  position: relative;
+}
+
+.home-buttons .game-container:hover .hand {
+  opacity: 1;
+}
+
+//=================================================================//
+//                             Chat button                         //
+//=================================================================//
+
+.home-buttons .chat-container {
+  position: relative;
+}
+
+.home-buttons .chat-container:hover .hand {
+  opacity: 1;
+}
+
+//=================================================================//
