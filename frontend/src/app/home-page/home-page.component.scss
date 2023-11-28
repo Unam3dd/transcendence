@@ -6,4 +6,15 @@
 
 .form {
   text-align: center;
+  color: white;
+}
+
+.home-buttons button {
+  background-color: rgba(#303030, 0.6);
+  border: none;
+  color: whitesmoke;
+}
+
+.home-buttons button:hover {
+  background-color: #303030;
 }

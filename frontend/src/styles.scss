@@ -3,6 +3,12 @@
 
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
+
+  background-image: url("assets/images/background.jpg");
+  background-size: cover;
+  background-position: center center;
+  min-height: 100vh;
+  background-repeat: no-repeat;
 }
 
 .avatar-container50 {
@@ -22,6 +28,13 @@ body {
 .avatar-container100 {
   width: 100px;
   height: 100px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container150 {
+  width: 150px;
+  height: 150px;
   overflow: hidden;
   border-radius: 50%;
 }

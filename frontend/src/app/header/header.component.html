@@ -1,11 +1,11 @@
 <div class="navbar navbar-expand-lg navbar-dark bg-dark p-0 m-0" style="height: 70px;">
   <div class="container-fluid p-0 m-0" style="height: 70px;">
     <button class="btn mx-auto p-0 m-0" style="height: 70px;" type="button" (click)="moveToHome()">
-      <h1 class="text-nowrap text-light p-0 m-0" style="font-weight: 300;">T R A N S C E N D E N C E</h1>
+      <h1 class="text-nowrap text-light p-0 m-0 text-lg-center">T R A N S C E N D E N C E</h1>
     </button>
     <button class="btn position-absolute p-0 m-0" style="right: 10px; top: 10px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar" *ngIf="userData$ | async as userData" [disabled]="!userData.email">
       <div class="avatar-container50">
-        <img class="rounded-circle avatar" [src]="userData.avatar" alt="avatar picture">
+        <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
       </div>
     </button>
   </div>

@@ -1,8 +1,14 @@
-<div *ngIf="userData$ | async as userData">
+<div class="home-buttons" *ngIf="userData$ | async as userData">
   <ng-container *ngIf="userData.nickName && userData.email; else columnEmpty">
-    <button class="btn btn-primary profile" (click)="moveToProfile()">Profile</button>
-    <button class="btn btn-primary game" (click)="moveToGame()">Game</button>
-    <button class="btn btn-primary chat" (click)="moveToChat()">Chat</button>
+    <div class="row mt-5">
+      <button class="btn btn-primary profile fs-1" (click)="moveToProfile()">Profile</button>
+    </div>
+    <div class="row mt-5">
+      <button class="btn btn-primary game fs-1" (click)="moveToGame()">Game</button>
+    </div>
+    <div class="row mt-5">
+      <button class="btn btn-primary chat fs-1" (click)="moveToChat()">Chat</button>
+    </div>
   </ng-container>
 </div>
 
