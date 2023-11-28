@@ -19,7 +19,7 @@ export class UserComponent implements OnInit {
   gameHistory: GameResult[] = [];
   win: number = 0;
   loose: number = 0;
-  winrate: number = 0.0;
+  winrate: number = 0;
 
   unsubscribeObs = new Subject<void>();
 
@@ -42,13 +42,21 @@ export class UserComponent implements OnInit {
         if (info.id)
           this.myId = info.id;
         this.requestServices.listGame(userIdFromRoute)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((games) => {
-          this.gameHistory = games;
+          this.gameHistory = games.reverse();
+          this.dateFormat();
           this.win = this.countWin(games);
           this.loose = this.countLoose(games);
-          this.winrate = (this.win / games.length) * 100;
+          this.winrate = ((this.win / games.length) * 100) || 0;
+          this.winrate = Number(this.winrate.toFixed(2));
         });
       })
     });
+  }
+
+  dateFormat(): void {
+    this.gameHistory.forEach((el) => {
+      el.createdAt = el.createdAt.substring(0,10);
+    })
   }
 
   countWin(gameList: GameResult[]): number {
