@@ -1,27 +1,62 @@
-<div class="fluid-container connectionpage">
-  <simple-notifications></simple-notifications>
-  <div class="connection42API">
-    <h4>Connect with 42 !</h4>
-    <button (click)="connection42API()">42</button>
-  </div>
-  <div class="connection" *ngIf="!double_factor">
-    <form [formGroup]="form" (ngSubmit)="connection()">
-      <input id="login" type="text" placeholder="Login" formControlName="login" minlength="3" maxlength="120">
-      <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
-      <button class="login-button" type="submit">Login</button>
-    </form>
-  </div>
+<div>
+  <div class="container-fluid text-center mt-5">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card border-black register">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Connexion</h4>
+          </div>
+          <div class="card-body">
+            <simple-notifications></simple-notifications>
 
-  <div class="registration">
-    <a id="link" [routerLink]="['/register']">Not Registered ? Go</a>
-  </div>
-</div>
+            <div class="col-12 mb-3">
+              <h4>Connect with 42</h4>
+              <button class="btn btn-secondary" (click)="connection42API()">42 Auth</button> 
+            </div>
+            <hr class="border border-secondary border-2 opacity-50">
+            <form [formGroup]="form" (ngSubmit)="connection()">
+              <h4>Sign in</h4>
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="login">Login</label>
+                <div class="input-group">
+                  <div class="input-group-text">Login</div>
+                  <input id="login" class="form-control" type="text" formControlName="login">
+                </div>
+              </div>
 
-<div class="a2f" *ngIf="double_factor">
-  <h4>Double Authentication</h4>
-  <simple-notifications></simple-notifications>
-    <form [formGroup]="tokenForm" (ngSubmit)="a2f()">
-      <input id="token" type="text" placeholder="token" formControlName="token" required>
-      <button id="button-token" (click)="a2f" type="submit">Send Token !</button>
-    </form>
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="password">Password</label>
+                <div class="input-group">
+                  <div class="input-group-text">Password</div>
+                  <input id="password" class="form-control" type="password" formControlName="password">
+                </div>
+              </div>
+  
+              <div class="text-end">
+                <button *ngIf="!double_factor" type="submit" class="btn btn-secondary">Sign in</button>
+              </div>
+            </form>
+            <div *ngIf="double_factor">
+              <h4>Double Authentication</h4>
+              <simple-notifications></simple-notifications>
+                <form [formGroup]="tokenForm" (ngSubmit)="a2f()">
+                  <div class="col-12 mb-3">
+                    <label class="visually-hidden" for="login">Token</label>
+                    <div class="input-group">
+                      <div class="input-group-text">Token</div>
+                      <input class="form-control" id="token" type="text" formControlName="token" required>
+                    </div>
+                    <button class="btn btn-secondary mt-3" id="button-token" (click)="a2f" type="submit">Send Token</button>
+                  </div>
+                </form>      
+            </div>
+            <div class="registration">
+              <p class="mt-1 mb-0" >Don't have an account?</p>
+              <a class="" id="link" [routerLink]="['/register']">Register Now</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

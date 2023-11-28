@@ -1,72 +1,22 @@
-// .connectionpage{
-//   min-height: 100vh;
-// }
-
-// .connection42API h4 {
-//   position: absolute;
-//   top: 20%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .connection42API button {
-//   font-size: 30px;
-//   position: absolute;
-//   top: 30%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .connection #login {
-//   font-size: 15px;
-//   position: absolute;
-//   top: 45%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .connection #password {
-//   font-size: 15px;
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .connection button {
-//   font-size: 30px;
-//   position: absolute;
-//   top: 58%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .registration #link {
-//   font-size: 15px;
-//   position: absolute;
-//   top: 70%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .a2f #token {
-//   font-size: 15px;
-//   position: absolute;
-//   top: 50%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .a2f h4 {
-//   position: absolute;
-//   top: 45%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
-
-// .a2f #button-token {
-//   position: absolute;
-//   top: 55%;
-//   left: 50%;
-//   transform: translate(-50%, -50%);
-// }
+.input-group-text {
+    width: 100px;
+  }
+  
+  .card {
+    background-color: #404040;
+    color: white;
+  }
+  
+  .card.register {
+    min-width: 45vh;
+  }
+  
+  .card input {
+    background-color: #505050;
+    color: white;
+  }
+  
+  .card .input-group-text {
+    background-color: #303030;
+    color: white;
+  }
