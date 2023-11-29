@@ -1,7 +1,8 @@
 <div>
-  <div class="container-fluid m-5">
+  <div class="container-fluid text-center mt-4" style="margin-bottom: calc(1.5rem + 30px);">
     <div class="row justify-content-center">
-      <div class="col-md-7">
+      
+      <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto" *ngIf="!qrcode">
         <div class="card border-black register">
           <div class="card-header bg-dark text-white">
             <h4 class="mb-0">Registration</h4>
@@ -58,10 +59,11 @@
                 </div>
               </div>
 
-              <div class="mb-3 form-check">
+              <div class="mb-3 form-check text-start ">
                 <label class="form-check-label" for="a2f">Two-factor authentication</label>
                 <input id="a2f" type="checkbox" class="form-check-input" formControlName="a2f">
               </div>
+
               <div class="text-end">
                 <button type="submit" class="btn btn-secondary">Sign up</button>
               </div>
@@ -70,17 +72,19 @@
         </div>
       </div>
 
-      <div class="col-md-5">
-        <div class="card border-black" *ngIf="qrcode && form.value.a2f">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto" *ngIf="qrcode && form.value.a2f">
+        <div class="card border-black">
           <div class="card-header bg-dark text-white">
             <h4 class="mb-0">Your QRcode</h4>
           </div>
           <div class="card-body text-center">
-            <p class="m-1 p-0 text-left">Scan this QRcode with Google Authenticator :</p>
-            <div>
-              <img src="{{ qrcode }}" class="img-fluid" alt="QR Code" />
+            <p class="m-2 mb-4 p-0 text-left">Scan this QRcode with Google Authenticator :</p>
+
+            <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto">
+              <img src="{{ qrcode }}" class="img-fluid w-100" alt="QR Code" />
             </div>
-            <a href="http://localhost:4200/" class="btn btn-secondary">Done</a>
+            
+            <a href="http://localhost:4200/" class="btn btn-secondary col-6 mt-4 mb-2">Done</a>
           </div>
         </div>
       </div>
