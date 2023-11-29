@@ -1,3 +1,4 @@
+<simple-notifications></simple-notifications>
 <div class="container-fluid text-center mt-4" style="margin-bottom: calc(1.5rem + 30px);">
   <div class="row">
     <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 mx-auto">
@@ -6,7 +7,6 @@
           <h4 class="mb-0">Connection</h4>
         </div>
         <div class="card-body">
-          <simple-notifications></simple-notifications>
 
           <div *ngIf="!double_factor" class="col-12 mb-3">
             <h5>- with your 42 account :</h5>
@@ -40,7 +40,6 @@
           
           <div *ngIf="double_factor">
             <h5 class="mb-3">Two-factor authentication :</h5>
-            <!-- <simple-notifications></simple-notifications> -->
               <form [formGroup]="tokenForm" (ngSubmit)="a2f()">
                 <div class="col-12">
                   <label class="visually-hidden" for="login">Token</label>
