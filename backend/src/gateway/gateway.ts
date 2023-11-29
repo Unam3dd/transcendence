@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -19,7 +19,9 @@ import { LobbyServices } from 'src/modules/remote-game/lobbiesServices';
 import { FriendsService } from 'src/modules/friends/friends.service';
 import { UsersService } from 'src/modules/users/users.service';
 import { BlockService } from 'src/modules/block/block.service';
+import { WsGuard } from './ws/ws.guard';
 
+@UseGuards(WsGuard)
 @Injectable()
 @WebSocketGateway(3001, {
   cors: true,
