@@ -4,15 +4,42 @@
 </section>
 
 <!-- Else show the user information -->
-<section *ngIf="user.login">
-    <img class="avatar" [src]="user.avatar" alt="avatar picture">
-    <p>Login: {{user.login}}</p>
-    <p>Nickname: {{user.nickName}}</p>
-    <button class="btn btn-primary" (click)="addFriends()" >Add Friends</button>
-    <section>
-        <h5>User Stats</h5>
-        <p>Win: {{this.win}}</p>
-        <p>Loose: {{this.loose}}</p>
-        <p>Winrate: {{this.winrate}} %</p>
+<section *ngIf="user.login" class="user-section">
+  <div class="row d-flex justify-content-center">
+    <div class="col align-self-center">
+      <div class="avatar-container200">
+        <img class="avatar img-fluid" [src]="user.avatar" alt="avatar picture">
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="line fs-3">
+        <p id="key">NickName:</p>
+        <p id="value">{{user.nickName}}</p>
+      </div>
+    </div>
+    <button class="btn btn-info mt-4" (click)="addFriends()" >Add Friends</button>
+  </div>
+
+  <div class="row mt-3">
+    <div class="col center-history">
+      <section class="matchHistory">
+        <hr>
+        <h5>Match History</h5>
+        <hr>
+        <div class="history" *ngIf="gameHistory.length !== 0">
+          <ng-container *ngFor="let game of gameHistory">
+            <p *ngIf="game.size === 2"> 1v1 Game</p>
+            <p *ngIf="game.size > 2"> Tournament Game</p>
+            <p *ngIf="game.local"> Local Game</p>
+            <p *ngIf="!game.local">Remote Game</p>
+            <p *ngIf="game.victory">Win</p>
+            <p *ngIf="!game.victory">Loose</p>
+            <p>{{game.createdAt}}</p>
+          </ng-container>
+        </div>
+        <hr>
       </section>
+    </div>
+  </div>
 </section>

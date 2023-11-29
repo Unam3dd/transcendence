@@ -1,7 +1,71 @@
 .avatar {
-    width: 25px;
-    height: 25px;
-    margin-right: 10px;
-    border-radius: 50%;
-    overflow: hidden;
-  }
+  width: 25px;
+  height: 25px;
+  margin-right: 10px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+//=================================================================//
+//                             Buttons                             //
+//=================================================================//
+
+.gameMode button {
+  background-color: rgba(#303030, 0.6);
+  border: none;
+  color: whitesmoke;
+}
+
+.gameMode button:hover {
+  background-color: #303030;
+}
+
+//=================================================================//
+//                             Hand img                            //
+//=================================================================//
+
+.hand {
+  position: absolute;
+  top: 50%;
+  left: -22%;
+  transform: translateY(-50%);
+  height: auto;
+  width: 25%;
+  opacity: 0;
+}
+
+//=================================================================//
+//                         Local game button                       //
+//=================================================================//
+
+.gameMode .local-game-container {
+  position: relative;
+}
+
+.gameMode .local-game-container:hover .hand{
+  opacity: 1;
+}
+
+//=================================================================//
+//                         Two player button                       //
+//=================================================================//
+
+.gameMode .two-player-container {
+  position: relative;
+}
+
+.gameMode .two-player-container:hover .hand{
+  opacity: 1;
+}
+
+//=================================================================//
+//                         Tournament button                       //
+//=================================================================//
+
+.gameMode .tournament-container {
+  position: relative;
+}
+
+.gameMode .tournament-container:hover .hand{
+  opacity: 1;
+}
