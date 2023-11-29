@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Julius+Sans+One&family=Righteous&display=swap');
+
 header {
   background-color: #303030;
   height: 10vh;
@@ -5,6 +7,9 @@ header {
 }
 
 h1 {
+  font-family: 'Julius Sans One', sans-serif;
+  font-weight: 200;
+  // font-family: 'Righteous', sans-serif;
   color: white;
   margin: 0;
 }

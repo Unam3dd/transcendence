@@ -1,9 +1,11 @@
-<app-header></app-header>
-<div class="container-fluid content">
-  <simple-notifications></simple-notifications>
-  <div class="mt-3 mb-3">
-    <router-outlet></router-outlet>
-    <app-friends></app-friends>
+<div class="h-100 bg-warning">
+  <app-header></app-header>
+  <div class="container-fluid content">
+    <simple-notifications></simple-notifications>
+    <div class="mt-3 mb-3">
+      <router-outlet></router-outlet>
+      <app-friends></app-friends>
+    </div>
   </div>
+  <app-footer class="fixed-bottom"></app-footer>
 </div>
-<app-footer class="fixed-bottom"></app-footer>
