@@ -1,12 +1,9 @@
 #!/bin/sh
 
-apt-get update && apt-get upgrade -y && apt install python3 -y
-
+apt-get update && apt-get upgrade -y && apt install python3 openssl -y
 chmod -R 777 /project/
 npm install @angular-eslint/builder --save --legacy-peer-deps
 npm install --save-dev
-if [ "$HOST" = "nestjs" ] || [ "$HOST" = "nestjs-dev" ]; then
-    npm run lint
-    npm run format
-fi
+npm run lint
+npm run format
 exec ${@}

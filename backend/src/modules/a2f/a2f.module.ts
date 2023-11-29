@@ -8,8 +8,8 @@ import { AuthService } from '../auth/auth.service';
 import { ApiService } from '../api/api.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([User])],
-    providers: [A2fService, UsersService, AuthService, ApiService],
-    controllers: [A2fController]
+  imports: [TypeOrmModule.forFeature([User])],
+  providers: [A2fService, UsersService, AuthService, ApiService],
+  controllers: [A2fController],
 })
 export class A2fModule {}

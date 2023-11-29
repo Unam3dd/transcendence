@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams, HttpResponse, H
 import {Observable, catchError, throwError, Subscription } from "rxjs";
 import {CookiesService} from "./cookies.service";
 import {JwtService} from "./jwt.service";
-import { NESTJS_URL } from '../env';
+import { PROD_NESTJS_URL } from '../env';
 import { UserInterface, UserSanitizeInterface } from '../interfaces/user.interface'
 import { JWT_PAYLOAD } from './jwt.const';
 import { Friends } from '../interfaces/friends.interface';
@@ -68,7 +68,7 @@ export class RequestsService {
     const userId = this.getId(token);
 
     //Return of data recovery
-    return this.http.get<UserInterface>(`${NESTJS_URL}/users/${userId}`, { headers:
+    return this.http.get<UserInterface>(`${PROD_NESTJS_URL}/users/${userId}`, { headers:
       new HttpHeaders().append('authorization', token) });
   }
 
@@ -78,7 +78,7 @@ export class RequestsService {
 
     if (!JWT_TOKEN) return (null);
 
-    const url = `${NESTJS_URL}/users/me`;
+    const url = `${PROD_NESTJS_URL}/users/me`;
 
     return (this.http.get<UserInterface>(url, {
       headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }));
@@ -97,7 +97,7 @@ export class RequestsService {
         return this.updateUserHomeData(login, email);
     } else {
       const updateData = {id: id, nickName: newNickname, email: email};
-      return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers:
+      return this.http.put<string>(`${PROD_NESTJS_URL}/users`, updateData, {headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)});
     }
   }
@@ -126,7 +126,7 @@ export class RequestsService {
     if (email) update.email = email;
     update.a2f = a2f;
 
-    return (this.http.put<UserInterface>(`${NESTJS_URL}/users`, update,{headers: new HttpHeaders().append('authorization', `Bearer ${token}`)}));
+    return (this.http.put<UserInterface>(`${PROD_NESTJS_URL}/users`, update,{headers: new HttpHeaders().append('authorization', `Bearer ${token}`)}));
   }
 
   uploadUserImage(img: File) {
@@ -140,7 +140,7 @@ export class RequestsService {
 
     formData.append('file', img);
 
-    return this.http.post(`${NESTJS_URL}/upload`, formData,
+    return this.http.post(`${PROD_NESTJS_URL}/upload`, formData,
         {
           headers: new HttpHeaders().append('authorization', `Bearer ${token}`)
         });
@@ -151,7 +151,7 @@ export class RequestsService {
 
     if (!JWT_TOKEN) return (null);
 
-    return (this.http.delete<UserInterface>(`${NESTJS_URL}/users`, {
+    return (this.http.delete<UserInterface>(`${PROD_NESTJS_URL}/users`, {
       headers: new HttpHeaders().append('authorization', `Bearer ${JWT_TOKEN}`) }).pipe(catchError(this.handleError)));
   }
 
@@ -161,7 +161,7 @@ export class RequestsService {
 
     if (!token) return (null);
 
-    return this.http.get<UserSanitizeInterface>(`${NESTJS_URL}/users/${userId}`, {headers:
+    return this.http.get<UserSanitizeInterface>(`${PROD_NESTJS_URL}/users/${userId}`, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)})
       .pipe(catchError(this.handleError));
   }
@@ -176,7 +176,7 @@ export class RequestsService {
 
     const userId = this.getId(token);
 
-    return this.http.post(`${NESTJS_URL}/friends/add`, {
+    return this.http.post(`${PROD_NESTJS_URL}/friends/add`, {
       user1: userId, user2: targetId
     }, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
@@ -187,7 +187,7 @@ export class RequestsService {
 
     if (!token) return ;
 
-    return this.http.patch(`${NESTJS_URL}/friends/update/${userId}`, null, {headers:
+    return this.http.patch(`${PROD_NESTJS_URL}/friends/update/${userId}`, null, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
@@ -199,7 +199,7 @@ export class RequestsService {
     //Setting request param, print all friends on false, print only approved friends on true
     const param = new HttpParams().set('approved', approved);
 
-    return this.http.get<Friends[]>(`${NESTJS_URL}/friends/list/`,
+    return this.http.get<Friends[]>(`${PROD_NESTJS_URL}/friends/list/`,
     {headers: new HttpHeaders().append('authorization', `Bearer ${token}`),
     params: param}).pipe(catchError(this.handleError));
   }
@@ -209,7 +209,7 @@ export class RequestsService {
 
     if (!token) return ;
 
-    return this.http.delete(`${NESTJS_URL}/friends/delete/${friendId}`, {headers:
+    return this.http.delete(`${PROD_NESTJS_URL}/friends/delete/${friendId}`, {headers:
     new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
@@ -222,7 +222,7 @@ export class RequestsService {
 
     const userId = this.getId(token);
 
-    return this.http.post<HttpResponse<HttpStatusCode>>(`${NESTJS_URL}/block/add`, {
+    return this.http.post<HttpResponse<HttpStatusCode>>(`${PROD_NESTJS_URL}/block/add`, {
       user1: userId, user2: targetId }, { headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
@@ -232,23 +232,23 @@ export class RequestsService {
 
     if (!token) return (null);
 
-    return (this.http.get<BlockedUser[]>(`${NESTJS_URL}/block/list`, { headers: new HttpHeaders().append('authorization', `Bearer ${token}`)})).pipe(catchError(this.handleError));
+    return (this.http.get<BlockedUser[]>(`${PROD_NESTJS_URL}/block/list`, { headers: new HttpHeaders().append('authorization', `Bearer ${token}`)})).pipe(catchError(this.handleError));
   }
 
   /** Register new User without 42 API */
 
   registerUser(userData: UserInterface) {
-    return this.http.post(`${NESTJS_URL}/auth/register`, userData, { observe: 'response', responseType: 'text'}).pipe(catchError(this.handleError));
+    return this.http.post(`${PROD_NESTJS_URL}/auth/register`, userData, { observe: 'response', responseType: 'text'}).pipe(catchError(this.handleError));
   }
 
   loginUser(login: string, password: string) {
-    return this.http.post(`${NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response', responseType: 'json'}).pipe(catchError(this.handleError));
+    return this.http.post(`${PROD_NESTJS_URL}/auth/login`, { login: login, password: password}, { observe: 'response', responseType: 'json'}).pipe(catchError(this.handleError));
   }
 
   sendA2fToken(token: string | null | undefined): Observable<HttpResponse<Object>> {
     const login: string | null = this.cookieService.getCookie('tmp_name');
 
-    return this.http.post(`${NESTJS_URL}/a2f/verify`, { token: token }, { headers: new HttpHeaders().append('tmp_name', `${login}`), observe: 'response'});
+    return this.http.post(`${PROD_NESTJS_URL}/a2f/verify`, { token: token }, { headers: new HttpHeaders().append('tmp_name', `${login}`), observe: 'response'});
   }
 
   /** Game Requests */
@@ -259,7 +259,7 @@ export class RequestsService {
 
     if (!token) return ;
 
-    return this.http.post<HttpResponse<HttpStatusCode>>(`${NESTJS_URL}/game/add`, gameResult, { headers:
+    return this.http.post<HttpResponse<HttpStatusCode>>(`${PROD_NESTJS_URL}/game/add`, gameResult, { headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 
@@ -269,7 +269,7 @@ export class RequestsService {
 
     if (!token) return ;
 
-    return this.http.get<GameResult[]>(`${NESTJS_URL}/game/list/${userId}`, {headers:
+    return this.http.get<GameResult[]>(`${PROD_NESTJS_URL}/game/list/${userId}`, {headers:
       new HttpHeaders().append('authorization', `Bearer ${token}`)}).pipe(catchError(this.handleError));
   }
 }

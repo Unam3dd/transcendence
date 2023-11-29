@@ -7,7 +7,6 @@ import { WS_GATEWAY } from '../env';
 import { Socket, io } from 'socket.io-client';
 import { JWT_PAYLOAD } from '../services/jwt.const';
 import { WsClient } from './websocket.type';
-import { RequestsService } from '../services/requests.service';
 import { BlockedUser } from '../interfaces/user.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { GameInvitationComponent } from '../modals/game-invitation/game-invitation.component';
@@ -42,7 +41,9 @@ export class WebsocketService {
         return ;
       }
       
-      this.client = <WsClient>io(WS_GATEWAY);
+      this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
+
+      console.log(this.client)
 
       this.client.emit('join', JSON.stringify(AuthUser));
 

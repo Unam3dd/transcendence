@@ -25,12 +25,12 @@ export interface JWTPayload {
   exp: number;
 }
 
-export interface FriendsUser{
-  id: number,
-  user1: number,
-  user2: number,
-  status: boolean,
-  applicant: boolean
+export interface FriendsUser {
+  id: number;
+  user1: number;
+  user2: number;
+  status: boolean;
+  applicant: boolean;
 }
 
 export interface UserFriendsInfo extends UserSanitize {
@@ -50,4 +50,3 @@ export interface BlockedUser {
   user1: number;
   user2: number;
 }
-

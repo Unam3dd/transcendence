@@ -6,7 +6,7 @@ import { TokensFrom42API, UserInfoAPI } from 'src/interfaces/api.interfaces';
 import { ApiService } from '../api/api.service';
 import { Body } from '@nestjs/common';
 import { isEmpty } from 'class-validator';
-import * as argon2 from "argon2";
+import * as argon2 from 'argon2';
 
 import {
   ApiInternalServerErrorResponse,
@@ -25,7 +25,7 @@ export class AuthController {
     private readonly authService: AuthService,
     private readonly apiService: ApiService,
     private readonly userService: UsersService,
-    private readonly a2fService: A2fService
+    private readonly a2fService: A2fService,
   ) {}
 
   @ApiOperation({ summary: 'Authentication with the 42 Api' })
@@ -49,16 +49,12 @@ export class AuthController {
     const exist: boolean =
       await this.authService.CheckAccountAlreadyExist(UserInfo);
 
-    const redirectURI = process.env.DEV_MODE
-      ? process.env.HOME_REDIRECT_DEV
-      : process.env.HOME_REDIRECT;
-
     if (exist) {
       res.cookie(
         'authorization',
         `Bearer ${await this.authService.generateJwt(UserInfo.login)}`,
       );
-      res.redirect(redirectURI);
+      res.redirect(process.env.HOME_REDIRECT);
       return;
     }
 
@@ -71,7 +67,7 @@ export class AuthController {
       'authorization',
       `Bearer ${await this.authService.generateJwt(UserInfo.login)}`,
     );
-    res.redirect(redirectURI);
+    res.redirect(process.env.HOME_REDIRECT);
   }
 
   @Post('register')
@@ -80,10 +76,10 @@ export class AuthController {
 
     data.avatar =
       'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
-    
+
     const status = await this.authService.CreateNewAccount(data);
 
-    if (!status) return (res.status(HttpStatus.CONFLICT).send());
+    if (!status) return res.status(HttpStatus.CONFLICT).send();
 
     if (data.a2f) {
       const user = await this.userService.findOneByLogin(data.login);
@@ -91,10 +87,10 @@ export class AuthController {
 
       const qrcode = await this.a2fService.respondWithQRCode(otpauthUrl);
 
-      return (res.status(HttpStatus.CREATED).send(qrcode));
+      return res.status(HttpStatus.CREATED).send(qrcode);
     }
-  
-    return (res.status(HttpStatus.OK).send());
+
+    return res.status(HttpStatus.OK).send();
   }
 
   @Post('login')
@@ -103,7 +99,11 @@ export class AuthController {
 
     const user = await this.userService.findOneByLogin(login);
 
-    if (isEmpty(user) || user.is42 || !(await argon2.verify(user.password, password)))
+    if (
+      isEmpty(user) ||
+      user.is42 ||
+      !(await argon2.verify(user.password, password))
+    )
       return res.status(HttpStatus.UNAUTHORIZED).send();
 
     if (user.a2f) return res.status(HttpStatus.OK).send({ a2f: true });
