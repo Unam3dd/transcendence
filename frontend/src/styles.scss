@@ -1,14 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-
-  background-image: url("assets/images/background.jpg");
-  background-size: cover;
-  background-position: center center;
+  // font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Comfortaa', sans-serif;
   min-height: 100vh;
-  background-repeat: no-repeat;
+
+  // background-image: url("assets/images/background.jpg");
+  // background-size: cover;
+  // background-position: center center;
+  // background-repeat: no-repeat;
 }
 
 .avatar-container50 {
@@ -60,16 +62,13 @@ body {
 /* Track */
 ::-webkit-scrollbar-track {
   margin: 20px 20px;
-  background: rgb(201, 186, 186);
+  // background: secondary;
   border-radius: 7.5px;
-  box-shadow: 5px 5px 0 0 #000;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
   margin: 20px 20px;
-  //border: solid 3px #000;
-  box-shadow: 5px 5px 0 0 #000;
   border-radius: 7.5px;
-  background: white;
+  background: #aaaaaa;
 }
