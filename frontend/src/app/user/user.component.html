@@ -27,7 +27,7 @@
         <hr>
         <h5>Match History</h5>
         <hr>
-        <div class="history" *ngIf="gameHistory.length !== 0">
+        <div class="history ps-3" *ngIf="gameHistory.length !== 0">
           <ng-container *ngFor="let game of gameHistory">
             <p *ngIf="game.size === 2"> 1v1 Game</p>
             <p *ngIf="game.size > 2"> Tournament Game</p>

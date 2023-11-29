@@ -1,5 +1,5 @@
 <div class="profile-page" *ngIf="userData$ | async as userData">
-  <div class="profile-content">
+  <div class="profile-content pt-3 pb-3">
     <div class="row">
       <div class="col align-self-center d-flex justify-content-center">
         <div class="avatar-container200">
@@ -7,7 +7,7 @@
         </div>
       </div>
 
-      <div class="col">
+      <div class="col ps-3">
         <simple-notifications></simple-notifications>
         <div class="qrcode" *ngIf="this.qrcodeURL">
           <p>QRCode A2F</p>
@@ -54,8 +54,8 @@
           <hr>
           <h5>Match History</h5>
           <hr>
-          <div class="history" *ngIf="gameHistory.length !== 0">
-            <content *ngFor="let game of gameHistory">
+          <div class="history ps-3" *ngIf="gameHistory.length !== 0">
+            <ng-container *ngFor="let game of gameHistory">
               <p *ngIf="game.size === 2"> 1v1 Game</p>
               <p *ngIf="game.size > 2"> Tournament Game</p>
               <p *ngIf="game.local"> Local Game</p>
@@ -64,13 +64,12 @@
               <p *ngIf="!game.victory">Loose</p>
               <p>{{game.createdAt}}</p>
               <hr>
-            </content>
+            </ng-container>
           </div>
-          <hr>
         </section>
       </div>
       <div class="col">
-        <section class="stat">
+        <section class="stat ps-3">
           <hr>
           <h5>My Stats</h5>
           <hr>
