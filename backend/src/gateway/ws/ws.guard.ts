@@ -12,29 +12,25 @@ export class WsGuard implements CanActivate {
 
     const arr: string[] = request.handshake.headers.cookie.split(';');
 
-    let auth = null;
+    let token = null;
 
-    for (const e of arr) {
-      const [key, value] = e.split('=');
+    for (const i of arr) {
+      const [key, value] = i.split('=');
 
-      console.log(key, value);
+      if (key.trim() === 'authorization') {
+        const s = decodeURI(value).split(' ');
 
-      if (key == 'authorization') {
-        console.log('catch authorization');
-        auth = value;
+        if (s.length != 2) return false;
+
+        token = s[1];
+        break;
       }
     }
 
-    if (!auth) return false;
-
-    const token = decodeURI(auth).split(' ');
-
-    if (token.length != 2) return false;
+    if (!token) return false;
 
     try {
-      this.jwtService.verify(token[1], {
-        secret: process.env.JWT_SECRET,
-      });
+      this.jwtService.verify(token, { secret: process.env.JWT_SECRET });
     } catch (e) {
       return false;
     }

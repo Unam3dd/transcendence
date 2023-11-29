@@ -76,7 +76,6 @@ export class EventsGateway {
   // Define actions when receiving an event, 'message' event in this case
   @SubscribeMessage('message')
   receiveNewMessage(@MessageBody() message: string) {
-    console.log(message);
     this.server.emit('newMessage', message);
   }
 
