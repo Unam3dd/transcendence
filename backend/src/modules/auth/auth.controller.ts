@@ -79,7 +79,8 @@ export class AuthController {
     const data: CreateUserDto = JSON.parse(JSON.stringify(body));
 
     data.avatar =
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
+    'https://upload.wikimedia.org/wikipedia/commons/c/cf/Big-logo-fon.jpg'
+    // 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
     
     const status = await this.authService.CreateNewAccount(data);
 

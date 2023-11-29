@@ -1,7 +1,7 @@
 <div class="navbar navbar-expand-lg navbar-dark bg-dark p-0 m-0" style="height: 70px;">
-  <div class="container-fluid p-0 m-0" style="height: 70px;">
-    <button class="btn mx-auto p-0 m-0" style="height: 70px;" type="button" (click)="moveToHome()">
-      <h1 class="text-nowrap text-light p-0 m-0 text-lg-center">T R A N S C E N D E N C E</h1>
+  <div class="container-fluid p-0 m-0" style="height: 100%;">
+    <button class="btn mx-auto p-0 m-0" type="button" (click)="moveToHome()">
+      <h1 class="text-nowrap text-light p-0 m-0 text-lg-center" style="line-height: 70px;">T R A N S C E N D E N C E</h1>
     </button>
     <button class="btn position-absolute p-0 m-0" style="right: 10px; top: 10px;" type="button" data-bs-toggle="offcanvas" data-bs-target="#navbar" aria-controls="navbar" *ngIf="userData$ | async as userData" [disabled]="!userData.email">
       <div class="avatar-container50">
