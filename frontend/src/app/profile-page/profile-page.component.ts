@@ -32,7 +32,7 @@ export class ProfilePageComponent implements OnInit{
   gameHistory: GameResult[] = [];
   win: number = 0;
   loose: number = 0;
-  winrate: number = 0.0;
+  winrate: number = 0;
 
   // Get data of user has been logged from backend service (NestJS)
   ngOnInit(): void {
@@ -48,12 +48,20 @@ export class ProfilePageComponent implements OnInit{
       this.gameObserver$ = this.requestService.listGame(userData.id as number);
 
       this.gameObserver$?.subscribe((gameList: GameResult[]) => {
-        this.gameHistory = gameList;
+        this.gameHistory = gameList.reverse();
+        this.dateFormat();
         this.win = this.countWin(gameList);
         this.loose = this.countLoose(gameList);
-        this.winrate = (this.win / gameList.length) * 100;
+        this.winrate = ((this.win / gameList.length) * 100) || 0;
+        this.winrate = Number(this.winrate.toFixed(2));
       });
     });
+  }
+
+  dateFormat(): void {
+    this.gameHistory.forEach((el) => {
+      el.createdAt = el.createdAt.substring(0,10);
+    })
   }
 
   countWin(gameList: GameResult[]): number {
@@ -112,7 +120,7 @@ export class ProfilePageComponent implements OnInit{
       const { token, qrcode } = JSON.parse(JSON.stringify(data));
       this.qrcodeURL = qrcode;
       this.cookieService.removeOnlyCookie('authorization');
-      this.cookieService.setCookie('authorization', encodeURI(`Bearer ${token}`));
+      this.cookieService.setCookie('authorization', JSON.parse(JSON.stringify(`Bearer ${token}`)));
     })
   }
 

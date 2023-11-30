@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ActivatedRoute, Router} from "@angular/router";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
 import {Subject, takeUntil} from "rxjs";
 import { RequestsService } from '../services/requests.service';
 import { LocalPlayer, PlayerResult } from '../interfaces/game.interface';
@@ -51,7 +51,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
+  constructor(private route: ActivatedRoute, private router: Router, private activatedRoute: ActivatedRoute, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
     
     this.requestsService.getLoggedUserInformation()?.subscribe((data) => {
       this.userNickame = data.nickName as string;
@@ -59,10 +59,21 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
         "nickName": this.userNickame,
       }
       this.players.push(player1);
+      this.router.events.subscribe( (event) => {
+        if (event instanceof NavigationEnd) {
+          //console.log(event.url);
+          if (event.url != '/game' && !event.url.startsWith('/game?', 0))
+          {
+            console.log(event.url);
+            this.ws.client.emit('statusChange', OnlineState.online);
+          }
+        }
+      })
     });
   }
 
   ngOnInit(): void {
+    console.log("Ng on init")
     this.endDuo = false;
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe))
@@ -557,5 +568,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     if (this.gameInterval) {
       clearInterval(this.gameInterval);
     }
+    window.location.reload();
   }
 }

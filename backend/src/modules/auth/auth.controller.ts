@@ -74,9 +74,8 @@ export class AuthController {
   async RegisterNewAccount(@Res() res: Response, @Body() body: CreateUserDto) {
     const data: CreateUserDto = JSON.parse(JSON.stringify(body));
 
-    data.avatar =
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b5/Halloween.JPG/260px-Halloween.JPG';
-
+    data.avatar = 'https://upload.wikimedia.org/wikipedia/commons/c/cf/Big-logo-fon.jpg';
+  
     const status = await this.authService.CreateNewAccount(data);
 
     if (!status) return res.status(HttpStatus.CONFLICT).send();

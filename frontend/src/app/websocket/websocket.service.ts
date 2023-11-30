@@ -65,7 +65,6 @@ export class WebsocketService {
       });
 
       this.client.on('result', (payload: boolean) => {
-        this.changeStatus(this.client, OnlineState.online);
         this.printGameResult(payload);
     });
   } 

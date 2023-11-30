@@ -1,27 +1,67 @@
-<div class="fluid-container connectionpage">
-  <simple-notifications></simple-notifications>
-  <div class="connection42API">
-    <h4>Connect with 42 !</h4>
-    <button (click)="connection42API()">42</button>
-  </div>
-  <div class="connection" *ngIf="!double_factor">
-    <form [formGroup]="form" (ngSubmit)="connection()">
-      <input id="login" type="text" placeholder="Login" formControlName="login" minlength="3" maxlength="120">
-      <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
-      <button class="login-button" type="submit">Login</button>
-    </form>
-  </div>
+<div>
+  <div class="container-fluid text-center mt-4" style="margin-bottom: calc(1.5rem + 30px);">
+    <div class="row">
+      <div class="col-lg-6 col-md-8 col-sm-12 mx-auto">
+        <div class="card border-black register">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Connection</h4>
+          </div>
+          <div class="card-body">
+            <simple-notifications></simple-notifications>
 
-  <div class="registration">
-    <a id="link" [routerLink]="['/register']">Not Registered ? Go</a>
-  </div>
-</div>
+            <div *ngIf="!double_factor" class="col-12 mb-3">
+              <h5>- with your 42 account :</h5>
+              <button class="col-9 col-sm-8 col-md-7 col-lg-6 btn btn-light m-2 p-3" (click)="connection42API()">
+                <img src="../assets/images/42_logo_api.svg" alt="42 Auth" class="img-fluid" style="height: 80px;">
+              </button> 
+            </div>
+            <hr *ngIf="!double_factor" class="border border-secondary border-2 opacity-50">
+            <form *ngIf="!double_factor" [formGroup]="form" (ngSubmit)="connection()">
+              <h5 class="m-3">- or :</h5>
+              
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="login">Login</label>
+                <div class="input-group">
+                  <div class="input-group-text">Login</div>
+                  <input id="login" class="form-control" type="text" formControlName="login">
+                </div>
+              </div>
 
-<div class="a2f" *ngIf="double_factor">
-  <h4>Double Authentication</h4>
-  <simple-notifications></simple-notifications>
-    <form [formGroup]="tokenForm" (ngSubmit)="a2f()">
-      <input id="token" type="text" placeholder="token" formControlName="token" required>
-      <button id="button-token" (click)="a2f" type="submit">Send Token !</button>
-    </form>
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="password">Password</label>
+                <div class="input-group">
+                  <div class="input-group-text">Password</div>
+                  <input id="password" class="form-control" type="password" formControlName="password">
+                </div>
+              </div>
+  
+              <div class="text-end mb-3">
+                <button *ngIf="!double_factor" type="submit" class="col-6 btn btn-secondary">Sign in</button>
+              </div>
+            </form>
+            
+            <div *ngIf="double_factor">
+              <h5 class="mb-3">Two-factor authentication :</h5>
+              <!-- <simple-notifications></simple-notifications> -->
+                <form [formGroup]="tokenForm" (ngSubmit)="a2f()">
+                  <div class="col-12">
+                    <label class="visually-hidden" for="login">Token</label>
+                    <div class="input-group">
+                      <div class="input-group-text">Token</div>
+                      <input class="form-control" id="token" type="text" formControlName="token" required>
+                    </div>
+                  </div>
+                  <button class="col-12 btn btn-secondary mt-4 mb-2" id="button-token" (click)="a2f" type="submit">Send Token</button>
+                </form>      
+            </div>
+            <hr *ngIf="!double_factor" class="m-1 border border-secondary border-2 opacity-50">
+            <div *ngIf="!double_factor" class="col-12 mt-3 d-flex justify-content-center align-items-center">
+              <span class="col-4">No account yet ?</span>
+              <a class="col-4 text-decoration-none badge rounded-pill text-bg-secondary" style="margin-left: 5px;" id="link" [routerLink]="['/register']">Join now !</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

@@ -1,10 +1,17 @@
 <div class="gameMode">
-  <button (click)="moveToGame('local', null)">Two players local</button>
-  <button (click)="moveToGame('remote', null)">Two players online</button>
-  <button (click)="openModal(LocalTournament)">Local tournament</button>
-
+  <div class="local-game-container row mt-5">
+    <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
+    <button class="btn btn-primary local-game fs-1" (click)="moveToGame('local', null)">Two players local</button>
+  </div>
+  <div class="two-player-container row mt-5">
+    <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
+    <button class="btn btn-primary two-player fs-1" (click)="moveToGame('remote', null)">Two players online</button>
+  </div>
+  <div class="tournament-container row mt-5">
+    <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
+    <button class="btn btn-primary tournament-game fs-1" (click)="openModal(LocalTournament)">Local tournament</button>
+  </div>
 </div>
-<app-friends></app-friends>
 
 <!-- Choose Players Number for Tournament modal -->
 <ng-template #lobbySize let-modal>

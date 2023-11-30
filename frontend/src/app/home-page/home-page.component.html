@@ -1,11 +1,19 @@
-<div *ngIf="userData$ | async as userData">
+<div class="home-buttons" *ngIf="userData$ | async as userData">
   <ng-container *ngIf="userData.nickName && userData.email; else columnEmpty">
-    <button class="btn btn-primary profile" (click)="moveToProfile()">Profile</button>
-    <button class="btn btn-primary game" (click)="moveToGame()">Game</button>
-    <button class="btn btn-primary chat" (click)="moveToChat()">Chat</button>
+    <div class="profile-container row mt-5">
+      <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
+      <button class="btn btn-primary profile fs-1" (click)="moveToProfile()">Profile</button>
+    </div>
+    <div class="game-container row mt-5">
+      <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
+      <button class="btn btn-primary game fs-1" (click)="moveToGame()">Game</button>
+    </div>
+    <div class="chat-container row mt-5">
+      <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
+      <button class="btn btn-primary chat fs-1" (click)="moveToChat()">Chat</button>
+    </div>
   </ng-container>
 </div>
-<app-friends></app-friends>
 
 <ng-template #columnEmpty>
   <form (ngSubmit)="updateNickname()">
@@ -13,9 +21,9 @@
       <p>Welcome</p>
       <p>Enter your nickname and your email</p>
       <p>(Your nickname will be your login by default)</p>
-      <div>
+      <div *ngIf="userData$ | async as userData">
         <span>Nickname</span>
-        <input type="text" class="form-control" [formControl]="nickname">
+        <input type="text" placeholder="{{userData.nickName}}" class="form-control text-center" [formControl]="nickname">
       </div>
       <div>
         <span>Enter your email</span>

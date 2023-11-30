@@ -1,24 +1,46 @@
-<div class="global">
+<!-- <div class="global">
 
   <ul class="channel-list">
 
-    <li class="channel" (click)="onChannelClicked( null )">
+    <li class="channel" id="general" (click)="onChannelClicked( null )">
       <div class="thumbnail">  
         <div class="initial">G</div>
       </div>
       <span class="profile-name">General</span>
     </li>
 
-    <li></li>
-
     <li class="channel" *ngFor="let user of this.listClients" (click)="onChannelClicked( user )">
       <div class="thumbnail">  
         <img src={{user.avatar}}/>
       </div>
       <span class="profile-name">{{ user.nickName }} ({{ user.login }})</span>
-      <button>Block</button><!-- <button (click)="this.blockUser(user.id)">Block</button> -->
-      <!-- <button (click)="this.inviteUser(user.nickName)">Invitation</button> -->
-      <button (click)="this.visitUser(user.id)">Profile</button>
+      <button (click)="this.blockUser(user.id)">B</button>
+      <button (click)="this.inviteUser(user.nickName)">I</button>
+      <button (click)="this.visitUser(user.id)">P</button>
+    </li>
+    
+  </ul>
+</div> -->
+
+<div>
+
+  <ul>
+
+    <li (click)="onChannelClicked( null )">
+      <div >  
+        <div >G</div>
+      </div>
+      <span >General</span>
+    </li>
+
+    <li *ngFor="let user of this.listClients" (click)="onChannelClicked( user )">
+      <div >  
+        <img src={{user.avatar}}/>
+      </div>
+      <span >{{ user.nickName }} ({{ user.login }})</span>
+      <button (click)="this.blockUser(user.id)">B</button>
+      <button (click)="this.inviteUser(user.nickName)">I</button>
+      <button (click)="this.visitUser(user.id)">P</button>
     </li>
     
   </ul>

@@ -3,7 +3,7 @@
     <div class="userInfo">
         <p class="username">{{this.currentMatch[0].nickName}} </p>
     </div>
-    <p> vs </p> 
+    <p> vs </p>
     <div>
         <p class="username">{{this.currentMatch[1].nickName}} </p>
     </div>
@@ -13,7 +13,7 @@
     <div class="userInfo">
         <p class="username">{{this.userNickame}} </p>
     </div>
-    <p> vs </p> 
+    <p> vs </p>
     <div>
         <p class="username">Guest</p>
     </div>
@@ -26,18 +26,17 @@
 
    <section *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
     <h6>Order of fights for this round:</h6>
-    <content *ngFor="let pair of printOrder" class="roundInfo"> 
+    <ng-container *ngFor="let pair of printOrder" class="roundInfo">
       <div class="userInfo">
         <p class="username">{{pair[0].nickName}}</p>
       </div>
-      <p>vs</p> 
+      <p>vs</p>
       <div>
          <p class="username">{{pair[1].nickName}}</p>
       </div>
-    </content>
+    </ng-container>
     </section>
     <span class="right-column">
       <app-chat></app-chat>
     </span>
 </section>
-<app-friends></app-friends>

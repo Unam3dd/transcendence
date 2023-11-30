@@ -1,21 +1,89 @@
 <div>
-    <div class="register">
-      <simple-notifications></simple-notifications>
-      <form [formGroup]="form" (ngSubmit)="register()">
-        <input id="login" type="text" placeholder="login" formControlName="login" minlength="3" maxlength="120">
-        <input id="firstname" type="text" placeholder="firstName" formControlName="firstName" maxlength="120">
-        <input id="lastname" type="text" placeholder="lastName" formControlName="lastName" maxlength="120">
-        <input id="nickname" type="text" placeholder="nickName" formControlName="nickName" maxlength="120">
-        <input id="email" type="email" placeholder="email" formControlName="email">
-        <input id="password" type="password" placeholder="Password" formControlName="password" minlength="8" maxlength="120">
-        <p>Two Factor</p><input id="a2f" type="checkbox" placeholder="A2F" formControlName="a2f">
-        <button type="submit">Register</button>
-      </form>
-    </div>
+  <div class="container-fluid m-5">
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+        <div class="card border-black register">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Registration</h4>
+          </div>
+          <div class="card-body">
+            <simple-notifications></simple-notifications>
 
-    <div class="qrcode" *ngIf="this.qrcode && this.form.value.a2f">
-        <h4>Scan your qrcode with google authenticator</h4>
-        <img src="{{ this.qrcode }}" />
-        <a href="https://localhost/">Redirect to login</a>
+            <form [formGroup]="form" (ngSubmit)="register()">
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="login">Login</label>
+                <div class="input-group">
+                  <div class="input-group-text">Login</div>
+                  <input id="login" class="form-control" type="text" formControlName="login">
+                </div>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="firstName">Firstname</label>
+                <div class="input-group">
+                  <div class="input-group-text">Firstname</div>
+                  <input id="firstName" class="form-control" type="text" formControlName="firstName">
+                </div>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="lastName">Lastname</label>
+                <div class="input-group">
+                  <div class="input-group-text">Lastname</div>
+                  <input id="lastName" class="form-control" type="text" formControlName="lastName">
+                </div>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="nickName">Nickname</label>
+                <div class="input-group">
+                  <div class="input-group-text">Nickname</div>
+                  <input id="nickName" class="form-control" type="text" formControlName="nickName">
+                </div>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="email">Email</label>
+                <div class="input-group">
+                  <div class="input-group-text">Email</div>
+                  <input id="email" class="form-control" type="email" formControlName="email">
+                </div>
+              </div>
+
+              <div class="col-12 mb-3">
+                <label class="visually-hidden" for="password">Password</label>
+                <div class="input-group">
+                  <div class="input-group-text">Password</div>
+                  <input id="password" class="form-control" type="password" formControlName="password">
+                </div>
+              </div>
+
+              <div class="mb-3 form-check">
+                <label class="form-check-label" for="a2f">Two-factor authentication</label>
+                <input id="a2f" type="checkbox" class="form-check-input" formControlName="a2f">
+              </div>
+              <div class="text-end">
+                <button type="submit" class="btn btn-secondary">Sign up</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-5">
+        <div class="card border-black" *ngIf="qrcode && form.value.a2f">
+          <div class="card-header bg-dark text-white">
+            <h4 class="mb-0">Your QRcode</h4>
+          </div>
+          <div class="card-body text-center">
+            <p class="m-1 p-0 text-left">Scan this QRcode with Google Authenticator :</p>
+            <div>
+              <img src="{{ qrcode }}" class="img-fluid" alt="QR Code" />
+            </div>
+            <a href="http://localhost:4200/" class="btn btn-secondary">Done</a>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
+</div>

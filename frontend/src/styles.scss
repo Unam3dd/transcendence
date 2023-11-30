@@ -1,14 +1,74 @@
 /* You can add global styles to this file, and also import other style files */
 @import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css");
+@import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
-html, body {height: 100%; }
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  // font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: 'Comfortaa', sans-serif;
+  min-height: 100vh;
+
+  // background-image: url("assets/images/background.jpg");
+  // background-size: cover;
+  // background-position: center center;
+  // background-repeat: no-repeat;
 }
 
-.toast {
-  top: 0;
-  right: 0;
-  position: absolute;
+.avatar-container50 {
+  width: 50px;
+  height: 50px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container60 {
+  width: 60px;
+  height: 60px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container100 {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container150 {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar-container200 {
+  width: 200px;
+  height: 200px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  margin: 20px 20px;
+  // background: secondary;
+  border-radius: 7.5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  margin: 20px 20px;
+  border-radius: 7.5px;
+  background: #aaaaaa;
 }

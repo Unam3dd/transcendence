@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
-import { UserFriendsInfo, UserUpdateStatus } from '../interfaces/user.interface';
+import { UserFriendsInfo, UserInterface, UserUpdateStatus } from '../interfaces/user.interface';
 import { NavigationEnd, Router } from '@angular/router'
-import { Subject, Subscription, takeUntil } from 'rxjs';
+import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { WsClient } from '../websocket/websocket.type';
 import { WebsocketService } from '../websocket/websocket.service';
 
@@ -23,23 +23,20 @@ export class FriendsComponent implements OnInit {
   pendingFriends: UserFriendsInfo[] = [];
 
   unsubscribeObs = new Subject<void>();
+  userData$!: Observable<UserInterface> | null;
 
   test = new Subscription();
-  showContent: boolean = true;
-  display: boolean = true;
+  showContent: boolean = false;
 
   ngOnInit() {
-    //Display this component only on the /home page
-    this.router.events.pipe(takeUntil(this.unsubscribeObs)).subscribe((event) => {
-      if (event instanceof NavigationEnd) {
-        if ((event.url !== '/home'))
-          this.display = false;
-        else
-          this.display = true;
-      }
-    });
 
-    this.client.emit('listFriends');
+    this.userData$ = this.requestsService.getLoggedUserInformation();
+    if (!this.userData$)
+      return ;
+
+    this.userData$.pipe(takeUntil(this.unsubscribeObs)).subscribe( (user) => {
+      this.client.emit('listFriends', user.id);
+    });
 
     this.client.on('getListFriends', (payload: UserFriendsInfo[]) => {
       this.friendList = [];
@@ -48,6 +45,7 @@ export class FriendsComponent implements OnInit {
         return ;
       this.refreshList();
     })
+
 
     this.client.on('getStatus', (payload: UserUpdateStatus[]) => {
       if (this.approvedFriends.length === 0)
@@ -58,26 +56,29 @@ export class FriendsComponent implements OnInit {
         if (found)
         {
           found.onlineState = el.onlineState;
-          console.log(found.onlineState);
         }
       }
     });
   }
 
-  refreshList() {
+  public refreshList() {
     this.approvedFriends = [];
     this.pendingFriends = [];
 
     if (this.friendList.length === 0)
       return ;
 
-    this.friendList.forEach((element) => {
-        if (element.status === false) {
+    this.friendList.forEach(async (element) => {
+      this.requestsService.listBlockedUser()?.pipe(takeUntil(this.unsubscribeObs)).subscribe((blocked) => {
+        if (blocked.find((el) => el.user2 === element.id))
+          return
+        else if (element.status === false) {
           this.pendingFriends.push(element);
         }
         else
           this.approvedFriends.push(element);
       });
+    });
   }
 
   //approve a friend request, remove user from pending array then adding the user in the approved array
@@ -91,7 +92,7 @@ export class FriendsComponent implements OnInit {
           return element !== user
         });
         this.approvedFriends.push(user);
-        this.client.emit('updateFriend', user);
+        this.client.emit('updateFriend', user.id);
       })
     });
   }
@@ -101,16 +102,15 @@ export class FriendsComponent implements OnInit {
 
     this.requestsService.listFriends(false)?.pipe(takeUntil(this.unsubscribeObs)).subscribe((friends) => {
       if (!(friends.find((el) => el.user2 === user.id)))
+      {
+        this.removeFriend(user);
         return;
-        this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-          this.approvedFriends = this.approvedFriends.filter((element) => {
-            return element !== user
-          });
-          this.pendingFriends = this.pendingFriends.filter((element) => {
-            return element !== user
-          });
-          this.client.emit('updateFriend', user);
-        });
+      }
+        
+      this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
+        this.removeFriend(user);
+        this.client.emit('updateFriend', user.id);
+      });
     });
   }
 
@@ -119,29 +119,39 @@ export class FriendsComponent implements OnInit {
       if (!(friends.find((el) => el.user2 === user.id)))
         return;
       this.requestsService.blockUser(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(() => {
-        this.approvedFriends = this.approvedFriends.filter((element) => {
-          return element !== user
-        });
-        this.pendingFriends = this.pendingFriends.filter((element) => {
-          return element !== user
-        });
+        this.removeFriend(user);
       });
       this.requestsService.deleteFriends(user.id)?.pipe(takeUntil(this.unsubscribeObs)).subscribe(()=> {
-        this.client.emit('updateFriend', user);
+        this.client.emit('updateFriend', user.id);
       });
+    });
+  }
+
+  removeFriend(user: UserFriendsInfo)
+  {
+    this.approvedFriends = this.approvedFriends.filter((element) => {
+      return element !== user
+    });
+    this.pendingFriends = this.pendingFriends.filter((element) => {
+      return element !== user
     });
   }
 
   toggleContent() {
     this.showContent = !this.showContent;
-    if (!this.showContent)
-    {
-      this.client.emit('listFriends');
+    if (this.showContent && this.userData$) {
+      this.userData$.pipe(takeUntil(this.unsubscribeObs)).subscribe( (user) => {
+        this.client.emit('listFriends', user.id);
+      });
     }
   }
 
   toggleOption(user: UserFriendsInfo) {
     user.showOpt = !user.showOpt;
+  }
+
+  truncateText(user: UserFriendsInfo, limit: number): string {
+    return user.nickName.length > limit ? user.nickName.substring(0, limit) + '...' : user.nickName;
   }
 
   ngOnDestroy()

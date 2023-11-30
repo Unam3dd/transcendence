@@ -174,6 +174,11 @@ export class EventsGateway {
     lobby.gameInstance.pressButton(player, body.button);
   }
 
+  @SubscribeMessage('quitGame') 
+  quitGame(@ConnectedSocket() client: Socket) {
+      this.lobbyServices.clientDisconnect(client);
+  }
+
   @SubscribeMessage('quitLobby')
   quitLobby(@ConnectedSocket() client: Socket) {
     const player = this.lobbyServices.findUserBySocket(client);
@@ -204,45 +209,49 @@ export class EventsGateway {
     payload.push(info);
     this.server.emit('getStatus', payload);
   }
+    
+   @SubscribeMessage('listFriends')
+   async ListFriends(@MessageBody() userId: number) {
 
-  @SubscribeMessage('listFriends')
-  async ListFriends(@ConnectedSocket() client: Socket) {
-    const userFriendsInfo: UserFriendsInfo[] = [];
+      let userFriendsInfo: UserFriendsInfo[] = [];
 
-    const targetClient = this.clientList.find(
-      (el) => el.client.id === client.id,
-    );
-    if (!targetClient) return;
+      const targetClient = this.clientList.find((el) => el.id === userId);
+      if(!targetClient)
+        return ;
+      const friendsList = await this.friendsService.listFriends(targetClient.id, false);
+      
+      for (const el of friendsList) {
+        let state: OnlineState;
+        const user = await this.usersService.findOneSanitize(el.user2);
 
-    const friendsList = await this.friendsService.listFriends(
-      targetClient.id,
-      false,
-    );
+        if (user)
+        {
 
-    for (const el of friendsList) {
-      let state: OnlineState;
-      const user = await this.usersService.findOneSanitize(el.user2);
+          const userInfo = this.clientList.find((el) => el.id === user.id)
+          if (userInfo)
+            state = userInfo.onlineState
+          else
+            state = OnlineState.offline
+          const friendInfo: UserFriendsInfo = {
+            ...user,
+            'applicant': el.applicant,
+            'status': el.status,
+            'onlineState': state,
+          }
+          userFriendsInfo.push(friendInfo);  
+        }
+      }
+      targetClient.client.emit('getListFriends', userFriendsInfo);
+    }
 
-      const userInfo = this.clientList.find((el) => el.id === user.id);
-      if (userInfo) state = userInfo.onlineState;
-      else state = OnlineState.offline;
-
-      const friendInfo: UserFriendsInfo = {
-        ...user,
-        applicant: el.applicant,
-        status: el.status,
-        onlineState: state,
-      };
-      userFriendsInfo.push(friendInfo);
+    @SubscribeMessage('updateFriend')
+    updateFriend(@MessageBody() userId:number) {
+      const updated = this.clientList.find((el) => el.id === userId)
+      if (!updated)
+        return ;
+      this.ListFriends(updated.id);
     }
     client.emit('getListFriends', userFriendsInfo);
-  }
-
-  @SubscribeMessage('updateFriend')
-  deleteFriend(@MessageBody() user: UserFriendsInfo) {
-    const deleted = this.clientList.find((el) => el.id === user.id);
-    if (!deleted) return;
-    this.ListFriends(deleted.client);
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
