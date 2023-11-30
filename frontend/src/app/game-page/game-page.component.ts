@@ -312,13 +312,13 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   //Key management
   @HostListener('window:keydown', ['$event'])
   localKeyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowUp' && this.barRightY - this.barSpeed >= 0) {
+    if ((event.key === 'o' || event.key === 'O') && this.barRightY - this.barSpeed >= 0) {
       this.barRightY -= this.barSpeed;
-    } else if (event.key === 'ArrowDown' && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
+    } else if ((event.key === 'l' || event.key === 'L') && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.clientHeight) {
       this.barRightY += this.barSpeed;
-    } else if ((event.key === 'z' || event.key === 'Z') && this.barLeftY - this.barSpeed >= 0) {
+    } else if ((event.key === 'w' || event.key === 'W') && this.barLeftY - this.barSpeed >= 0) {
       this.barLeftY -= this.barSpeed;
-    } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
+    } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.clientHeight) {
       this.barLeftY += this.barSpeed;
     }
 
