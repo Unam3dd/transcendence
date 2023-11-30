@@ -3,7 +3,7 @@ import { FormBuilder } from '@angular/forms';
 import { UserInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
 import { TimerService } from '../services/timer.service';
-import { PROD_LOGIN_PAGE } from '../env';
+import { LOGIN_PAGE } from '../env';
 import { NotificationsService } from 'angular2-notifications';
 import { HttpStatusCode } from '@angular/common/http';
 
@@ -51,7 +51,7 @@ export class RegisterComponent {
         return ;
       }
       await this.timerService.sleep(3000);
-      window.location.href = `${PROD_LOGIN_PAGE}`
+      window.location.href = `${LOGIN_PAGE}`
     }, () => {
       this.notif.error('Error', 'You not respect the expected answer to perform registration !');
     });

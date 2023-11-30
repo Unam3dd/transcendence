@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, PROD_HOME_PAGE, PROD_LOGIN_PAGE, PROD_REDIRECT_URI} from '../env';
+import { CLIENT_ID, HOME_PAGE, LOGIN_PAGE, REDIRECT_URI} from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
@@ -33,7 +33,7 @@ export class ConnectionComponent {
   double_factor: boolean = false;
 
   connection42API() {
-    window.location.href=`https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${PROD_REDIRECT_URI}&response_type=code`
+    window.location.href=`https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`
   }
 
   connection() {
@@ -57,7 +57,7 @@ export class ConnectionComponent {
 
       this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
       await this.timeService.sleep(2000);
-      window.location.href = PROD_HOME_PAGE;
+      window.location.href = HOME_PAGE;
     }, async () => {
       this.notif.error('Error', 'Your login or password is not correct !');
       return ;
@@ -75,7 +75,7 @@ export class ConnectionComponent {
         this.notif.error('Error', 'Your token is invalid !');
         this.cookieService.removeCookie('tmp_name');
         await this.timeService.sleep(2000);
-        window.location.href = PROD_LOGIN_PAGE;
+        window.location.href = LOGIN_PAGE;
         return ;
       }
 
@@ -84,12 +84,12 @@ export class ConnectionComponent {
       this.notif.success('You are connected !', `You are connected with ${atob(login)} welcome !`);
       await this.timeService.sleep(2000);
       this.cookieService.removeCookie('tmp_name');
-      window.location.href = PROD_HOME_PAGE;
+      window.location.href = HOME_PAGE;
     }, async () => {
       this.notif.error('Error', 'Your token is invalid !');
       this.cookieService.removeCookie('tmp_name');
       await this.timeService.sleep(2000);
-      window.location.href = PROD_LOGIN_PAGE;
+      window.location.href = LOGIN_PAGE;
     })
   }
 }

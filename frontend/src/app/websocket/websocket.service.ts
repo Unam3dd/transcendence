@@ -43,8 +43,6 @@ export class WebsocketService {
       
       this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
 
-      console.log(this.client)
-
       this.client.emit('join', JSON.stringify(AuthUser));
 
       this.client.on('newArrival', (msg: string) => {
