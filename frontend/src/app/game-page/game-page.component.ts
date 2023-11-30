@@ -110,7 +110,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   ballRadius: number = 0;
   ballSpeedX: number = 0;
   ballSpeedY: number = 0;
-  ballSpeed: number = 5;
+  ballSpeed: number = 0;
   gameInterval: number = 0;
 
   //Score variables
@@ -377,7 +377,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   initPosition() {
-    const centerY: number = (this.canvas.nativeElement.clientHeight - this.barHeight) / 2;
+    this.ballRadius = this.canvas.nativeElement.clientWidth * 0.012;
+    const centerY: number = (this.canvas.nativeElement.clientHeight - (this.canvas.nativeElement.clientHeight * 0.12)) / 2;
     const centerBallX: number = (this.canvas.nativeElement.clientWidth - this.ballRadius) / 2;
     const centerBallY: number = (this.canvas.nativeElement.clientHeight - this.ballRadius) / 2;
 
@@ -451,6 +452,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     const angle = randomAngle * Math.PI / 180;
     const initialSide = Math.random() < 0.5 ? -1 : 1;
 
+    this.ballSpeed = this.canvas.nativeElement.clientWidth * 0.006;
+
     this.ballSpeedX = initialSide * Math.cos(angle) * this.ballSpeed;
     this.ballSpeedY = Math.sin(angle) * this.ballSpeed;
   }
@@ -463,12 +466,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.barHeight = canvas.clientHeight * 0.12;
     this.barWidth = canvas.clientWidth * 0.0125;
 
-    /*this.ballX = ;
-    this.ballY = ;
-    this.ballRadius = ;*/
-
     if (context) {
-      context.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
       //Draw rackets
       context.fillStyle = 'white';
@@ -490,9 +489,9 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
       //draw scores
       context.fillStyle = 'white';
-      context.font = '80px Courier New, monospace';
-      context.fillText(`${this.scoreP1}`, centerX / 2, 100);
-      context.fillText(`${this.scoreP2}`, 3 * (canvas.clientWidth / 4), 100);
+      context.font = '5vw Courier New, monospace';
+      context.fillText(`${this.scoreP1}`, centerX / 2, this.canvas.nativeElement.clientHeight * 0.25);
+      context.fillText(`${this.scoreP2}`, 3 * (canvas.clientWidth / 4), this.canvas.nativeElement.clientHeight * 0.25);
 
       //Win message
       if (this.scoreP1 == 3) {
@@ -526,7 +525,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       context.font = '50px Courier New, monospace';
       context.textBaseline = 'middle';
       context.textAlign = "center";
-      context.fillText(`${i}`, (canvas.width / 2), canvas.height / 2);
+      context.fillText(`${i}`, (canvas.clientWidth / 2), canvas.clientHeight / 2);
     }
   }
 
@@ -540,8 +539,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       context.fillStyle = 'white';
       context.font = '50px Courier New, monospace';
       context.textBaseline = 'middle';
-      context.fillText('Next Round in', (canvas.width / 2), (canvas.height / 2) - canvas.height * 0.2);
-      context.fillText(`${count}`, (canvas.width / 2), (canvas.height / 2) + canvas.height * 0.1);
+      context.fillText('Next Round in', (canvas.clientWidth / 2), (canvas.clientHeight / 2) - canvas.clientHeight * 0.2);
+      context.fillText(`${count}`, (canvas.clientWidth / 2), (canvas.clientHeight / 2) + canvas.clientHeight * 0.1);
     }
   }
 
