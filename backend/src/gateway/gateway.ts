@@ -23,10 +23,7 @@ import { WsGuard } from './ws/ws.guard';
 
 @UseGuards(WsGuard)
 @Injectable()
-@WebSocketGateway(3001, {
-  cors: true,
-  transports: ['websocket'],
-})
+@WebSocketGateway(3001, { cors: true, transports: ['websocket'] })
 export class EventsGateway {
   constructor(
     private readonly lobbyServices: LobbyServices,
@@ -174,9 +171,9 @@ export class EventsGateway {
     lobby.gameInstance.pressButton(player, body.button);
   }
 
-  @SubscribeMessage('quitGame') 
+  @SubscribeMessage('quitGame')
   quitGame(@ConnectedSocket() client: Socket) {
-      this.lobbyServices.clientDisconnect(client);
+    this.lobbyServices.clientDisconnect(client);
   }
 
   @SubscribeMessage('quitLobby')
@@ -209,49 +206,43 @@ export class EventsGateway {
     payload.push(info);
     this.server.emit('getStatus', payload);
   }
-    
-   @SubscribeMessage('listFriends')
-   async ListFriends(@MessageBody() userId: number) {
 
-      let userFriendsInfo: UserFriendsInfo[] = [];
+  @SubscribeMessage('listFriends')
+  async ListFriends(@MessageBody() userId: number) {
+    const userFriendsInfo: UserFriendsInfo[] = [];
 
-      const targetClient = this.clientList.find((el) => el.id === userId);
-      if(!targetClient)
-        return ;
-      const friendsList = await this.friendsService.listFriends(targetClient.id, false);
-      
-      for (const el of friendsList) {
-        let state: OnlineState;
-        const user = await this.usersService.findOneSanitize(el.user2);
+    const targetClient = this.clientList.find((el) => el.id === userId);
+    if (!targetClient) return;
+    const friendsList = await this.friendsService.listFriends(
+      targetClient.id,
+      false,
+    );
 
-        if (user)
-        {
+    for (const el of friendsList) {
+      let state: OnlineState;
+      const user = await this.usersService.findOneSanitize(el.user2);
 
-          const userInfo = this.clientList.find((el) => el.id === user.id)
-          if (userInfo)
-            state = userInfo.onlineState
-          else
-            state = OnlineState.offline
-          const friendInfo: UserFriendsInfo = {
-            ...user,
-            'applicant': el.applicant,
-            'status': el.status,
-            'onlineState': state,
-          }
-          userFriendsInfo.push(friendInfo);  
-        }
+      if (user) {
+        const userInfo = this.clientList.find((el) => el.id === user.id);
+        if (userInfo) state = userInfo.onlineState;
+        else state = OnlineState.offline;
+        const friendInfo: UserFriendsInfo = {
+          ...user,
+          applicant: el.applicant,
+          status: el.status,
+          onlineState: state,
+        };
+        userFriendsInfo.push(friendInfo);
       }
-      targetClient.client.emit('getListFriends', userFriendsInfo);
     }
+    targetClient.client.emit('getListFriends', userFriendsInfo);
+  }
 
-    @SubscribeMessage('updateFriend')
-    updateFriend(@MessageBody() userId:number) {
-      const updated = this.clientList.find((el) => el.id === userId)
-      if (!updated)
-        return ;
-      this.ListFriends(updated.id);
-    }
-    client.emit('getListFriends', userFriendsInfo);
+  @SubscribeMessage('updateFriend')
+  updateFriend(@MessageBody() userId: number) {
+    const updated = this.clientList.find((el) => el.id === userId);
+    if (!updated) return;
+    this.ListFriends(updated.id);
   }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
