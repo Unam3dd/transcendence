@@ -41,7 +41,7 @@ export class UsersController {
   constructor(
     private readonly usersService: UsersService,
     private readonly authService: AuthService,
-    private readonly a2fService: A2fService
+    private readonly a2fService: A2fService,
   ) {}
 
   // Recieving a PUT request to update informations about an user
@@ -60,13 +60,16 @@ export class UsersController {
 
       if (user.a2f) {
         const { otpauthUrl } = JSON.parse(user.a2fsecret);
-        return (res.status(HttpStatus.OK).send({ token: await this.authService.generateJwtByUser(user),
-        qrcode: await this.a2fService.respondWithQRCode(otpauthUrl)}));
+        return res.status(HttpStatus.OK).send({
+          token: await this.authService.generateJwtByUser(user),
+          qrcode: await this.a2fService.respondWithQRCode(otpauthUrl),
+        });
       }
 
-      return res
-        .status(HttpStatus.OK)
-        .send({ token: await this.authService.generateJwtByUser(user), qrcode: null});
+      return res.status(HttpStatus.OK).send({
+        token: await this.authService.generateJwtByUser(user),
+        qrcode: null,
+      });
     } catch (e) {
       console.log(e);
       return res.status(HttpStatus.NOT_MODIFIED).send();

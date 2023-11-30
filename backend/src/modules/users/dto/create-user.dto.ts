@@ -56,6 +56,6 @@ export class CreateUserDto {
   is42: boolean;
 
   @IsOptional()
-  @IsString({ message: 'a2fsecret must be a string !'})
+  @IsString({ message: 'a2fsecret must be a string !' })
   a2fsecret: string;
 }

@@ -40,10 +40,16 @@ export class UploadController {
           }
 
           if (dangerousChars.some((char) => file.originalname.includes(char))) {
-            return cb(new Error('File name contains inappropriate characters'), '');
+            return cb(
+              new Error('File name contains inappropriate characters'),
+              '',
+            );
           }
 
-          const filename = `${Date.now()}-${file.originalname.replace(/ /g,'')}`;
+          const filename = `${Date.now()}-${file.originalname.replace(
+            / /g,
+            '',
+          )}`;
           cb(null, filename);
         },
       }),
@@ -74,17 +80,18 @@ export class UploadController {
   }
   @Get(':img')
   getImg(@Param('img') image: string, @Res() res: Response) {
+    const filename = image.replaceAll('\\.', '').replaceAll('/', '');
 
-    const filename = image.replaceAll("\\.", "").replaceAll("/", "");
+    const image_filename = path.resolve(
+      `./src/assets/profile_pictures/${filename}`,
+    );
 
-    const image_filename = path.resolve(`./src/assets/profile_pictures/${filename}`);
-
-    if (!image_filename) return (res.status(404).send({}));
+    if (!image_filename) return res.status(404).send({});
 
     try {
       res.sendFile(image_filename);
     } catch (err) {
-      return (res.status(404).send({}));
+      return res.status(404).send({});
     }
   }
 }

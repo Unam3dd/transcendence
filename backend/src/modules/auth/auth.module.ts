@@ -21,7 +21,7 @@ import { A2fModule } from '../a2f/a2f.module';
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '1h' },
     }),
-    A2fModule
+    A2fModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, ApiService, UsersService, A2fService],

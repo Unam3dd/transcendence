@@ -9,10 +9,7 @@ import { GameService } from '../game/game.service';
 //This class handle all lobbies
 @Injectable()
 export class LobbyServices {
-  public lobbies: Map<Lobby['id'], Lobby> = new Map<
-    Lobby['id'],
-    Lobby
-  >();
+  public lobbies: Map<Lobby['id'], Lobby> = new Map<Lobby['id'], Lobby>();
 
   constructor(private readonly gameService: GameService) {}
   //Search for a lobby of desired size, if no place found, create a new lobby
@@ -38,8 +35,7 @@ export class LobbyServices {
   ): Lobby {
     let newLobby: Lobby;
 
-    if (maxSize === 2)
-      newLobby = new Lobby(this, server, this.gameService);
+    if (maxSize === 2) newLobby = new Lobby(this, server, this.gameService);
 
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(player);
@@ -63,8 +59,7 @@ export class LobbyServices {
       avatar: player.avatar,
       score: 0,
     };
-    if (this.findLobbyByPlayer(opponentInfo))
-      return null;
+    if (this.findLobbyByPlayer(opponentInfo)) return null;
     const newLobby = new Lobby(this, server, this.gameService);
     this.lobbies.set(newLobby.id, newLobby);
     newLobby.addClient(playerInfo);

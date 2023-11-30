@@ -84,7 +84,7 @@ export class User {
     type: 'varchar',
     nullable: false,
   })
-  @IsString({ message: 'avatar must be a string !'})
+  @IsString({ message: 'avatar must be a string !' })
   avatar: string;
 
   @Column({
@@ -96,9 +96,9 @@ export class User {
 
   @Column({
     type: 'varchar',
-    nullable: true
+    nullable: true,
   })
-  @IsString({ message: 'a2fsecret must be a string !'})
+  @IsString({ message: 'a2fsecret must be a string !' })
   a2fsecret: string | null;
 
   @CreateDateColumn()

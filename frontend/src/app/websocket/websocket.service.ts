@@ -41,7 +41,7 @@ export class WebsocketService {
         return ;
       }
       
-      this.client = <WsClient>io(WS_GATEWAY);
+      this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
 
       this.client.emit('join', JSON.stringify(AuthUser));
 

@@ -4,18 +4,17 @@ import * as QRCode from 'qrcode';
 
 @Injectable()
 export class A2fService {
+  constructor() {}
 
-    constructor () {}
+  generateSecret() {
+    const secret = speakeasy.generateSecret({
+      name: 'transcendence',
+    });
 
-    generateSecret() {
-        const secret = speakeasy.generateSecret({
-            name: 'transcendence'
-        });
+    return { otpauthUrl: secret.otpauth_url, base32: secret.base32 };
+  }
 
-        return ({ otpauthUrl: secret.otpauth_url, base32: secret.base32});
-    }
-
-    async respondWithQRCode(otpauthUrl: string) {
-        return (await QRCode.toDataURL(otpauthUrl));
-    }
+  async respondWithQRCode(otpauthUrl: string) {
+    return await QRCode.toDataURL(otpauthUrl);
+  }
 }

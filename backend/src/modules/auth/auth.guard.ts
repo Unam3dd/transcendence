@@ -30,8 +30,8 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(req: Request): string | undefined {
-
-    const [type, token] = decodeURI(req.headers.authorization)?.split(' ') ?? [];
+    const [type, token] =
+      decodeURI(req.headers.authorization)?.split(' ') ?? [];
 
     if (!isJWT(token)) return undefined;
 

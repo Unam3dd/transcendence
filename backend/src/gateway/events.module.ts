@@ -15,7 +15,6 @@ import { FriendsService } from 'src/modules/friends/friends.service';
 import { BlockService } from 'src/modules/block/block.service';
 import { UsersModule } from 'src/modules/users/users.module';
 
-
 @Module({
   imports: [
     BlockModule,
@@ -27,6 +26,13 @@ import { UsersModule } from 'src/modules/users/users.module';
     TypeOrmModule.forFeature([Game]),
     TypeOrmModule.forFeature([Friends]),
   ],
-  providers: [EventsGateway, LobbyServices, GameService, FriendsService, UsersService, BlockService],
+  providers: [
+    EventsGateway,
+    LobbyServices,
+    GameService,
+    FriendsService,
+    UsersService,
+    BlockService,
+  ],
 })
 export class GatewayModule {}

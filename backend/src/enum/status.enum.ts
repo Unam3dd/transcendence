@@ -1,7 +1,5 @@
-export enum OnlineState
-{
+export enum OnlineState {
   offline,
   online,
-  ingame
+  ingame,
 }
-  

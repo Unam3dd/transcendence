@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CLIENT_ID, HOME_PAGE, REDIRECT_URI } from '../env';
+import { CLIENT_ID, HOME_PAGE, LOGIN_PAGE, REDIRECT_URI} from '../env';
 import { FormBuilder } from '@angular/forms';
 import { isEmpty } from 'class-validator';
 import { RequestsService } from '../services/requests.service';
@@ -7,8 +7,6 @@ import { TimerService } from '../services/timer.service';
 import { CookiesService } from '../services/cookies.service';
 import { NotificationsService } from 'angular2-notifications';
 import { HttpStatusCode } from '@angular/common/http';
-import { LOGIN_PAGE } from '../env';
-import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-connection',
@@ -86,7 +84,7 @@ export class ConnectionComponent {
       this.notif.success('You are connected !', `You are connected with ${atob(login)} welcome !`);
       await this.timeService.sleep(2000);
       this.cookieService.removeCookie('tmp_name');
-      window.location.href = 'http://localhost:4200/home';
+      window.location.href = HOME_PAGE;
     }, async () => {
       this.notif.error('Error', 'Your token is invalid !');
       this.cookieService.removeCookie('tmp_name');

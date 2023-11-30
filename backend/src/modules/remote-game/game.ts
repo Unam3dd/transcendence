@@ -1,8 +1,5 @@
 import { Lobby } from './lobby';
-import {
-  GameInfo,
-  PlayerInfo,
-} from 'src/interfaces/game.interfaces';
+import { GameInfo, PlayerInfo } from 'src/interfaces/game.interfaces';
 import { gameState } from 'src/enum/gameState.enum';
 
 //In this class we define actions needed to play the game
@@ -29,7 +26,6 @@ export class gameInstance {
   gameStart: boolean = false;
 
   public launchGame(): void {
-
     let count: number = 3;
     this.lobby.state = gameState.playing;
     this.lobby.sendTimerToAll(count);
@@ -206,7 +202,6 @@ export class gameInstance {
   }
 
   public gameVictory(player: PlayerInfo): void {
-
     this.lobby.sendMessageToAll('endMatch', null);
     clearInterval(this.gameInterval);
     this.printResult(player.nickName);

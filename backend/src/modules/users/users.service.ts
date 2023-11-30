@@ -13,10 +13,9 @@ import * as QRCode from 'qrcode';
 // This class will do all operations needed for our requests like writing, modifiyng or accessing data from database
 @Injectable()
 export class UsersService {
-
   constructor(
     @InjectRepository(User)
-    private usersRepository: Repository<User>
+    private usersRepository: Repository<User>,
   ) {}
 
   // Return an array with all users from database
@@ -48,8 +47,7 @@ export class UsersService {
   public async findOneSanitize(id: number): Promise<UserSanitize | null> {
     const user: User = await this.usersRepository.findOne({ where: { id } });
 
-    if (!user)
-      return null;
+    if (!user) return null;
     return <UserSanitize>{
       id: user.id,
       login: user.login,
@@ -104,7 +102,6 @@ export class UsersService {
   }
 
   public async decodeJWT(token: string): Promise<string[] | null> {
-
     const [type, jwt] = decodeURI(token)?.split(' ');
 
     if (type !== 'Bearer') return null;
@@ -115,13 +112,13 @@ export class UsersService {
 
   generateSecret() {
     const secret = speakeasy.generateSecret({
-        name: 'transcendence'
+      name: 'transcendence',
     });
 
-    return ({ otpauthUrl: secret.otpauth_url, base32: secret.base32});
+    return { otpauthUrl: secret.otpauth_url, base32: secret.base32 };
   }
 
   async respondWithQRCode(otpauthUrl: string) {
-    return (await QRCode.toDataURL(otpauthUrl));
+    return await QRCode.toDataURL(otpauthUrl);
   }
 }

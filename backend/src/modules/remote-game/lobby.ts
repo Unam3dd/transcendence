@@ -59,8 +59,7 @@ export class Lobby {
   }
 
   public joinPrivateLobby(player: PlayerInfo) {
-    if (this.lobbyManager.findLobbyByPlayer(player))
-      return;
+    if (this.lobbyManager.findLobbyByPlayer(player)) return;
     if (this.invitedOpponent == null) return;
     if (player.nickName != this.invitedOpponent) {
       console.log('this is a private game and user is not the invited player');
@@ -69,8 +68,7 @@ export class Lobby {
   }
 
   async sendGameResult(player: PlayerInfo) {
-    if (this.players.length != 2)
-      return ;
+    if (this.players.length != 2) return;
     const payload: GamePayload = {
       lobby: this.id,
       size: this.fullSize,
@@ -114,8 +112,7 @@ export class Lobby {
     this.server.to(this.id).emit(event, param);
   }
 
-  public sendTimerToAll(count: number)
-  {
+  public sendTimerToAll(count: number) {
     this.server.to(this.id).emit('sendTimer', count);
   }
 }

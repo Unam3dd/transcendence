@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UseGuards } from '@nestjs/common';
 import {
   WebSocketGateway,
   SubscribeMessage,
@@ -10,17 +10,27 @@ import { Server, Socket } from 'socket.io';
 import { OnlineState } from 'src/enum/status.enum';
 import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
 import { UserFriendsInfo, UserStatus } from 'src/interfaces/user.interfaces';
-import { ClientInfo, ListUserSanitizeInterface } from 'src/interfaces/user.interfaces';
+import {
+  ClientInfo,
+  ListUserSanitizeInterface,
+} from 'src/interfaces/user.interfaces';
 import { BlockedUser } from 'src/interfaces/user.interfaces';
 import { LobbyServices } from 'src/modules/remote-game/lobbiesServices';
 import { FriendsService } from 'src/modules/friends/friends.service';
 import { UsersService } from 'src/modules/users/users.service';
 import { BlockService } from 'src/modules/block/block.service';
+import { WsGuard } from './ws/ws.guard';
 
+@UseGuards(WsGuard)
 @Injectable()
-@WebSocketGateway(3001, { namespace: 'events', cors: true })
+@WebSocketGateway(3001, { cors: true, transports: ['websocket'] })
 export class EventsGateway {
-  constructor(private readonly lobbyServices: LobbyServices, private block: BlockService, private readonly friendsService: FriendsService, private readonly usersService: UsersService) {}
+  constructor(
+    private readonly lobbyServices: LobbyServices,
+    private block: BlockService,
+    private readonly friendsService: FriendsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   //To get an instance of the server, so we can send message to every clients of the server and more
   @WebSocketServer()
@@ -45,12 +55,12 @@ export class EventsGateway {
       const { id, login } = JSON.parse(msg);
 
       const found = this.clientList.find((el) => el.id === id);
-  
+
       if (!found) {
         this.clientList.push({
           ...JSON.parse(msg),
           client,
-          onlineState: OnlineState.online
+          onlineState: OnlineState.online,
         });
       }
       this.statusChange(client, OnlineState.online);
@@ -62,8 +72,7 @@ export class EventsGateway {
 
   // Define actions when receiving an event, 'message' event in this case
   @SubscribeMessage('message')
-  receiveNewMessage(
-    @MessageBody() message: string) {
+  receiveNewMessage(@MessageBody() message: string) {
     this.server.emit('newMessage', message);
   }
 
@@ -162,9 +171,9 @@ export class EventsGateway {
     lobby.gameInstance.pressButton(player, body.button);
   }
 
-  @SubscribeMessage('quitGame') 
+  @SubscribeMessage('quitGame')
   quitGame(@ConnectedSocket() client: Socket) {
-      this.lobbyServices.clientDisconnect(client);
+    this.lobbyServices.clientDisconnect(client);
   }
 
   @SubscribeMessage('quitLobby')
@@ -177,110 +186,110 @@ export class EventsGateway {
       lobby.lobbyManager.leaveLobby(player, lobby);
   }
 
-   /** End of Remote games functions */
+  /** End of Remote games functions */
 
-    @SubscribeMessage('statusChange') 
-    statusChange(@ConnectedSocket() client: Socket, @MessageBody() newState: OnlineState) {
+  @SubscribeMessage('statusChange')
+  statusChange(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() newState: OnlineState,
+  ) {
+    const targetClient = this.clientList.find(
+      (el) => el.client.id === client.id,
+    );
+    if (!targetClient) return;
+    targetClient.onlineState = newState;
+    const payload: UserStatus[] = [];
+    const info: UserStatus = {
+      id: targetClient.id,
+      onlineState: newState,
+    };
+    payload.push(info);
+    this.server.emit('getStatus', payload);
+  }
 
-      const targetClient = this.clientList.find((el) => el.client.id === client.id);
-      if(!targetClient)
-        return ;
-      targetClient.onlineState = newState;
-      let payload: UserStatus[] = []
-      const info: UserStatus = {
-        id: targetClient.id,
-        onlineState: newState,
+  @SubscribeMessage('listFriends')
+  async ListFriends(@MessageBody() userId: number) {
+    const userFriendsInfo: UserFriendsInfo[] = [];
+
+    const targetClient = this.clientList.find((el) => el.id === userId);
+    if (!targetClient) return;
+    const friendsList = await this.friendsService.listFriends(
+      targetClient.id,
+      false,
+    );
+
+    for (const el of friendsList) {
+      let state: OnlineState;
+      const user = await this.usersService.findOneSanitize(el.user2);
+
+      if (user) {
+        const userInfo = this.clientList.find((el) => el.id === user.id);
+        if (userInfo) state = userInfo.onlineState;
+        else state = OnlineState.offline;
+        const friendInfo: UserFriendsInfo = {
+          ...user,
+          applicant: el.applicant,
+          status: el.status,
+          onlineState: state,
+        };
+        userFriendsInfo.push(friendInfo);
       }
-      payload.push(info);
-      this.server.emit('getStatus', payload);
     }
+    targetClient.client.emit('getListFriends', userFriendsInfo);
+  }
 
-    @SubscribeMessage('listFriends')
-    async ListFriends(@MessageBody() userId: number) {
-
-      let userFriendsInfo: UserFriendsInfo[] = [];
-
-      const targetClient = this.clientList.find((el) => el.id === userId);
-      if(!targetClient)
-        return ;
-      const friendsList = await this.friendsService.listFriends(targetClient.id, false);
-      
-      for (const el of friendsList) {
-        let state: OnlineState;
-        const user = await this.usersService.findOneSanitize(el.user2);
-
-        if (user)
-        {
-
-          const userInfo = this.clientList.find((el) => el.id === user.id)
-          if (userInfo)
-            state = userInfo.onlineState
-          else
-            state = OnlineState.offline
-          const friendInfo: UserFriendsInfo = {
-            ...user,
-            'applicant': el.applicant,
-            'status': el.status,
-            'onlineState': state,
-          }
-          userFriendsInfo.push(friendInfo);  
-        }
-      }
-      targetClient.client.emit('getListFriends', userFriendsInfo);
-    }
-
-    @SubscribeMessage('updateFriend')
-    updateFriend(@MessageBody() userId:number) {
-      const updated = this.clientList.find((el) => el.id === userId)
-      if (!updated)
-        return ;
-      this.ListFriends(updated.id);
-    }
+  @SubscribeMessage('updateFriend')
+  updateFriend(@MessageBody() userId: number) {
+    const updated = this.clientList.find((el) => el.id === userId);
+    if (!updated) return;
+    this.ListFriends(updated.id);
+  }
 
   handleDisconnect(@ConnectedSocket() client: Socket) {
-
     console.log('new user just disconnected !');
     this.lobbyServices.clientDisconnect(client);
     for (const el of this.clientList) {
       if (el.client.id === client.id) {
         this.statusChange(client, OnlineState.offline);
         el.client.disconnect();
-        this.server.emit('newDepart', `${el.nickName} (${el.login}) has left transcendence`);
+        this.server.emit(
+          'newDepart',
+          `${el.nickName} (${el.login}) has left transcendence`,
+        );
         const index = this.clientList.indexOf(el);
         this.clientList.splice(index, 1);
         this.ListClient();
-        return ;
+        return;
       }
     }
   }
 
   @SubscribeMessage('listClient')
   ListClient() {
-    let loginArray: ListUserSanitizeInterface[] = [];
+    const loginArray: ListUserSanitizeInterface[] = [];
 
     this.clientList.forEach((el: ClientInfo) => {
-      
       const usanitize: ListUserSanitizeInterface = {
         id: el.id,
         login: el.login,
         nickName: el.nickName,
         avatar: el.avatar,
         clientID: el.client.id,
-      }
-      
+      };
+
       loginArray.push(usanitize);
     });
-     this.server.emit('listClient', loginArray);
+    this.server.emit('listClient', loginArray);
   }
 
   @SubscribeMessage('listBlocked')
   async ListBlocked(@ConnectedSocket() client: Socket) {
-
-    const targetClient = this.clientList.find((el) => el.client.id === client.id);
-    if (!targetClient)
-      return ;
+    const targetClient = this.clientList.find(
+      (el) => el.client.id === client.id,
+    );
+    if (!targetClient) return;
     const blockedList = await this.block.listBlock(targetClient.id);
 
-    client.emit('getListBlocked', <BlockedUser[]>(blockedList));
+    client.emit('getListBlocked', <BlockedUser[]>blockedList);
   }
 }
