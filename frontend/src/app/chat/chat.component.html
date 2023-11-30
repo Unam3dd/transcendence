@@ -1,4 +1,4 @@
-<!-- <div class="global">
+<div class="global">
 
   <div id="active-chat-title">{{ this.ws.client_name }}</div>
   <div class="conversation">
@@ -6,7 +6,7 @@
     <ul class="messages">
       <div class="capsule" *ngFor="let msg of this.ws.received_messages">
 
-        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
+        <div class="d-flex" *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
           <div class="picture-column">
             <div class="thumbnail">  
               <img src={{msg.author.avatar}}/>
@@ -18,9 +18,9 @@
           </div>
         </div>
 
-        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login))">
+        <div class="d-flex" *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login))">
           <div class="picture-column">
-            <div class="thumbnail">  
+            <div class="thumbnail">
               <img src={{msg.author.avatar}}/>
             </div>
           </div>
@@ -34,54 +34,60 @@
     </ul>
 
     <form class="messagebox" [formGroup]="msg" (ngSubmit)="sendMessage()">
-      <textarea placeholder="Enter your message here" id="messageinput" type="text" formControlName="content" required></textarea>
-      <button id="sendbutton" type="submit">Send !</button>
-    </form>
-
-  </div>
-
-</div> -->
-
-<div >
-
-  <div >{{ this.ws.client_name }}</div>
-  <div >
-
-    <ul >
-      <div *ngFor="let msg of this.ws.received_messages">
-
-        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
-          <div >
-            <div >  
-              <img src={{msg.author.avatar}}/>
-            </div>
-          </div>
-          <div >
-            <div >{{msg.author.nickName}} :</div>
-            <div >{{msg.content}}</div>
-          </div>
-        </div>
-
-        <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login))">
-          <div >
-            <div >  
-              <img src={{msg.author.avatar}}/>
-            </div>
-          </div>
-          <div >
-            <div >{{msg.author.nickName}} :</div>
-            <div >{{msg.content}}</div>
-          </div>
-        </div>
-
-      </div>
-    </ul>
-
-    <form [formGroup]="msg" (ngSubmit)="sendMessage()">
-      <textarea placeholder="Enter your message here" type="text" formControlName="content" required></textarea>
-      <button type="submit">Send !</button>
+      <textarea class="form-control" id="messageinput" placeholder="Send a message to: {{ this.ws.client_name }}" formControlName="content" required (keydown.enter)="sendMessage()"></textarea>
+      <!-- <textarea placeholder="Enter your message here" id="messageinput" type="text" formControlName="content" required></textarea> -->
+      <button id="sendbutton" type="submit" required (keydown.enter)="sendMessage()">Send !</button>
     </form>
 
   </div>
 
 </div>
+
+<!-- <div class="container-fluid bg-success h-100 m-0 p-0">
+  <div class="row m-0 p-0">
+
+    <div class="col-12 navbar navbar-light bg-warning fs-4 m-0 p-1 ps-3" style="height: 45px; font-family: 'Cabin', sans-serif;">{{ this.ws.client_name }}</div>
+    <div class="col-12 bg-secondary m-0 p-0" style="margin-bottom: 30px; height: calc(100% - 45px);">
+      
+      <ul class="p-0 m-0 overflow-y-auto">
+
+        <div class="bg-danger" style="height: calc(100% - 50px);" *ngFor="let msg of this.ws.received_messages">
+          
+          <div class="d-flex" *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
+            <div>
+              <div class="avatar-container50">  
+                <img class="avatar" src={{msg.author.avatar}}/>
+              </div>
+            </div>
+            <div>
+              <div >{{msg.author.nickName}} :</div>
+              <div >{{msg.content}}</div>
+            </div>
+          </div>
+          
+          <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login))">
+            <div >
+              <div >  
+                <img src={{msg.author.avatar}}/>
+              </div>
+            </div>
+            <div >
+              <div >{{msg.author.nickName}} :</div>
+              <div >{{msg.content}}</div>
+            </div>
+          </div>
+          
+        </div>
+      </ul>
+
+      <form class="p-0 m-0" [formGroup]="msg" (ngSubmit)="sendMessage()">
+        <div class="input-group col-12 p-0 m-0">
+          <textarea class="form-control col-11 p-0 m-0" placeholder="Send a message to: {{ this.ws.client_name }}" formControlName="content" required (keydown.enter)="sendMessage()"></textarea>
+          <button class="btn btn-primary col-1 p-0 m-0" type="submit"><i class="bi bi-send"></i></button>
+        </div>
+      </form>
+      
+    </div>
+
+  </div>
+</div> -->

@@ -25,7 +25,7 @@ export class WebsocketService {
 
   public received_messages: Message[] = [];
 
-  public client_name: string = 'General';
+  public client_name: string = 'Main chat';
   public author_name: string = '';
 
   public BlockUserList: BlockedUser[] = [];

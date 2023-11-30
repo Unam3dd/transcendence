@@ -1,14 +1,20 @@
-<!-- <div class="global">
-  <span class="left-column">
-    <app-chat-profile></app-chat-profile>
-  </span>
-  <span class="right-column">
-    <app-chat></app-chat>
-  </span>
-</div> -->
-<div class="container-fluid">
+<div class="container-fluid p-0 m-0 bg-danger" style="height: calc(100vh - 100px)">
   <div class="row">
-    <app-chat-profile class="col-md-6"></app-chat-profile>
-    <app-chat class="col-md-6"></app-chat>
+
+    <button class="col-12 d-md-none btn btn-light dropdown-toggle rounded-0 w-100 p-0 m-0" type="button" data-bs-toggle="collapse" data-bs-target="#toBeCollapse" aria-expanded="false" aria-controls="toBeCollapse">
+      Channels
+    </button>
+    
+    <div class="collapse col-12 d-md-none p-0 m-0 overflow-y-auto" style="position: absolute; top: 96px; max-height: 60%;" id="toBeCollapse">
+      <app-chat-profile></app-chat-profile>
+    </div>
+    
+    <div class="offcanvas-md col-md-5 col-lg-5 col-xl-4 p-0 m-0 overflow-y-auto bg-black" style="height: calc(100vh - 100px);">
+      <app-chat-profile></app-chat-profile>
+    </div>
+
+    <div class="col-12 col-md-7 col-lg-7 col-xl-8 p-0 m-0 bg-info" style="height: calc(100vh - 100px);">
+      <app-chat></app-chat>
+    </div>
   </div>
 </div>
