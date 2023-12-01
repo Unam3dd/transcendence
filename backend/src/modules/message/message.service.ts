@@ -5,7 +5,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Message } from './entities/message.entity';
 import { Repository } from 'typeorm';
 
-
 @Injectable()
 export class MessageService {
   constructor(
@@ -13,12 +12,12 @@ export class MessageService {
     private messagesRepository: Repository<Message>,
   ) {}
 
-  create(createMessageDto: CreateMessageDto) {
-    return 'This action adds a new message';
+  async create(createMessageDto: CreateMessageDto): Promise<Message> {
+    return await this.messagesRepository.create({ ...createMessageDto });
   }
 
-  findAll() {
-    return `This action returns all message`;
+  async findAll(): Promise<Message[]> {
+    return await this.messagesRepository.find();
   }
 
   // findOne(id: number) {
@@ -32,6 +31,4 @@ export class MessageService {
   // remove(id: number) {
   //   return `This action removes a #${id} message`;
   // }
-
-
 }
