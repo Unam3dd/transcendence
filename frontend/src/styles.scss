@@ -3,14 +3,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Comfortaa&display=swap');
 
 body {
-  // font-family: Roboto, "Helvetica Neue", sans-serif;
   font-family: 'Comfortaa', sans-serif;
   min-height: 100vh;
 
-  // background-image: url("assets/images/background.jpg");
-  // background-size: cover;
-  // background-position: center center;
-  // background-repeat: no-repeat;
+  background-image: url("assets/images/background.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
 }
 
 .avatar-container50 {

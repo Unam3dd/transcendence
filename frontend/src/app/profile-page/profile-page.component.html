@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col align-self-center d-flex justify-content-center">
         <div class="avatar-container200">
-          <img class="avatar img-fluid" [src]="userData.avatar" alt="avatar picture">
+          <img class="avatar img-fluid" [src]="avatar" alt="avatar picture">
         </div>
       </div>
 
@@ -19,24 +19,24 @@
         </div>
         <div class="line">
           <p id="key">FirstName:</p>
-          <p id="value">{{userData.firstName}}</p>
+          <p id="value">{{firstname}}</p>
         </div>
         <div class="line">
           <p id="key">LastName:</p>
-          <p id="value">{{userData.lastName}}</p>
+          <p id="value">{{lastname}}</p>
         </div>
         <div class="line">
           <p id="key">NickName:</p>
-          <p id="value">{{userData.nickName}}</p>
+          <p id="value">{{nickname}}</p>
         </div>
         <div class="line">
           <p id="key">Email:</p>
-          <p id="value">{{userData.email}}</p>
+          <p id="value">{{email}}</p>
         </div>
         <div class="a2f-container">
           <p class="form-check form-switch">
             <label class="form-check-label" for="a2fCheck">A2F </label>
-            <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="userData.a2f" disabled>
+            <input class="form-check-input" type="checkbox" role="switch" id="a2fCheck" [checked]="a2f" disabled>
           </p>
         </div>
         <div class="button-group mt-3">
@@ -123,23 +123,23 @@
               </div>
               <div>
                 <span>Firstname</span>
-                <input placeholder="{{userData.firstName}}" class="form-control" [formControl]="firstname">
+                <input placeholder="{{firstname}}" class="form-control" [formControl]="firstnameForm">
               </div>
               <div>
                 <span>Lastname</span>
-                <input placeholder="{{userData.lastName}}" class="form-control" [formControl]="lastname">
+                <input placeholder="{{lastname}}" class="form-control" [formControl]="lastnameForm">
               </div>
               <div>
                 <span>Nickname</span>
-                <input placeholder="{{userData.nickName}}" class="form-control" [formControl]="nickname">
+                <input placeholder="{{nickname}}" class="form-control" [formControl]="nicknameForm">
               </div>
               <div>
                 <span>Email</span>
-                <input placeholder="{{userData.email}}" class="form-control" [formControl]="email">
+                <input placeholder="{{email}}" class="form-control" [formControl]="emailForm">
               </div>
               <div class="form-check form-switch">
                 <span>A2F</span>
-                <input class="form-check-input" type="checkbox" role="switch" [formControl]="a2f">
+                <input class="form-check-input" type="checkbox" role="switch" [formControl]="a2fForm">
               </div>
             </div>
           </div>
