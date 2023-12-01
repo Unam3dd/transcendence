@@ -1,15 +1,20 @@
-<section *ngIf="this.gameStart" class="fight">
-    <div class="userInfo">
-        <img class="avatar" [src]="playerLeft.avatar" alt="avatar picture"> 
-        <p class="username">{{playerLeft.nickName}}</p>
-    </div>
-    <p>vs</p> 
-    <div>
-        <img class="avatar" [src]="playerRight.avatar" alt="avatar picture"> 
-        <p class="username">{{playerRight.nickName}}</p>
-    </div>
-</section>
-<br>
+<div class="container">
+    <section class="container-fluid w-75 mb-3 d-flex align-items-center justify-content-center" style="height: 5vh">
+        <div *ngIf="this.gameStart" class="content-align-center d-flex h-100">
+            <div class="avatar-container50">
+                <img class="avatar d-inline" [src]="playerLeft.avatar" alt="avatar picture">
+            </div>
+                <p class="m-0 mx-2 align-items-center text-white">{{playerLeft.nickName}}</p>
 
-<canvas #gameCanvasRemote class="game" width="800" height="400">Game part</canvas>
-<button *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
+        <img src="../../assets/images/fight.svg">
+
+                <p class="m-0 mx-2 text-white">{{playerRight.nickName}}</p>
+                <div class="avatar-container50 ">
+                    <img class="avatar d-inline" [src]="playerRight.avatar" alt="avatar picture">
+                </div>
+        </div>
+    </section>
+
+    <canvas #gameCanvasRemote class="game" width="800" height="400">Game part</canvas>
+    <button class="btn btn-secondary" *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
+</div>
