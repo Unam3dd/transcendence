@@ -48,11 +48,11 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @ViewChild('chooseNickname', { static: true }) chooseNicknameTemplate!: TemplateRef<any>;
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
-  
+
   private unsubscribe: Subject<void> = new Subject<void>();
 
   constructor(private route: ActivatedRoute, private router: Router, private activatedRoute: ActivatedRoute, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
-    
+
     this.requestsService.getLoggedUserInformation()?.subscribe((data) => {
       this.userNickame = data.nickName as string;
       const player1: LocalPlayer = {
@@ -100,17 +100,17 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   //Rackets config variables
   barLeftY: number = 0;
   barRightY: number = 0;
-  barHeight: number = 50;
-  barWidth: number = 10;
+  barHeight: number = 0;
+  barWidth: number = 0;
   barSpeed: number = 30;
 
   //Ball config variables
   ballX: number = 0;
   ballY: number = 0;
-  ballRadius: number = 10;
+  ballRadius: number = 0;
   ballSpeedX: number = 0;
   ballSpeedY: number = 0;
-  ballSpeed: number = 5;
+  ballSpeed: number = 0;
   gameInterval: number = 0;
 
   //Score variables
@@ -312,13 +312,13 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   //Key management
   @HostListener('window:keydown', ['$event'])
   localKeyEvent(event: KeyboardEvent) {
-    if (event.key === 'ArrowUp' && this.barRightY - this.barSpeed >= 0) {
+    if ((event.key === 'o' || event.key === 'O') && this.barRightY - this.barSpeed >= 0) {
       this.barRightY -= this.barSpeed;
-    } else if (event.key === 'ArrowDown' && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
+    } else if ((event.key === 'l' || event.key === 'L') && this.barRightY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.clientHeight) {
       this.barRightY += this.barSpeed;
-    } else if ((event.key === 'z' || event.key === 'Z') && this.barLeftY - this.barSpeed >= 0) {
+    } else if ((event.key === 'w' || event.key === 'W') && this.barLeftY - this.barSpeed >= 0) {
       this.barLeftY -= this.barSpeed;
-    } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.height) {
+    } else if ((event.key === 's' || event.key === 'S') && this.barLeftY + this.barHeight + this.barSpeed <= this.canvas.nativeElement.clientHeight) {
       this.barLeftY += this.barSpeed;
     }
 
@@ -377,14 +377,15 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   initPosition() {
-    const centerY: number = (this.canvas.nativeElement.height - this.barHeight) / 2;
-    const centerX: number = (this.canvas.nativeElement.width - this.ballRadius) / 2;
-    const centerBallY: number = (this.canvas.nativeElement.height - this.ballRadius) / 2;
+    this.ballRadius = this.canvas.nativeElement.clientWidth * 0.012;
+    const centerY: number = (this.canvas.nativeElement.clientHeight - (this.canvas.nativeElement.clientHeight * 0.12)) / 2;
+    const centerBallX: number = (this.canvas.nativeElement.clientWidth - this.ballRadius) / 2;
+    const centerBallY: number = (this.canvas.nativeElement.clientHeight - this.ballRadius) / 2;
 
     this.barRightY = centerY;
     this.barLeftY = centerY;
 
-    this.ballX = centerX;
+    this.ballX = centerBallX;
     this.ballY = centerBallY;
   }
 
@@ -394,14 +395,14 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.ballX += this.ballSpeedX;
 
     //Canvas hit box
-    if (this.ballY + this.ballRadius >= this.canvas.nativeElement.height ||
+    if (this.ballY + this.ballRadius >= this.canvas.nativeElement.clientHeight ||
       this.ballY - this.ballRadius <= 0) {
       this.ballSpeedY = -this.ballSpeedY;
     }
 
     //Rackets hit box
     const leftHit = this.ballX >= 40 && this.ballX <= 40 + this.barWidth;
-    const rightHit = this.ballX + this.ballRadius <= this.canvas.nativeElement.width - 40 && this.ballX + this.ballRadius >= this.canvas.nativeElement.width - 40 - this.barWidth;
+    const rightHit = this.ballX + this.ballRadius <= this.canvas.nativeElement.clientWidth - 40 && this.ballX + this.ballRadius >= this.canvas.nativeElement.clientWidth - 40 - this.barWidth;
 
     if ((leftHit && this.ballY >= this.barLeftY && this.ballY <= this.barLeftY + this.barHeight) ||
         (rightHit && this.ballY >= this.barRightY && this.ballY <= this.barRightY + this.barHeight)) {
@@ -409,16 +410,16 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     //increment players score
-    if (this.ballX + this.ballRadius >= this.canvas.nativeElement.width){
+    if (this.ballX + this.ballRadius >= this.canvas.nativeElement.clientWidth){
       this.scoreP1++;
     } else if (this.ballX - this.ballRadius <= 0) {
       this.scoreP2++;
     }
 
     //reset ball position
-    if (this.ballX + this.ballRadius >= this.canvas.nativeElement.width || this.ballX - this.ballRadius <= 0) {
-      const centerX: number = (this.canvas.nativeElement.width - this.ballRadius) / 2;
-      const centerBallY: number = (this.canvas.nativeElement.height - this.ballRadius) / 2;
+    if (this.ballX + this.ballRadius >= this.canvas.nativeElement.clientWidth || this.ballX - this.ballRadius <= 0) {
+      const centerX: number = (this.canvas.nativeElement.clientWidth - this.ballRadius) / 2;
+      const centerBallY: number = (this.canvas.nativeElement.clientHeight - this.ballRadius) / 2;
       this.ballX = centerX;
       this.ballY = centerBallY;
       this.randomDirection();
@@ -451,6 +452,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     const angle = randomAngle * Math.PI / 180;
     const initialSide = Math.random() < 0.5 ? -1 : 1;
 
+    this.ballSpeed = this.canvas.nativeElement.clientWidth * 0.006;
+
     this.ballSpeedX = initialSide * Math.cos(angle) * this.ballSpeed;
     this.ballSpeedY = Math.sin(angle) * this.ballSpeed;
   }
@@ -458,15 +461,18 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   drawElements() {
     const canvas = this.canvas.nativeElement;
     const context = canvas.getContext('2d');
-    const centerX: number = canvas.width / 2;
+    const centerX: number = canvas.clientWidth / 2;
+
+    this.barHeight = canvas.clientHeight * 0.12;
+    this.barWidth = canvas.clientWidth * 0.0125;
 
     if (context) {
-      context.clearRect(0, 0, canvas.width, canvas.height); 
+      context.clearRect(0, 0, canvas.width, canvas.height);
 
       //Draw rackets
       context.fillStyle = 'white';
       context.fillRect(40, this.barLeftY, this.barWidth, this.barHeight); //draw left bar
-      context.fillRect(canvas.width - (40 + this.barWidth), this.barRightY, this.barWidth, this.barHeight); //draw right bar
+      context.fillRect(canvas.clientWidth - (40 + this.barWidth), this.barRightY, this.barWidth, this.barHeight); //draw right bar
 
       //draw the center line
       context.strokeStyle = 'white';
@@ -474,7 +480,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       context.lineWidth = 2;  //Width of the line
       context.beginPath();
       context.moveTo(centerX, 0);
-      context.lineTo(centerX, canvas.height);
+      context.lineTo(centerX, canvas.clientHeight);
       context.stroke();
 
       //draw the ball
@@ -483,12 +489,12 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
       //draw scores
       context.fillStyle = 'white';
-      context.font = '80px Courier New, monospace';
-      context.fillText(`${this.scoreP1}`, centerX / 2, 100);
-      context.fillText(`${this.scoreP2}`, 3 * (canvas.width / 4), 100);
+      context.font = '5vw Courier New, monospace';
+      context.fillText(`${this.scoreP1}`, centerX / 2, this.canvas.nativeElement.clientHeight * 0.25);
+      context.fillText(`${this.scoreP2}`, 3 * (canvas.clientWidth / 4), this.canvas.nativeElement.clientHeight * 0.25);
 
       //Win message
-      if (this.scoreP1 == 3) {
+      if (this.scoreP1 == 99) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         this.gameStart = false;
@@ -497,7 +503,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
         else
           this.gameReset(true);
 
-      } else if (this.scoreP2 == 3) {
+      } else if (this.scoreP2 == 99) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         this.gameStart = false;
@@ -514,12 +520,12 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     const context = canvas.getContext('2d');
 
     if (context) {
-      context.clearRect(0, 0, canvas.width, canvas.height); 
+      context.clearRect(0, 0, canvas.width, canvas.height);
       context.fillStyle = 'white';
       context.font = '50px Courier New, monospace';
       context.textBaseline = 'middle';
       context.textAlign = "center";
-      context.fillText(`${i}`, (canvas.width / 2), canvas.height / 2);
+      context.fillText(`${i}`, (canvas.clientWidth / 2), canvas.clientHeight / 2);
     }
   }
 
@@ -533,8 +539,8 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       context.fillStyle = 'white';
       context.font = '50px Courier New, monospace';
       context.textBaseline = 'middle';
-      context.fillText('Next Round in', (canvas.width / 2), (canvas.height / 2) - canvas.height * 0.2);
-      context.fillText(`${count}`, (canvas.width / 2), (canvas.height / 2) + canvas.height * 0.1);
+      context.fillText('Next Round in', (canvas.clientWidth / 2), (canvas.clientHeight / 2) - canvas.clientHeight * 0.2);
+      context.fillText(`${count}`, (canvas.clientWidth / 2), (canvas.clientHeight / 2) + canvas.clientHeight * 0.1);
     }
   }
 
