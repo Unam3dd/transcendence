@@ -15,6 +15,7 @@ import { A2fModule } from './modules/a2f/a2f.module';
 import { UploadModule } from './modules/upload/upload.module';
 import { GameModule } from './modules/game/game.module';
 import { RemoteGameModule } from './modules/remote-game/remote-game.module';
+import { MessageModule } from './modules/message/message.module';
 
 dotenv.config();
 
@@ -41,6 +42,7 @@ dotenv.config();
     UploadModule,
     GameModule,
     RemoteGameModule,
+    MessageModule,
   ],
   controllers: [],
   providers: [],
