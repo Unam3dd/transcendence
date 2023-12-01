@@ -1,4 +1,4 @@
-<!-- <div class="global">
+<div class="global">
 
   <ul class="channel-list">
 
@@ -20,28 +20,180 @@
     </li>
     
   </ul>
-</div> -->
-
-<div>
+</div>
+<!-- 
+<div class="bg-primary">
 
   <ul>
 
-    <li (click)="onChannelClicked( null )">
-      <div >  
-        <div >G</div>
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <div >M</div>
       </div>
-      <span >General</span>
+      <span >Main chat</span>
     </li>
 
-    <li *ngFor="let user of this.listClients" (click)="onChannelClicked( user )">
-      <div >  
-        <img src={{user.avatar}}/>
+    <li class="d-flex" *ngFor="let user of this.listClients" (click)="onChannelClicked( user )">
+      <div class="avatar-container50">  
+        <img class="avatar" src={{user.avatar}}/>
       </div>
       <span >{{ user.nickName }} ({{ user.login }})</span>
       <button (click)="this.blockUser(user.id)">B</button>
       <button (click)="this.inviteUser(user.nickName)">I</button>
       <button (click)="this.visitUser(user.id)">P</button>
     </li>
-    
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >loooooooooooongnameverylonnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnngname (Dummy1)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy2 (Dummy2)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy3 (Dummy3)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy4 (Dummy4)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy5 (Dummy5)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy6 (Dummy6)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy7 (Dummy7)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy8 (Dummy8)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy9 (Dummy9)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy10 (Dummy10)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy11 (Dummy11)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy12 (Dummy12)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy13 (Dummy13)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
+
+
+    <li class="d-flex" (click)="onChannelClicked( null )">
+      <div class="avatar-container50">  
+        <img class="avatar" src="../../assets/images/background.jpg" />
+      </div>
+      <span >duuummy14 (Dummy14)</span>
+      <button >B</button>
+      <button >I</button>
+      <button >P</button>
+    </li>
   </ul>
-</div>
+</div> -->
