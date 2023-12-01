@@ -292,4 +292,30 @@ export class EventsGateway {
 
     client.emit('getListBlocked', <BlockedUser[]>blockedList);
   }
+
+  @SubscribeMessage('refreshData')
+  async refreshProfileData(@ConnectedSocket() client: Socket) {
+    const targetClient = this.clientList.find(
+      (el) => el.client.id === client.id,
+    );
+
+    if (!targetClient) return;
+
+    const target = await this.usersService.findOne(targetClient.id);
+
+    if (!target) return;
+
+    const info = {
+      firstName: target.firstName,
+      lastName: target.lastName,
+      nickName: target.nickName,
+      email: target.email,
+      a2f: target.a2f,
+      avatar: target.avatar,
+    };
+
+    console.log(info);
+
+    client.emit('refreshDataProfile', info);
+  }
 }
