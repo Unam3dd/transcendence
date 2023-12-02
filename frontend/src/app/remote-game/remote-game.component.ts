@@ -4,7 +4,6 @@ import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from
 import { Subject, takeUntil } from "rxjs";
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { GameInfo } from '../interfaces/game.interface';
-import { RequestsService } from '../services/requests.service';
 import { OnlineState } from '../enum/status.enum';
 
 export interface Player {
@@ -30,26 +29,13 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   @ViewChild('gameCanvasRemote', {static: true}) canvas!: ElementRef;
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private readonly ws: WebsocketService, private readonly route: ActivatedRoute, private readonly router: Router, private readonly requestsService: RequestsService) {
+  constructor(private readonly ws: WebsocketService, private readonly route: ActivatedRoute, private readonly router: Router,) {
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe))
     .subscribe(params => {
       this.mode = params['mode'];
     });
-
-    this.router.events.subscribe( (event) => {
-      if (event instanceof NavigationEnd) {
-        //this.client.emit('quitGame');
-        if (event.url != '/game/remote')
-        {
-          //console.log(event.url);
-          this.ws.client.emit('statusChange', OnlineState.online);
-          this.client.emit('quitGame');
-        }
-      }
-    })
   }
-
 
   ngOnInit(): void {
 
@@ -91,7 +77,7 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
     this.drawElements(payload);
   }
 
-  //envoie le bouton sur leaquel le joueur a appuyer
+  //envoie le bouton sur lequel le joueur a appuyer
   pressButton(button: string): void {
     this.ws.pressButton(this.client, button);
   }
@@ -210,12 +196,15 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
   }
 
   ngOnDestroy() {
+    
+    this.ws.client.emit('statusChange', OnlineState.online);
+    this.client.emit('quitGame');
     this.client.off('interval');
     this.client.off('gameMessage');
     this.client.off('stopGame');
     this.client.off('sendTimer');
     this.unsubscribe.next();
     this.unsubscribe.complete();
-    window.location.reload();
+    //window.location.reload();
   }
 }
