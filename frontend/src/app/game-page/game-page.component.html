@@ -1,42 +1,58 @@
 <div class="container-fluid">
 
-  <div class="row" style="height: 10vh">
+  <div class="row mt-2 mb-1" style="height: 3rem">
 
-      <!-- <div *ngIf="this.gameStart && this.gameMode === 'local'" class="col-6 mx-auto"> -->
-        <div class="col-6 mx-auto" *ngIf="this.gameStart && this.gameMode === 'local'" style="height: 100%">
-          <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
-            <div class="col-5 mx-auto text-center m-auto">{{this.userNickame}}</div>
-            <div class="col-2 mx-auto text-center m-auto" style="height: 100%">
-              <img class="img-fluid pt-2 pb-3 mx-auto" style="height:100%; ; object-fit: cover;" src="../../assets/images/fight.png">
-            </div>
-            <div class="col-5 mx-auto m-auto">Guest</div>
+    <div class="col-lg-5 col-md-6 mx-auto" *ngIf="this.gameStart && this.gameMode === 'local'" style="height: 100%">
+      <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
+        <div class="col-5 mx-auto text-center m-auto display-6">{{this.userNickame}}</div>
+        <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+          <div class="col-12 display-2">
+              ×
           </div>
-
+        </div>
+        <div class="col-5 mx-auto m-auto display-6">Guest</div>
       </div>
+    </div>
 
-
-    <!-- <div *ngIf="this.gameStart && this.gameMode === 'tournament_local'" class="col-6 mx-auto">
-      <p class="">{{this.currentMatch[0].nickName}}</p>
-      <div >
-        <img class="img-fluid" src="../../assets/images/fight.png">
+    <div class="col-lg-5 col-md-6 mx-auto" *ngIf="this.gameStart && this.gameMode === 'tournament_local'" style="height: 100%">
+      <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
+        <div class="col-5 mx-auto text-center m-auto display-6">{{this.currentMatch[0].nickName}}</div>
+        <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+          <div class="col-12 display-2">
+              ×
+          </div>
+        </div>
+        <div class="col-5 mx-auto m-auto display-6">{{this.currentMatch[1].nickName}}</div>
       </div>
-      <p class="">{{this.currentMatch[1].nickName}}</p>
-    </div> -->
+    </div>
 
   </div>
+
 
 <div class="row">
   <canvas #gameCanvas class="game col-6 mx-auto">Game part</canvas>
 </div>
 
-  <div class="row">
-    <ng-container *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
-      <h6>Order of fights for this round:</h6>
-      <ng-container *ngFor="let pair of printOrder" class="roundInfo">
-        <p class="">{{pair[0].nickName}} vs {{pair[1].nickName}}</p>
-      </ng-container>
+<div class="row">
+  <div class="col-6 mx-auto" *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
+    <h3 class="pl-0 ml-0 mt-3 mb-3" >Order of fights for this round:</h3>
+     <ng-container *ngFor="let pair of printOrder">
+
+      <div class="row m-3" style="height: 3rem">
+        <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
+          <div class="col-5 mx-auto text-center m-auto display-6">{{pair[0].nickName}}</div>
+
+          <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+            <div class="col-12 display-2">
+                ×
+            </div>
+          </div>
+          <div class="col-5 mx-auto m-auto display-6">{{pair[1].nickName}}</div>
+        </div>
+      </div>
     </ng-container>
   </div>
+</div>
   
 <hr>
   <span class="row">
