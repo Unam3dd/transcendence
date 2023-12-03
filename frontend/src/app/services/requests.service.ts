@@ -91,12 +91,12 @@ export class RequestsService {
 
     if (!token) return ;
 
-    const { id, login } = <UserSanitizeInterface>JSON.parse(atob(token.split('.')[1]));
+    const { sub, login } = JSON.parse(atob(token.split('.')[1]));
 
     if (newNickname.trim() === '') {
         return this.updateUserHomeData(login, email);
     } else {
-      const updateData = {id: id, nickName: newNickname, email: email};
+      const updateData = {id: sub, nickName: newNickname, email: email};
       return this.http.put<string>(`${NESTJS_URL}/users`, updateData, {headers:
         new HttpHeaders().append('authorization', `Bearer ${token}`)});
     }
