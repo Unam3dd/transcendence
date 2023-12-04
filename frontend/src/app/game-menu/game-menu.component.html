@@ -13,7 +13,19 @@
   </div>
 </div>
 
-<!-- Choose Players Number for Tournament modal -->
+
+<!-- Text for player control -->
+<!-- <div class="container-fluid text-center">
+  <div class="row">
+    <div class="col-10 mx-auto">
+      <p class="p-3" style="font-size: 1.2rem;  text-align: left">Local game: player the right player control his paddle with W and S, player on the left control with O and L</p>
+      <p class="p-3" style="font-size: 1.2rem;  text-align: left" >Online game: just use the both arrow up and arrow down key to control your paddle.</p>
+    </div>
+  </div>
+</div> -->
+
+
+<!-- Choose Players Number for the Online Tournament (Commented as the online tournament was removed)
 <ng-template #lobbySize let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Choose Lobby Size</h4>
@@ -34,7 +46,6 @@
       </select>
     </form>
   </div>
-  <!-- Maybe we should show this in the modal when people choose the amount of players for the tournament?-->
   <h6>Rules of the tournament: </h6>
   <p>Players affront each other in turn, winners of first round will fight against each other next round.</p>
   <p>If you are not select for a round and that you don't have been eliminated, it means that there was no opponent for you this round. But you will fight against one of the winner of the actual round on the next round.</p>
@@ -43,7 +54,10 @@
     <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
     <button type="button" class="btn btn-danger" (click)="moveToGame('tournament_remote', selectedOption.value)">Find Tournament</button>
   </div>
-</ng-template>
+</ng-template> -->
+
+
+
 
 <ng-template #LocalTournament let-modal>
   <div class="modal-header">
@@ -64,14 +78,16 @@
         <option value="8">Eight</option>
       </select>
     </form>
-  </div>
 
-  <h6>Rules of the tournament: </h6>
-  <p>Players affront each other in turn, winners of first round will fight against each other next round.</p>
-  <p>If you are not select for a round and than you don't have been eliminated, it means that there was no opponent for you this round. But you will fight against one of the winner of the actual round on the next round.</p>
-  <p>If you loose a match, you are eliminated of the tournament.</p>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
-    <button type="button" class="btn btn-danger" (click)="moveToGame('tournament_local', selectedOption.value)">Launch Tournament</button>
+    <div class="container mt-3">
+      <h5 class="mb-3">Rules of the tournament: </h5>
+      <p>Players fight each other in turn, winners of first round will fight against each other next round.</p>
+      <p>If you are not select for a round and than you don't have been eliminated, it means that there was no opponent for you this round. But you will fight against one of the winner of the actual round on the next round.</p>
+      <p>If you loose a match, you are eliminated of the tournament.</p>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modal.close()">Cancel</button>
+        <button type="button" class="btn btn-primary" (click)="moveToGame('tournament_local', selectedOption.value)">Launch Tournament</button>
+      </div>
+    </div>
   </div>
 </ng-template>

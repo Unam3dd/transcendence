@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {Subject, takeUntil} from "rxjs";
+import {Observable, Subject, Subscription, takeUntil} from "rxjs";
 import { RequestsService } from '../services/requests.service';
 import { LocalPlayer, PlayerResult } from '../interfaces/game.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -46,34 +46,27 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   display: boolean = false;
   endDuo: boolean = false;
 
+  routerObs: Subscription = new Subscription();
+
   @ViewChild('chooseNickname', { static: true }) chooseNicknameTemplate!: TemplateRef<any>;
   @ViewChild('gameCanvas', {static: true}) canvas!: ElementRef;
 
   private unsubscribe: Subject<void> = new Subject<void>();
 
-  constructor(private route: ActivatedRoute, private router: Router, private activatedRoute: ActivatedRoute, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
+  constructor(private route: ActivatedRoute, private router: Router, private readonly requestsService: RequestsService, private modalService: NgbModal, private notif: NotificationsService, private readonly ws: WebsocketService,) {
 
-    this.requestsService.getLoggedUserInformation()?.subscribe((data) => {
+    this.requestsService.getLoggedUserInformation()?.pipe(takeUntil(this.unsubscribe)).subscribe((data) => {
       this.userNickame = data.nickName as string;
       const player1: LocalPlayer = {
         "nickName": this.userNickame,
       }
       this.players.push(player1);
-      this.router.events.subscribe( (event) => {
-        if (event instanceof NavigationEnd) {
-          //console.log(event.url);
-          if (event.url != '/game' && !event.url.startsWith('/game?', 0))
-          {
-            console.log(event.url);
-            this.ws.client.emit('statusChange', OnlineState.online);
-          }
-        }
-      })
     });
   }
 
   ngOnInit(): void {
     console.log("Ng on init")
+    this.initValue();
     this.endDuo = false;
     this.route.queryParams
     .pipe(takeUntil(this.unsubscribe))
@@ -112,6 +105,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   ballSpeedY: number = 0;
   ballSpeed: number = 0;
   gameInterval: number = 0;
+  countInterval: number = 0;
 
   //Score variables
   scoreP1: number = 0;
@@ -123,6 +117,34 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   //Game mode variable
   gameMode!: GameMode;
+
+  initValue()
+  {
+      //Rackets config variables
+  this.barLeftY = 0;
+  this.barRightY = 0;
+  this.barHeight = 0;
+  this.barWidth = 0;
+  this.barSpeed= 30;
+
+  //Ball config variables
+  this.ballX = 0;
+  this.ballY = 0;
+  this.ballRadius = 0;
+  this.ballSpeedX = 0;
+  this.ballSpeedY = 0;
+  this.ballSpeed = 0;
+  this.gameInterval = 0;
+  this.countInterval = 0;
+
+  //Score variables
+  this.scoreP1 = 0;
+  this.scoreP2 = 0;
+
+  //This variable checks whether the game is running
+  this.gameStart = false;
+  this.roundStart = false;
+  }
 
   //init game
   ngAfterViewInit() {
@@ -245,11 +267,11 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   {
     let count: number = 5;
     this.printNextRound(count);
-    const countInterval = setInterval(() => {
+    this.countInterval = setInterval(() => {
       count--;
       this.printNextRound(count);
       if (count === 0) {
-        clearInterval(countInterval);
+        clearInterval(this.countInterval);
         this.roundStart = true;
         this.nextMatch();
       }
@@ -435,11 +457,11 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   startGame() {
     let count: number = 3;
     this.printTiming(count);
-    const countInterval = setInterval(() => {
+    this.countInterval = setInterval(() => {
       count--;
       this.printTiming(count);
       if (count === 0) {
-        clearInterval(countInterval);
+        clearInterval(this.countInterval);
         this.gameInterval = setInterval(() => {
           this.moveBall();
         }, 20);
@@ -494,7 +516,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       context.fillText(`${this.scoreP2}`, 3 * (canvas.clientWidth / 4), this.canvas.nativeElement.clientHeight * 0.25);
 
       //Win message
-      if (this.scoreP1 == 99) {
+      if (this.scoreP1 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         this.gameStart = false;
@@ -503,7 +525,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
         else
           this.gameReset(true);
 
-      } else if (this.scoreP2 == 99) {
+      } else if (this.scoreP2 == 3) {
         context.fillStyle = 'white';
         context.font = '80px Courier New, monospace';
         this.gameStart = false;
@@ -565,15 +587,44 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
     this.pushGameResult(victory);
   }
 
-  //Destructor
-  ngOnDestroy() {
-    this.unsubscribe.next();
-    this.unsubscribe.complete();
+  resetData()
+  {
+    this.userNickame = '';
+  
+    this.gameId = '';
+    this.gameSize = 0;
+  
+    this.players = [];
+    this.currentMatch = [];
+    this.currentRound = [];
+    this.nextRound = [];
+  
+    this.printOrder = [];
+  
+    this.matchCount = 0;
+    this.roundTotal = 0;
+    this.roundCount = 1;
+  
+    this.display = false;
+    this.endDuo = false;
+
     this.scoreP1 = 0;
     this.scoreP2 = 0;
-    if (this.gameInterval) {
-      clearInterval(this.gameInterval);
-    }
-    window.location.reload();
+
+    this.gameStart = false;
+    this.roundStart = false;
+  }
+
+  //Destructor
+  ngOnDestroy() {
+    console.log("ng on destroy")
+    this.unsubscribe.next();
+    this.unsubscribe.complete();
+    this.resetData()
+    this.ws.client.emit('statusChange', OnlineState.online);
+    clearInterval(this.countInterval);
+    clearInterval(this.gameInterval);
+
+    //window.location.reload();
   }
 }

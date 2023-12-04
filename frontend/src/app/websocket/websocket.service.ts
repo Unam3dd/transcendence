@@ -56,6 +56,7 @@ export class WebsocketService {
       /** Game related listening events */
 
       this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
+        this.modalService.dismissAll();
         this.openModal(payload);
         console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
       });

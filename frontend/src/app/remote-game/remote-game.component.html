@@ -1,20 +1,39 @@
 <div class="container">
-    <section class="container-fluid w-75 mb-3 d-flex align-items-center justify-content-center" style="height: 5vh">
-        <div *ngIf="this.gameStart" class="content-align-center d-flex h-100">
-            <div class="avatar-container50">
-                <img class="avatar d-inline" [src]="playerLeft.avatar" alt="avatar picture">
-            </div>
-                <p class="m-0 mx-2 align-items-center text-white">{{playerLeft.nickName}}</p>
 
-        <img src="../../assets/images/fight.svg">
-
-                <p class="m-0 mx-2 text-white">{{playerRight.nickName}}</p>
-                <div class="avatar-container50 ">
-                    <img class="avatar d-inline" [src]="playerRight.avatar" alt="avatar picture">
+    <div class="row mt-3 mb-2" style="height: 3rem">
+        <div class="col-12 col-lg-6 mx-auto" *ngIf="this.gameStart" style="height: 100%">
+            <div class="col-10 d-flex mx-auto text-center" style="height: 100%">
+                <div class="col-5 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+                    <div class="col-3 avatar-container50">
+                        <img class="avatar" [src]="playerLeft.avatar" alt="avatar picture">
+                    </div>
+                    <div class="col-9 mx-auto text-center">
+                       {{playerLeft.nickName}}
+                    </div>
                 </div>
-        </div>
-    </section>
 
-    <canvas #gameCanvasRemote class="game" width="800" height="400">Game part</canvas>
-    <button class="btn btn-secondary" *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
+                <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+                    <div class="col-12 display-2">
+                        ×
+                    </div>
+                </div>
+                <div class="col-5 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+                    <div class="col-9 text-center">
+                        {{playerRight.nickName}}
+                    </div>
+                    <div class="col-3 avatar-container50" >
+                        <img class="avatar" [src]="playerLeft.avatar" alt="avatar picture">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <canvas #gameCanvasRemote class="game mx-auto" width="800" height="400">Game part</canvas>
+    </div>
+    <div class="row">
+        <button class="btn btn-secondary m-3 col-2 mx-auto" *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
+    </div>
+
 </div>
