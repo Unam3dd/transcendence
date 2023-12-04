@@ -5,8 +5,8 @@
 
 <!-- Else show the user information -->
 <section *ngIf="user.login" class="user-section">
-  <div class="row d-flex justify-content-center">
-    <div class="col align-self-center">
+  <div class="row">
+    <div class="col mt-4 me-4 d-flex justify-content-end">
       <div class="avatar-container200">
         <img class="avatar img-fluid" [src]="user.avatar" alt="avatar picture">
       </div>
@@ -17,17 +17,17 @@
         <p id="key">NickName:</p>
         <p id="value">{{user.nickName}}</p>
       </div>
+      <button class="btn btn-info mt-3 fs-4" (click)="addFriends()" >Add Friends</button>
     </div>
-    <button class="btn btn-info mt-4" (click)="addFriends()" >Add Friends</button>
   </div>
 
-  <div class="row mt-3">
+  <div class="row mt-4">
     <div class="col center-history">
       <section class="matchHistory">
         <hr>
         <h5>Match History</h5>
         <hr>
-        <div class="history" *ngIf="gameHistory.length !== 0">
+        <div class="history ms-2" *ngIf="gameHistory.length !== 0">
           <ng-container *ngFor="let game of gameHistory">
             <p *ngIf="game.size === 2"> 1v1 Game</p>
             <p *ngIf="game.size > 2"> Tournament Game</p>

@@ -1,15 +1,15 @@
 <div class="gameMode">
   <div class="local-game-container row mt-5">
     <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
-    <button class="btn btn-primary local-game fs-1" (click)="moveToGame('local', null)">Two players local</button>
+    <button class="btn btn-primary local-game fs-1 col-3 mx-auto" (click)="moveToGame('local', null)">Two players local</button>
   </div>
   <div class="two-player-container row mt-5">
-    <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
-    <button class="btn btn-primary two-player fs-1" (click)="moveToGame('remote', null)">Two players online</button>
+    <img class="hand img-fluid col-1" src="../../assets/images/hand.png" alt="">
+    <button class="btn btn-primary two-player fs-1 col-3 mx-auto" (click)="moveToGame('remote', null)">Two players online</button>
   </div>
   <div class="tournament-container row mt-5">
     <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
-    <button class="btn btn-primary tournament-game fs-1" (click)="openModal(LocalTournament)">Local tournament</button>
+    <button class="btn btn-primary tournament-game fs-1 col-3 mx-auto" (click)="openModal(LocalTournament)">Local tournament</button>
   </div>
 </div>
 

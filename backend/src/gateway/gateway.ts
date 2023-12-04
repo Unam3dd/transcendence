@@ -305,6 +305,8 @@ export class EventsGateway {
 
     if (!target) return;
 
+    targetClient.nickName = target.nickName;
+
     const info = {
       firstName: target.firstName,
       lastName: target.lastName,
@@ -313,8 +315,6 @@ export class EventsGateway {
       a2f: target.a2f,
       avatar: target.avatar,
     };
-
-    console.log(info);
 
     client.emit('refreshDataProfile', info);
   }
