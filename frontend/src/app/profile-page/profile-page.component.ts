@@ -183,6 +183,8 @@ export class ProfilePageComponent implements OnInit, OnDestroy{
       this.cookieService.removeOnlyCookie('authorization');
       this.cookieService.setCookie('authorization', JSON.parse(JSON.stringify(`Bearer ${token}`)));
       client.emit('refreshData');
+    }, () => {
+      this.notif.error('Error', 'an error occurred when changing the profile');
     })
   }
 

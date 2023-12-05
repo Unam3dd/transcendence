@@ -30,7 +30,11 @@
     </div>
 
     <div class="row">
-        <canvas #gameCanvasRemote class="game mx-auto" width="800" height="400">Game part</canvas>
+      <canvas #gameCanvasRemote class="game mx-auto" width="800" height="400">Game part</canvas>
+      
+      <div class="col-6 mx-auto">
+        <app-chat></app-chat>
+      </div>
     </div>
     <div class="row">
         <button class="btn btn-secondary m-3 col-2 mx-auto" *ngIf="!this.gameStart" (click)="cancel()">cancel</button>
