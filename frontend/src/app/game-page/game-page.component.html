@@ -1,42 +1,61 @@
-<section class ="gameContent">
-  <section *ngIf="this.gameStart && this.gameMode === 'tournament_local'" class="fight">
-    <div class="userInfo">
-        <p class="username">{{this.currentMatch[0].nickName}} </p>
-    </div>
-    <p> vs </p>
-    <div>
-        <p class="username">{{this.currentMatch[1].nickName}} </p>
-    </div>
-  </section>
+<div class="container-fluid">
 
-  <section *ngIf="this.gameStart && this.gameMode === 'local'" class="fight">
-    <div class="userInfo">
-        <p class="username">{{this.userNickame}} </p>
-    </div>
-    <p> vs </p>
-    <div>
-        <p class="username">Guest</p>
-    </div>
-  </section>
-  <br>
+  <div class="row mt-2 mb-1" style="height: 3rem">
 
-  <div class="gameDiv">
-    <canvas #gameCanvas class="game">Game part</canvas>
+    <div class="col-lg-5 col-md-6 mx-auto" *ngIf="this.gameStart && this.gameMode === 'local'" style="height: 100%">
+      <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
+        <div class="col-5 mx-auto text-center m-auto display-6">{{this.userNickame}}</div>
+        <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+          <div class="col-12 display-2">
+              ×
+          </div>
+        </div>
+        <div class="col-5 mx-auto m-auto display-6">Guest</div>
+      </div>
+    </div>
+
+    <div class="col-lg-5 col-md-6 mx-auto" *ngIf="this.gameStart && this.gameMode === 'tournament_local'" style="height: 100%">
+      <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
+        <div class="col-5 mx-auto text-center m-auto display-6">{{this.currentMatch[0].nickName}}</div>
+        <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+          <div class="col-12 display-2">
+              ×
+          </div>
+        </div>
+        <div class="col-5 mx-auto m-auto display-6">{{this.currentMatch[1].nickName}}</div>
+      </div>
+    </div>
+
   </div>
 
-   <section *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
-    <h6>Order of fights for this round:</h6>
-    <ng-container *ngFor="let pair of printOrder" class="roundInfo">
-      <div class="userInfo">
-        <p class="username">{{pair[0].nickName}}</p>
-      </div>
-      <p>vs</p>
-      <div>
-         <p class="username">{{pair[1].nickName}}</p>
+
+<div class="row">
+  <canvas #gameCanvas class="game col-6 mx-auto">Game part</canvas>
+</div>
+
+<div class="row">
+  <div class="col-6 mx-auto" *ngIf="this.roundStart && this.gameMode === 'tournament_local'">
+    <h3 class="pl-0 ml-0 mt-3 mb-3" >Order of fights for this round:</h3>
+     <ng-container *ngFor="let pair of printOrder">
+
+      <div class="row m-3" style="height: 3rem">
+        <div class="col-12 d-flex mx-auto text-center" style="height: 100%">
+          <div class="col-5 mx-auto text-center m-auto display-6">{{pair[0].nickName}}</div>
+
+          <div class="col-2 mx-auto text-center m-auto d-flex align-items-center" style="height: 100%">
+            <div class="col-12 display-2">
+                ×
+            </div>
+          </div>
+          <div class="col-5 mx-auto m-auto display-6">{{pair[1].nickName}}</div>
+        </div>
       </div>
     </ng-container>
-    </section>
-    <span class="right-column">
-      <app-chat></app-chat>
-    </span>
-</section>
+  </div>
+</div>
+  
+<hr>
+  <span class="row">
+    <app-chat></app-chat>
+  </span>
+</div>

@@ -51,7 +51,7 @@ export class GameMenuComponent implements OnInit{
   }
 
   findGame(): void {
-    //this.ws.privateGame(this.client, "toto3"); // it was just a test to send a game invit to nickName toto3
+    //this.ws.privateGame(this.client, "riri"); // it was just a test to send a game invit to nickName riri
     this.ws.enterLobby(this.client, 2);
   }
 
