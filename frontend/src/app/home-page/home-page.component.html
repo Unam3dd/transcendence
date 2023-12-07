@@ -2,15 +2,15 @@
   <ng-container *ngIf="userData.nickName && userData.email; else columnEmpty">
     <div class="profile-container row mt-5">
       <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
-      <button class="btn btn-primary profile fs-1" (click)="moveToProfile()">Profile</button>
+      <button class="btn btn-primary profile fs-1 col-2 mx-auto" (click)="moveToProfile()">Profile</button>
     </div>
     <div class="game-container row mt-5">
       <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
-      <button class="btn btn-primary game fs-1" (click)="moveToGame()">Game</button>
+      <button class="btn btn-primary game fs-1 col-2 mx-auto" (click)="moveToGame()">Game</button>
     </div>
     <div class="chat-container row mt-5">
       <img class="hand img-fluid" src="../../assets/images/hand.png" alt="">
-      <button class="btn btn-primary chat fs-1" (click)="moveToChat()">Chat</button>
+      <button class="btn btn-primary chat fs-1 col-2 mx-auto" (click)="moveToChat()">Chat</button>
     </div>
   </ng-container>
 </div>

@@ -43,7 +43,7 @@ export class WebsocketService {
         console.error('You are not connected !')
         return ;
       }
-      
+
       this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
 
       this.client.emit('join', JSON.stringify(AuthUser));
@@ -51,7 +51,7 @@ export class WebsocketService {
       this.client.on('newArrival', (msg: string) => {
         console.log(msg);
       })
-  
+
       this.client.on('disconnect', (msg: string) => {
         console.log(msg);
       })
@@ -99,6 +99,7 @@ export class WebsocketService {
       content: data,
       createdAt: new Date(),
       recipient: this.targetRecipient
+      }
     }
 
     client.emit(path, message);
@@ -117,17 +118,18 @@ export class WebsocketService {
     }
     
     const message: Message = {
-      author: {
-        login: 'sy',
-        id: 0,
-        avatar: '',
-        clientID: '',
-        nickName: ''
-      },
-      content: data,
-      createdAt: new Date(),
-      recipient: null
-    }
+        author: {
+          login: 'sy',
+          id: 0,
+          avatar: 'https://cdn.dribbble.com/userupload/4483515/file/original-8729cdbcd7ac3a9d3ac873e39c07603e.jpg?resize=400x300',
+          clientID: '',
+          nickName: 'Eugène'
+        },
+        content: data,
+        createdAt: new Date(),
+        recipient: null
+      }
+    
     client.emit(path, message);
   }
 
@@ -147,7 +149,7 @@ export class WebsocketService {
     const client = this.getClient();
     client.removeListener(channel);
   }
-  
+
   sendHelloChat(client: WsClient): void {
     const user = this.getUserInformation()
 
@@ -158,12 +160,12 @@ export class WebsocketService {
 
   getUserInformation(): UserSanitizeInterface | null {
     const token: string | null = this.cookieService.getToken();
-  
+
     if (!token) return (null);
 
       // get client username from JWT token
     const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
-      
+
     const AuthorUser: UserSanitizeInterface = {
       id: payloadJWT.sub,
       login: payloadJWT.login,

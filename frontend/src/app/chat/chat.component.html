@@ -1,4 +1,4 @@
-<div class="global">
+<div class="global container-fluid h-100 p-0 m-0">
 
   <div id="active-chat-title">{{ this.ws.client_name }}</div>
   <div class="conversation">
@@ -8,7 +8,7 @@
 
         <div class="d-flex" *ngIf="IsMainChat(msg)">
           <div class="picture-column">
-            <div class="thumbnail">  
+            <div class="thumbnail">
               <img src={{msg.author.avatar}}/>
             </div>
           </div>
@@ -48,14 +48,14 @@
 
     <div class="col-12 navbar navbar-light bg-warning fs-4 m-0 p-1 ps-3" style="height: 45px; font-family: 'Cabin', sans-serif;">{{ this.ws.client_name }}</div>
     <div class="col-12 bg-secondary m-0 p-0" style="margin-bottom: 30px; height: calc(100% - 45px);">
-      
+
       <ul class="p-0 m-0 overflow-y-auto">
 
         <div class="bg-danger" style="height: calc(100% - 50px);" *ngFor="let msg of this.ws.received_messages">
-          
+
           <div class="d-flex" *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient === null && msg.recipient === null)">
             <div>
-              <div class="avatar-container50">  
+              <div class="avatar-container50">
                 <img class="avatar" src={{msg.author.avatar}}/>
               </div>
             </div>
@@ -64,10 +64,10 @@
               <div >{{msg.content}}</div>
             </div>
           </div>
-          
+
           <div *ngIf="(!IsBlocked(msg.author.id) && this.ws.targetRecipient && msg.recipient && (msg.author.login === this.ws.getUserInformation()?.login || msg.author.login === this.ws.targetRecipient?.login) && (msg.recipient.login === this.ws.getUserInformation()?.login || msg.recipient.login === this.ws.targetRecipient?.login))">
             <div >
-              <div >  
+              <div >
                 <img src={{msg.author.avatar}}/>
               </div>
             </div>
@@ -76,7 +76,7 @@
               <div >{{msg.content}}</div>
             </div>
           </div>
-          
+
         </div>
       </ul>
 
@@ -86,7 +86,7 @@
           <button class="btn btn-primary col-1 p-0 m-0" type="submit"><i class="bi bi-send"></i></button>
         </div>
       </form>
-      
+
     </div>
 
   </div>
