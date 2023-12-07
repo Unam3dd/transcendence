@@ -25,8 +25,7 @@ export class RequestsService {
 
   //Handle requests errors
   private handleError(error: HttpErrorResponse){
-    void error;
-    return throwError(() => new Error ());
+    return throwError(() => new Error (`Error response ${error.status}`));
   }
 
   //Get the user's id
