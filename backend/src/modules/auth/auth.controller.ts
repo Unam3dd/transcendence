@@ -50,6 +50,13 @@ export class AuthController {
       await this.authService.CheckAccountAlreadyExist(UserInfo);
 
     if (exist) {
+      const verifyIs42 = this.userService.findOneByLogin(UserInfo.login);
+
+      if (!(await verifyIs42).is42) {
+        res.redirect(process.env.HOME_REDIRECT);
+        return;
+      }
+
       res.cookie(
         'authorization',
         `Bearer ${await this.authService.generateJwt(UserInfo.login)}`,
