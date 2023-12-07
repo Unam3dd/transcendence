@@ -14,6 +14,7 @@ import { Friends } from 'src/modules/friends/entities/friends.entity';
 import { FriendsService } from 'src/modules/friends/friends.service';
 import { BlockService } from 'src/modules/block/block.service';
 import { UsersModule } from 'src/modules/users/users.module';
+import { MessageModule } from 'src/modules/message/message.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UsersModule } from 'src/modules/users/users.module';
     RemoteGameModule,
     FriendsModule,
     UsersModule,
+    MessageModule,
     TypeOrmModule.forFeature([Game]),
     TypeOrmModule.forFeature([Friends]),
   ],

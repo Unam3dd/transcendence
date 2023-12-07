@@ -9,7 +9,11 @@ import {
 import { Server, Socket } from 'socket.io';
 import { OnlineState } from 'src/enum/status.enum';
 import { PlayerInfo, playPayload } from 'src/interfaces/game.interfaces';
-import { UserFriendsInfo, UserStatus } from 'src/interfaces/user.interfaces';
+import {
+  UserFriendsInfo,
+  UserStatus,
+  beMessage,
+} from 'src/interfaces/user.interfaces';
 import {
   ClientInfo,
   ListUserSanitizeInterface,
@@ -20,6 +24,8 @@ import { FriendsService } from 'src/modules/friends/friends.service';
 import { UsersService } from 'src/modules/users/users.service';
 import { BlockService } from 'src/modules/block/block.service';
 import { WsGuard } from './ws/ws.guard';
+import { MessageService } from 'src/modules/message/message.service';
+import { CreateMessageDto } from 'src/modules/message/dto/create-message.dto';
 
 @UseGuards(WsGuard)
 @Injectable()
@@ -30,6 +36,7 @@ export class EventsGateway {
     private block: BlockService,
     private readonly friendsService: FriendsService,
     private readonly usersService: UsersService,
+    private readonly messageService: MessageService,
   ) {}
 
   //To get an instance of the server, so we can send message to every clients of the server and more
@@ -71,9 +78,37 @@ export class EventsGateway {
   }
 
   // Define actions when receiving an event, 'message' event in this case
+  // @SubscribeMessage('message')
+  // receiveNewMessage(@MessageBody() message: string) {
+  //   this.server.emit('newMessage', message);
+  // }
+
   @SubscribeMessage('message')
-  receiveNewMessage(@MessageBody() message: string) {
+  async receiveNewMessage(
+    @MessageBody()
+    message: beMessage,
+  ) {
     this.server.emit('newMessage', message);
+    console.log('message = ', message);
+
+    const msgDTO: CreateMessageDto = {
+      author: null,
+      recipient: null,
+      content: '',
+    };
+
+    msgDTO.author = message.author;
+    msgDTO.recipient = message.recipient;
+    msgDTO.content = message.content;
+
+    console.log('message dto is : ', msgDTO);
+    const res = await this.messageService.create(msgDTO);
+  }
+
+  @SubscribeMessage('savedMessage')
+  async giveOldMessages(@ConnectedSocket() client: Socket) {
+    const getMsgDTO: CreateMessageDto[] = await this.messageService.findAll();
+    client.emit('getOldMsg', getMsgDTO);
   }
 
   @SubscribeMessage('disconnect')
@@ -84,7 +119,10 @@ export class EventsGateway {
     const { login } = JSON.parse(body);
 
     if (!client.disconnected) client.disconnect();
-    this.server.emit('newDepart', `${login} has just left the transcendence !`);
+    this.server.emit(
+      'newLeaving',
+      `${login} has just left the transcendence !`,
+    );
   }
 
   @SubscribeMessage('newJoinChat')
@@ -253,7 +291,7 @@ export class EventsGateway {
         this.statusChange(client, OnlineState.offline);
         el.client.disconnect();
         this.server.emit(
-          'newDepart',
+          'newLeaving',
           `${el.nickName} (${el.login}) has left transcendence`,
         );
         const index = this.clientList.indexOf(el);

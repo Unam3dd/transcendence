@@ -50,3 +50,10 @@ export interface BlockedUser {
   user1: number;
   user2: number;
 }
+
+export interface beMessage {
+  author: ListUserSanitizeInterface | null;
+  content: string;
+  createdAt: Date;
+  recipient: ListUserSanitizeInterface | null;
+}
