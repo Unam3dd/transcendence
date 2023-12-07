@@ -37,7 +37,6 @@ export class SelectPlayerModalComponent {
       this.activeModal.close(nickname);
     else
     {
-      console.log("empty");
       alert('Your nickname must be between 3 and 12 characters');
     }
   }

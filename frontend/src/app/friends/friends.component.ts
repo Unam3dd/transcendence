@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RequestsService } from '../services/requests.service';
 import { UserFriendsInfo, UserInterface, UserUpdateStatus } from '../interfaces/user.interface';
-import { NavigationEnd, Router } from '@angular/router'
+import { Router } from '@angular/router'
 import { Observable, Subject, Subscription, takeUntil } from 'rxjs';
 import { WsClient } from '../websocket/websocket.type';
 import { WebsocketService } from '../websocket/websocket.service';
@@ -12,7 +12,7 @@ import { WebsocketService } from '../websocket/websocket.service';
   styleUrls: ['./friends.component.scss']
 })
 
-export class FriendsComponent implements OnInit {
+export class FriendsComponent implements OnInit, OnDestroy {
 
   constructor(private readonly requestsService: RequestsService, private readonly router: Router, private readonly ws:WebsocketService) {}
 
@@ -50,7 +50,7 @@ export class FriendsComponent implements OnInit {
     this.client.on('getStatus', (payload: UserUpdateStatus[]) => {
       if (this.approvedFriends.length === 0)
         return ;
-      for (let el of payload)
+      for (const el of payload)
       {
         const found = this.approvedFriends.find( (user) => user.id === el.id)
         if (found)

@@ -30,8 +30,6 @@ export class Lobby {
   ) {
     this.id = v4();
     this.state = gameState.waiting;
-
-    console.log('Lobby created : ', this.id);
   }
 
   public addClient(player: PlayerInfo): void {
@@ -62,7 +60,6 @@ export class Lobby {
     if (this.lobbyManager.findLobbyByPlayer(player)) return;
     if (this.invitedOpponent == null) return;
     if (player.nickName != this.invitedOpponent) {
-      console.log('this is a private game and user is not the invited player');
       return;
     } else this.addClient(player);
   }

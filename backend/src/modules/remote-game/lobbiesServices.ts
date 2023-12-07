@@ -19,7 +19,6 @@ export class LobbyServices {
     server: Server,
   ): void {
     if (this.findLobbyByPlayer(player)) {
-      console.log('Client is already in a lobby!');
       return;
     }
     const lobby = this.searchLobby(lobbySize);
@@ -82,9 +81,7 @@ export class LobbyServices {
 
   public leaveLobby(player: PlayerInfo, lobby: Lobby): void {
     lobby.removeClient(player);
-    console.log('client = ', player.nickName, ' removed');
     if (lobby.players.length === 0) {
-      console.log('lobby ', lobby.id, 'has been deleted');
       this.lobbies.delete(lobby.id);
     }
     return;
@@ -92,7 +89,6 @@ export class LobbyServices {
 
   public destroyLobby(lobby: Lobby): void {
     while (lobby.players.length) {
-      console.log(lobby.players[0].nickName);
       this.leaveLobby(lobby.players[0], lobby);
     }
   }

@@ -25,7 +25,8 @@ export class RequestsService {
 
   //Handle requests errors
   private handleError(error: HttpErrorResponse){
-    return throwError(() => new Error (`Error response ${error.status}`));
+    void error;
+    return throwError(() => new Error ());
   }
 
   //Get the user's id
@@ -52,7 +53,7 @@ export class RequestsService {
         throw new Error('"id" not found');
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.log('Unexpected error:', error);
       throw error;
     }
   }

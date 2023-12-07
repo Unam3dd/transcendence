@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UserSanitizeInterface } from '../interfaces/user.interface';
 import { RequestsService } from '../services/requests.service';
@@ -11,7 +11,7 @@ import { WebsocketService } from '../websocket/websocket.service';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.scss']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
 
   user = {} as UserSanitizeInterface;
   myId: number = 0;

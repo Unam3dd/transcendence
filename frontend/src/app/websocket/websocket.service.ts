@@ -37,7 +37,7 @@ export class WebsocketService {
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
       if (!AuthUser) {
-        console.error('You are not connected !')
+        console.log('You are not connected !')
         return ;
       }
 
@@ -58,7 +58,6 @@ export class WebsocketService {
       this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
         this.modalService.dismissAll();
         this.openModal(payload);
-        console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
       });
 
       this.client.on('declined', () => {
@@ -101,12 +100,12 @@ export class WebsocketService {
 
       if (!user) return ;
 
-      const client: Socket = this.getClient();
+      //const client: Socket = this.getClient();
 
-      const clientInfo: ClientInfoInterface = {
+      /*const clientInfo: ClientInfoInterface = {
         ...user,
         clientID: client.id
-      }
+      }*/
 
       const message: Message = {
         author: {
