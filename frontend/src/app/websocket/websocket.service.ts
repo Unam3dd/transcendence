@@ -100,10 +100,8 @@ export class WebsocketService {
       createdAt: new Date(),
       recipient: this.targetRecipient
       }
+      client.emit(path, message);
     }
-
-    client.emit(path, message);
-  }
 
   sendSystemMessage(path: string, data: string) {
     const user: UserSanitizeInterface | null = this.getUserInformation();
