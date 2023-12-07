@@ -29,9 +29,9 @@ export class WebsocketService {
   public author_name: string = '';
 
   public BlockUserList: BlockedUser[] = [];
- 
+
   constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService) 
+    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService)
   {
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
@@ -40,7 +40,7 @@ export class WebsocketService {
         console.error('You are not connected !')
         return ;
       }
-      
+
       this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
 
       this.client.emit('join', JSON.stringify(AuthUser));
@@ -48,7 +48,7 @@ export class WebsocketService {
       this.client.on('newArrival', (msg: string) => {
         console.log(msg);
       })
-  
+
       this.client.on('disconnect', (msg: string) => {
         console.log(msg);
       })
@@ -68,7 +68,7 @@ export class WebsocketService {
       this.client.on('result', (payload: boolean) => {
         this.printGameResult(payload);
     });
-  } 
+  }
 
   initializeWebsocketService() {
     console.log('Websocket service was initialized !');
@@ -112,9 +112,9 @@ export class WebsocketService {
         author: {
           login: 'sy',
           id: 0,
-          avatar: '',
+          avatar: 'https://cdn.dribbble.com/userupload/4483515/file/original-8729cdbcd7ac3a9d3ac873e39c07603e.jpg?resize=400x300',
           clientID: '',
-          nickName: ''
+          nickName: 'Eugène'
         },
         content: data,
         createdAt: new Date(),
@@ -139,7 +139,7 @@ export class WebsocketService {
       const client = this.getClient();
       client.removeListener(channel);
     }
-  
+
   sendHelloChat(client: WsClient): void {
     const user = this.getUserInformation()
 
@@ -150,12 +150,12 @@ export class WebsocketService {
 
   getUserInformation(): UserSanitizeInterface | null {
     const token: string | null = this.cookieService.getToken();
-  
+
     if (!token) return (null);
 
       // get client username from JWT token
     const payloadJWT = <JWTPayload>JSON.parse(this.jwtService.decode(token)[JWT_PAYLOAD]);
-      
+
     const AuthorUser: UserSanitizeInterface = {
       id: payloadJWT.sub,
       login: payloadJWT.login,
