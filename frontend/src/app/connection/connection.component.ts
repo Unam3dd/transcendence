@@ -55,7 +55,7 @@ export class ConnectionComponent {
 
       this.cookieService.setCookie('authorization', token);
 
-      this.notif.success('You are connected !', `You are connected with ${login} welcome !`);
+      this.notif.success('You are connected !', `You are connected, ${login} ! Welcome !`);
       await this.timeService.sleep(2000);
       window.location.href = HOME_PAGE;
     }, async () => {
@@ -81,7 +81,7 @@ export class ConnectionComponent {
 
       this.cookieService.setCookie('authorization', token);
 
-      this.notif.success('You are connected !', `You are connected with ${atob(login)} welcome !`);
+      this.notif.success('You are connected !', `You are connected, ${atob(login)} ! welcome !`);
       await this.timeService.sleep(2000);
       this.cookieService.removeCookie('tmp_name');
       window.location.href = HOME_PAGE;

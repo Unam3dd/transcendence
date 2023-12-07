@@ -29,10 +29,13 @@ export class WebsocketService {
   public author_name: string = '';
 
   public BlockUserList: BlockedUser[] = [];
-
-  constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService)
-  {
+ 
+  constructor(
+    private readonly cookieService: CookiesService,
+    private readonly jwtService: JwtService,
+    private modalService: NgbModal,
+    private notif: NotificationsService,
+  ) {
 
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
@@ -53,9 +56,9 @@ export class WebsocketService {
         console.log(msg);
       })
 
-      /** Game related listening events */
-
-      this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
+    /** Game related listening events */
+    
+    this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
         this.modalService.dismissAll();
         this.openModal(payload);
       });
@@ -74,6 +77,11 @@ export class WebsocketService {
   }
 
   getClient(): WsClient { return (this.client); }
+
+  getOldMessages() {
+    const client: Socket = this.getClient();
+    client.emit('savedMessage');
+  }
 
   sendMessage(path: string, data: any) {
       const user: UserSanitizeInterface | null = this.getUserInformation();
@@ -122,29 +130,29 @@ export class WebsocketService {
       this.client.emit(path, message);
     }
 
-    listClient() {
-      const client = this.getClient();
+  listClient() {
+    const client = this.getClient();
 
-      client.emit('listClient', null);
-    }
+    client.emit('listClient', null);
+  }
 
-    resetAllListener() {
-      const client = this.getClient();
+  resetAllListener() {
+    const client = this.getClient();
 
-      client.removeAllListeners();
-    }
+    client.removeAllListeners();
+  }
 
-    removeListener(channel: string) {
-      const client = this.getClient();
-      client.removeListener(channel);
-    }
+  removeListener(channel: string) {
+    const client = this.getClient();
+    client.removeListener(channel);
+  }
 
   sendHelloChat(client: WsClient): void {
     const user = this.getUserInformation()
 
     if (!user) return ;
 
-    client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
+    client.emit('newJoinChat', `${user.login}`, `${user.nickName} (${user.login}) has joined a chat !`);
   }
 
   getUserInformation(): UserSanitizeInterface | null {

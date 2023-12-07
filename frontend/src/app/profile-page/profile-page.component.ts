@@ -177,7 +177,7 @@ export class ProfilePageComponent implements OnInit, OnDestroy{
     const observable = await this.requestService.updateUserDatas(firstname, lastname, nickname, email, a2f)
 
     observable?.subscribe(async (data) => {
-      this.notif.success('Profile Updated successfully !', 'Your profile has been updated');
+      this.notif.success('Profile successfully updated !', 'Your profile has been updated');
       const { token, qrcode } = JSON.parse(JSON.stringify(data));
       this.qrcodeURL = qrcode;
       this.cookieService.removeOnlyCookie('authorization');

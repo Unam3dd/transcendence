@@ -160,7 +160,7 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
       let player = await this.openModal(i);
       while (this.players.find((el) => el.nickName === player.nickName))
       {
-        this.notif.error("Nickname is already taken");
+        this.notif.error("Nickname already taken");
         player = await this.openModal(i);
       }
       if (!player.nickName)
