@@ -37,31 +37,29 @@ export class WebsocketService {
     private notif: NotificationsService,
   ) {
 
-    const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
-    if (!AuthUser) {
-      console.error('You are not connected !')
-      return ;
-    }
-    
-    this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
-    
-    this.client.emit('join', JSON.stringify(AuthUser));
-    
-    this.client.on('newArrival', (msg: string) => {
-      console.log(msg);
-    })
+      const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
-    this.client.on('disconnect', (msg: string) => {
-      console.log(msg);
-    })
-    
-    this.client.on('welcome', (data:string) => {
-      console.log(data);
-    })
+      if (!AuthUser) {
+        console.error('You are not connected !')
+        return ;
+      }
+      
+      this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
+
+      this.client.emit('join', JSON.stringify(AuthUser));
+
+      this.client.on('newArrival', (msg: string) => {
+        console.log(msg);
+      })
+  
+      this.client.on('disconnect', (msg: string) => {
+        console.log(msg);
+      })
 
     /** Game related listening events */
     
     this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
+        this.modalService.dismissAll();
       this.openModal(payload);
       console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
     });
