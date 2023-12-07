@@ -2,12 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { IsDate, IsNumber, IsString } from 'class-validator';
+import { IsDate, IsNumber, IsObject, IsString } from 'class-validator';
 import { User } from 'src/modules/users/entities/user.entity';
+import { ListUserSanitizeInterface } from 'src/interfaces/user.interfaces';
 
 @Entity()
 export class Message {
@@ -15,23 +15,21 @@ export class Message {
   @IsNumber({}, { message: 'id must be a number !' })
   id: number;
 
-  @OneToOne(() => User)
-  @JoinColumn()
   @Column({
-    type: 'int',
-    nullable: false,
+    type: 'jsonb',
+    nullable: true,
   })
-  @IsNumber({}, { message: 'author must be a number !' })
-  author: number;
+  @IsObject({ message: 'author must be an object ListUserSanitizeInterface !' })
+  author: ListUserSanitizeInterface;
 
-  @OneToOne(() => User)
-  @JoinColumn()
   @Column({
-    type: 'int',
-    nullable: false,
+    type: 'jsonb',
+    nullable: true,
   })
-  @IsNumber({}, { message: 'recipient must be a number !' })
-  recipient: number;
+  @IsObject({
+    message: 'recipient must be an object ListUserSanitizeInterface !',
+  })
+  recipient: ListUserSanitizeInterface;
 
   @IsString({ message: 'content must be a string !' })
   @Column({

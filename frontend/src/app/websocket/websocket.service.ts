@@ -30,44 +30,50 @@ export class WebsocketService {
 
   public BlockUserList: BlockedUser[] = [];
  
-  constructor(private readonly cookieService: CookiesService,
-    private readonly jwtService: JwtService, private modalService: NgbModal, private notif: NotificationsService) 
-  {
+  constructor(
+    private readonly cookieService: CookiesService,
+    private readonly jwtService: JwtService,
+    private modalService: NgbModal,
+    private notif: NotificationsService,
+  ) {
 
-      const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
+    const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
+    if (!AuthUser) {
+      console.error('You are not connected !')
+      return ;
+    }
+    
+    this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
+    
+    this.client.emit('join', JSON.stringify(AuthUser));
+    
+    this.client.on('newArrival', (msg: string) => {
+      console.log(msg);
+    })
 
-      if (!AuthUser) {
-        console.error('You are not connected !')
-        return ;
-      }
-      
-      this.client = <WsClient>io(WS_GATEWAY, { transports: ['websocket'], rejectUnauthorized: false });
+    this.client.on('disconnect', (msg: string) => {
+      console.log(msg);
+    })
+    
+    this.client.on('welcome', (data:string) => {
+      console.log(data);
+    })
 
-      this.client.emit('join', JSON.stringify(AuthUser));
-
-      this.client.on('newArrival', (msg: string) => {
-        console.log(msg);
-      })
-  
-      this.client.on('disconnect', (msg: string) => {
-        console.log(msg);
-      })
-
-      /** Game related listening events */
-
-      this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
-        this.openModal(payload);
-        console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
-      });
-
-      this.client.on('declined', () => {
-        this.notif.error('Game invitation has been declined');
-      });
-
-      this.client.on('result', (payload: boolean) => {
-        this.printGameResult(payload);
+    /** Game related listening events */
+    
+    this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
+      this.openModal(payload);
+      console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
     });
-  } 
+    
+    this.client.on('declined', () => {
+      this.notif.error('Game invitation has been declined');
+    });
+    
+    this.client.on('result', (payload: boolean) => {
+      this.printGameResult(payload);
+    });
+  }
 
   initializeWebsocketService() {
     console.log('Websocket service was initialized !');
@@ -75,76 +81,81 @@ export class WebsocketService {
 
   getClient(): WsClient { return (this.client); }
 
+  getOldMessages() {
+    const client: Socket = this.getClient();
+    client.emit('savedMessage');
+  }
+
   sendMessage(path: string, data: any) {
-      const user: UserSanitizeInterface | null = this.getUserInformation();
+    const user: UserSanitizeInterface | null = this.getUserInformation();
 
-      if (!user) return ;
+    if (!user) return ;
 
-      const client: Socket = this.getClient();
+    const client: Socket = this.getClient();
 
-      const message: Message = {
-        author: {
-          ...user,
-          clientID: client.id
-        },
-        content: data,
-        createdAt: new Date(),
-        recipient: this.targetRecipient
-      }
-
-      this.client.emit(path, message);
-    }
-
-    sendSystemMessage(path: string, data: string) {
-      const user: UserSanitizeInterface | null = this.getUserInformation();
-
-      if (!user) return ;
-
-      const client: Socket = this.getClient();
-
-      const clientInfo: ClientInfoInterface = {
+    const message: Message = {
+      author: {
         ...user,
         clientID: client.id
-      }
-
-      const message: Message = {
-        author: {
-          login: 'sy',
-          id: 0,
-          avatar: '',
-          clientID: '',
-          nickName: ''
-        },
-        content: data,
-        createdAt: new Date(),
-        recipient: null
-      }
-      this.client.emit(path, message);
+      },
+      content: data,
+      createdAt: new Date(),
+      recipient: this.targetRecipient
     }
 
-    listClient() {
-      const client = this.getClient();
+    client.emit(path, message);
+  }
 
-      client.emit('listClient', null);
+  sendSystemMessage(path: string, data: string) {
+    const user: UserSanitizeInterface | null = this.getUserInformation();
+    
+    if (!user) return ;
+    
+    const client: Socket = this.getClient();
+    
+    const clientInfo: ClientInfoInterface = {
+      ...user,
+      clientID: client.id
     }
-
-    resetAllListener() {
-      const client = this.getClient();
-
-      client.removeAllListeners();
+    
+    const message: Message = {
+      author: {
+        login: 'sy',
+        id: 0,
+        avatar: '',
+        clientID: '',
+        nickName: ''
+      },
+      content: data,
+      createdAt: new Date(),
+      recipient: null
     }
+    client.emit(path, message);
+  }
 
-    removeListener(channel: string) {
-      const client = this.getClient();
-      client.removeListener(channel);
-    }
+  listClient() {
+    const client = this.getClient();
+
+    client.emit('listClient', null);
+  }
+
+  resetAllListener() {
+    const client = this.getClient();
+
+    client.removeAllListeners();
+  }
+
+  removeListener(channel: string) {
+    const client = this.getClient();
+    client.removeListener(channel);
+  }
   
   sendHelloChat(client: WsClient): void {
     const user = this.getUserInformation()
 
     if (!user) return ;
 
-    client.emit('newJoinChat', `${user.login} (${user.nickName}) has joined a chat !`);
+    client.emit('newJoinChat', `${user.login}`, `${user.nickName} (${user.login}) has joined a chat !`);
   }
 
   getUserInformation(): UserSanitizeInterface | null {

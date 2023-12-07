@@ -13,12 +13,16 @@ export class MessageService {
   ) {}
 
   async create(createMessageDto: CreateMessageDto): Promise<Message> {
-    return await this.messagesRepository.create({ ...createMessageDto });
+    return await this.messagesRepository.save({ ...createMessageDto });
   }
 
   async findAll(): Promise<Message[]> {
     return await this.messagesRepository.find();
   }
+
+  // async findLast50(): Promise<Message[]> {
+  //   return await this.messagesRepository.find({ order: {createdAt: 'DESC'}, take: 50 });
+  // }
 
   // findOne(id: number) {
   //   return `This action returns a #${id} message`;

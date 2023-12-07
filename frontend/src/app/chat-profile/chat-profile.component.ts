@@ -18,6 +18,8 @@ export class ChatProfileComponent {
   ngOnInit() {
     const client = this.ws.getClient();
 
+    this.refreshChat();
+
     client.on('listClient', (clients: ClientInfoInterface[]) => {
       this.listClients = clients.filter(client => client.login !== this.ws.getUserInformation()?.login)
 
@@ -40,20 +42,20 @@ export class ChatProfileComponent {
       //if not on general already, call for general conversation
       this.ws.targetRecipient = null;
       this.ws.client_name = 'Main chat';
-
+      
       for (let user of this.ws.BlockUserList) {
         this.listClients = this.listClients.filter(client => client.id !== user.user2);
-        console.log(this.listClients);
+        // console.log(this.listClients);
       }
-
-    } else {
       
+    } else {
       for (let user of this.ws.BlockUserList)
         this.listClients = this.listClients.filter(client => client.id !== user.user2);
       //if not on recipient already, call for recipient conversation
       this.ws.targetRecipient = recipient;
       this.ws.client_name = `${recipient.login} (${recipient.nickName})`;
     }
+    this.refreshChat();
   }
 
   blockUser(id: number) {
@@ -62,6 +64,7 @@ export class ChatProfileComponent {
       const client = this.ws.getClient();
 
       client.emit('listBlocked');
+      this.refreshChat();
     })
   }
 
@@ -76,6 +79,11 @@ export class ChatProfileComponent {
   {
     const page: string = '/user/' + id;
     this.router.navigate([page]);
+  }
+
+  refreshChat() {
+    this.ws.received_messages = [];
+    this.ws.getOldMessages();
   }
 
   ngOnDestroy()

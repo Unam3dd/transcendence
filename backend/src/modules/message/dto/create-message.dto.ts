@@ -1,21 +1,13 @@
-import { IsDate, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsObject, IsString } from 'class-validator';
+import { ListUserSanitizeInterface } from 'src/interfaces/user.interfaces';
 
 export class CreateMessageDto {
-  //auto-increment
-  // @IsOptional()
-  // @IsNumber({}, { message: 'id must be a number !' })
-  // id?: number;
+  @IsObject({ message: 'content must be an object ListUserSanitizeInterface' })
+  author: ListUserSanitizeInterface | null;
 
-  @IsNumber({}, { message: 'content must be an number' })
-  author: number;
-
-  @IsNumber({}, { message: 'content must be an number' })
-  recipient: number;
+  @IsObject({ message: 'content must be an object ListUserSanitizeInterface' })
+  recipient: ListUserSanitizeInterface | null;
 
   @IsString({ message: 'content must be a string !' })
   content: string;
-
-  // auto-completed
-  // @IsDate({ message: 'createdAt must be a Date' })
-  // createdAt: Date;
 }

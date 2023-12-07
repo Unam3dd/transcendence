@@ -67,7 +67,7 @@ export class HomePageComponent implements OnInit {
 
       window.location.reload();
     }, () => {
-      this.notif.error('Error', 'Nickname or email is already taken please choose another nickname or email !');
+      this.notif.error('Error', 'Nickname or email already taken ! Please, choose another nickname or email.');
     });
   }
 }

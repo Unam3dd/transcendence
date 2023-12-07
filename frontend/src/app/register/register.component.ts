@@ -45,7 +45,7 @@ export class RegisterComponent {
 
     this.req.registerUser(userData).subscribe(async (res) => {
 
-      this.notif.success('Success', 'Your account has been created successfully !');
+      this.notif.success('Success', 'Your account has been successfully created !');
       if (res.status == HttpStatusCode.Created) {
         this.qrcode = res.body;
         return ;
@@ -53,7 +53,7 @@ export class RegisterComponent {
       await this.timerService.sleep(3000);
       window.location.href = `${LOGIN_PAGE}`
     }, () => {
-      this.notif.error('Error', 'You not respect the expected answer to perform registration !');
+      this.notif.error('Error', 'Registration failed.');//format and availability of credentials may cause this failure
     });
   }
 }
