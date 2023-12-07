@@ -1,5 +1,3 @@
-import { OnlineState } from "../enum/status.enum";
-
 export interface Friends{
     id: number,
     user1: number,

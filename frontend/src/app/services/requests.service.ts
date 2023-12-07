@@ -52,7 +52,7 @@ export class RequestsService {
         throw new Error('"id" not found');
       }
     } catch (error) {
-      console.error('Unexpected error:', error);
+      console.log('Unexpected error:', error);
       throw error;
     }
   }

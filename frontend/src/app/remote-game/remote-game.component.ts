@@ -2,7 +2,7 @@ import { WebsocketService } from '../websocket/websocket.service';
 import { WsClient } from '../websocket/websocket.type';
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import { Subject, takeUntil } from "rxjs";
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { GameInfo } from '../interfaces/game.interface';
 import { OnlineState } from '../enum/status.enum';
 
@@ -41,7 +41,6 @@ export class RemoteGameComponent implements OnDestroy, OnInit {
 
     this.drawWaiting();
     this.client.on('gameMessage', (data: string) => {
-      console.log(data);
       this.gameStart = false;
     })
 

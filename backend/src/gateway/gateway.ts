@@ -73,7 +73,7 @@ export class EventsGateway {
       this.statusChange(client, OnlineState.online);
       this.server.emit('newArrival', `${login} has join the transcendence !`);
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
   }
 

@@ -40,7 +40,7 @@ export class WebsocketService {
       const AuthUser: UserSanitizeInterface | null = this.getUserInformation();
 
       if (!AuthUser) {
-        console.error('You are not connected !')
+        console.log('You are not connected !')
         return ;
       }
 
@@ -60,16 +60,15 @@ export class WebsocketService {
     
     this.client.on('gameInvitation', (payload: gameInvitationPayload) => {
         this.modalService.dismissAll();
-      this.openModal(payload);
-      console.log("game invitation id :", payload.gameId, "; host : ", payload.host);
-    });
-    
-    this.client.on('declined', () => {
-      this.notif.error('Game invitation has been declined');
-    });
-    
-    this.client.on('result', (payload: boolean) => {
-      this.printGameResult(payload);
+        this.openModal(payload);
+      });
+
+      this.client.on('declined', () => {
+        this.notif.error('Game invitation has been declined');
+      });
+
+      this.client.on('result', (payload: boolean) => {
+        this.printGameResult(payload);
     });
   }
 
@@ -85,37 +84,38 @@ export class WebsocketService {
   }
 
   sendMessage(path: string, data: any) {
-    const user: UserSanitizeInterface | null = this.getUserInformation();
+      const user: UserSanitizeInterface | null = this.getUserInformation();
 
-    if (!user) return ;
+      if (!user) return ;
 
-    const client: Socket = this.getClient();
+      const client: Socket = this.getClient();
 
-    const message: Message = {
-      author: {
+      const message: Message = {
+        author: {
+          ...user,
+          clientID: client.id
+        },
+        content: data,
+        createdAt: new Date(),
+        recipient: this.targetRecipient
+      }
+
+      this.client.emit(path, message);
+    }
+
+    sendSystemMessage(path: string, data: string) {
+      const user: UserSanitizeInterface | null = this.getUserInformation();
+
+      if (!user) return ;
+
+      //const client: Socket = this.getClient();
+
+      /*const clientInfo: ClientInfoInterface = {
         ...user,
         clientID: client.id
-      },
-      content: data,
-      createdAt: new Date(),
-      recipient: this.targetRecipient
-      }
-      client.emit(path, message);
-    }
+      }*/
 
-  sendSystemMessage(path: string, data: string) {
-    const user: UserSanitizeInterface | null = this.getUserInformation();
-    
-    if (!user) return ;
-    
-    const client: Socket = this.getClient();
-    
-    const clientInfo: ClientInfoInterface = {
-      ...user,
-      clientID: client.id
-    }
-    
-    const message: Message = {
+      const message: Message = {
         author: {
           login: 'sy',
           id: 0,
@@ -127,9 +127,8 @@ export class WebsocketService {
         createdAt: new Date(),
         recipient: null
       }
-    
-    client.emit(path, message);
-  }
+      this.client.emit(path, message);
+    }
 
   listClient() {
     const client = this.getClient();

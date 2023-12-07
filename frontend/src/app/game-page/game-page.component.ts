@@ -1,6 +1,6 @@
 import {AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {Observable, Subject, Subscription, takeUntil} from "rxjs";
+import {ActivatedRoute, Router} from "@angular/router";
+import { Subject, Subscription, takeUntil} from "rxjs";
 import { RequestsService } from '../services/requests.service';
 import { LocalPlayer, PlayerResult } from '../interfaces/game.interface';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -65,7 +65,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log("Ng on init")
     this.initValue();
     this.endDuo = false;
     this.route.queryParams
@@ -617,7 +616,6 @@ export class GamePageComponent implements AfterViewInit, OnInit, OnDestroy {
 
   //Destructor
   ngOnDestroy() {
-    console.log("ng on destroy")
     this.unsubscribe.next();
     this.unsubscribe.complete();
     this.resetData()

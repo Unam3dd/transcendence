@@ -56,7 +56,6 @@ export class ChatComponent implements OnInit {
     })
 
     client.on('newMessage', (msg) => {
-      console.log(msg);
       this.ws.received_messages.push(msg);
     })
 

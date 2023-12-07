@@ -39,7 +39,6 @@ export class GameInvitationComponent {
   client: WsClient = this.ws.getClient();
 
   public accept(){
-    console.log("accept game invit");
     this.ws.changeStatus(this.client, OnlineState.ingame);
     this.ws.joinPrivateGame(this.client, this.invitation);
     this.activeModal.dismiss();
@@ -47,7 +46,6 @@ export class GameInvitationComponent {
   }
 
   public decline () {
-    console.log("decline game invit");
     this.ws.declinePrivateGame(this.client, this.invitation);
     this.activeModal.dismiss();
   }

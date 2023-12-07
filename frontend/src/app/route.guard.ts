@@ -1,5 +1,5 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { CanActivateFn, Router, UrlTree } from '@angular/router';
 import { CookiesService } from './services/cookies.service';
 import * as JwtDecode from 'jwt-decode'
 
@@ -20,7 +20,7 @@ function checkAuth(): boolean {
   return true
 }
 
-export const routeGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {
+export const routeGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
 
   if (checkAuth())
@@ -29,7 +29,7 @@ export const routeGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: 
     return router.createUrlTree(['/']);
 };
 
-export const loginGuard: CanActivateFn = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree => {
+export const loginGuard: CanActivateFn = (): boolean | UrlTree => {
   const router = inject(Router);
 
   if (checkAuth())

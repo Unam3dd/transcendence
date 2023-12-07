@@ -1,4 +1,3 @@
-import { Socket } from "socket.io-client";
 import { OnlineState } from "../enum/status.enum";
 
 export interface UserInterface {
