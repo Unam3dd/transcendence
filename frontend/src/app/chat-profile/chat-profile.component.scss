@@ -37,10 +37,6 @@ ul {
     padding: 10px;
 }
 
-.channel:not(:first-child) {
-    color: rgb(166, 166, 166);
-}
-
 .thumbnail {
     z-index: 1;
     width: 35px;
@@ -78,8 +74,8 @@ ul {
 }
 
 .profile-name {
-    line-height: 35px;
-    font-size: large;
+    line-height: 25px;
+    font-size: medium;
     font-weight: 550;
     // color: goldenrod;
     padding-left: 10px;

@@ -44,6 +44,7 @@ export class ChatComponent implements OnInit {
           }
         }
       }
+      this.scrollToBottom();
     })
 
     client.on('newJoinChat', (msg) => {
@@ -60,6 +61,7 @@ export class ChatComponent implements OnInit {
     })
 
     this.ws.sendHelloChat(client);
+
   }
 
   sendMessage() {
@@ -68,6 +70,7 @@ export class ChatComponent implements OnInit {
 
     this.ws.sendMessage('message', this.msg.value.content);
     this.msg.reset();
+    this.scrollToBottom();
   }
 
   IsBlocked(id: number) {
@@ -89,6 +92,14 @@ export class ChatComponent implements OnInit {
     || msg.recipient.login === this.ws.targetRecipient?.login))
       return true;
     return false;
+  }
+
+  scrollToBottom() {
+    setTimeout(() => {  
+      let block: HTMLElement | null = document.getElementById('scrollable');
+      if (block)
+        block.scrollTop = block.scrollHeight;
+     }, 150);
   }
 
   ngOnDestroy()

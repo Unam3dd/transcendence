@@ -29,15 +29,17 @@
     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
   </div>
   <hr class="m-0">
-  <div class="offcanvas-body">
-    <div class="navbar-nav flex-column">
-      <button class="btn btn-dark navbarBtn btn-lg font-weight-bold" data-bs-dismiss="offcanvas" (click)="moveToProfile()">Profile</button>
-      <button class="btn btn-dark navbarBtn btn-lg font-weight-bold" data-bs-dismiss="offcanvas" (click)="moveToGame()">Game</button>
-      <button class="btn btn-dark navbarBtn btn-lg font-weight-bold" data-bs-dismiss="offcanvas" (click)="moveToChat()">Chat</button>
+  <div class="offcanvas-body m-0 p-0">
+    <div class="col-12 navbar-nav d-flex flex-row">
+      <button class="col-4 btn btn-dark navbarBtn btn-lg font-weight-bold rounded-0" data-bs-dismiss="offcanvas" (click)="moveToProfile()">Profile</button>
+      <button class="col-4 btn btn-dark navbarBtn btn-lg font-weight-bold rounded-0" data-bs-dismiss="offcanvas" (click)="moveToGame()">Game</button>
+      <button class="col-4 btn btn-dark navbarBtn btn-lg font-weight-bold rounded-0" data-bs-dismiss="offcanvas" (click)="moveToChat()">Chat</button>
     </div>
+    <hr class="m-0">
+    <app-friends></app-friends>
   </div>
   <hr class="m-0">
-  <div class="m-3">
+  <div class="m-3 d-flex justify-content-end">
     <button class="btn btn-danger" type="button" (click)="Logout()">Logout</button>
   </div>
 </div>
