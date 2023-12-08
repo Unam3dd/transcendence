@@ -70,7 +70,7 @@ export class UploadController {
 
       const { sub } = JSON.parse(data[1]);
 
-      const filePath = 'https://localhost:443/api/upload/' + file.filename;
+      const filePath = `https://${process.env.NESTJS_IP}/api/upload/` + file.filename;
       await this.uploadService.saveFilePath(sub, filePath);
       return res.status(HttpStatus.OK).send();
     } catch (error) {

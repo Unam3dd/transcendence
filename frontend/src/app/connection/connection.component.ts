@@ -73,8 +73,8 @@ export class ConnectionComponent {
 
       if (!login) {
         this.notif.error('Error', 'Your token is invalid !');
-        this.cookieService.removeCookie('tmp_name');
-        await this.timeService.sleep(2000);
+        this.cookieService.removeOnlyCookie('tmp_name');
+        await this.timeService.sleep(5000);
         window.location.href = LOGIN_PAGE;
         return ;
       }
@@ -87,8 +87,8 @@ export class ConnectionComponent {
       window.location.href = HOME_PAGE;
     }, async () => {
       this.notif.error('Error', 'Your token is invalid !');
-      this.cookieService.removeCookie('tmp_name');
-      await this.timeService.sleep(2000);
+      this.cookieService.removeOnlyCookie('tmp_name');
+      await this.timeService.sleep(5000);
       window.location.href = LOGIN_PAGE;
     })
   }
