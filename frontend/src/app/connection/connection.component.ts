@@ -32,6 +32,14 @@ export class ConnectionComponent {
 
   double_factor: boolean = false;
 
+  ngOnInit() {
+    const a2f_flag: string | null = this.cookieService.getCookie('a2f');
+
+    if (!a2f_flag) return ;
+
+    if (a2f_flag) this.double_factor = true;
+  }
+
   connection42API() {
     window.location.href=`https://api.intra.42.fr/oauth/authorize?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=code`
   }
@@ -74,6 +82,7 @@ export class ConnectionComponent {
       if (!login) {
         this.notif.error('Error', 'Your token is invalid !');
         this.cookieService.removeOnlyCookie('tmp_name');
+        this.cookieService.removeOnlyCookie('a2f');
         await this.timeService.sleep(5000);
         window.location.href = LOGIN_PAGE;
         return ;
@@ -83,11 +92,13 @@ export class ConnectionComponent {
 
       this.notif.success('You are connected !', `You are connected, ${atob(login)} ! welcome !`);
       await this.timeService.sleep(2000);
-      this.cookieService.removeCookie('tmp_name');
+      this.cookieService.removeOnlyCookie('tmp_name');
+      this.cookieService.removeOnlyCookie('a2f');
       window.location.href = HOME_PAGE;
     }, async () => {
       this.notif.error('Error', 'Your token is invalid !');
       this.cookieService.removeOnlyCookie('tmp_name');
+      this.cookieService.removeOnlyCookie('a2f');
       await this.timeService.sleep(5000);
       window.location.href = LOGIN_PAGE;
     })

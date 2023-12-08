@@ -50,11 +50,17 @@ export class AuthController {
       await this.authService.CheckAccountAlreadyExist(UserInfo);
 
     if (exist) {
-      const verifyIs42 = this.userService.findOneByLogin(UserInfo.login);
+      const verifyIs42 = await this.userService.findOneByLogin(UserInfo.login);
 
-      if (!(await verifyIs42).is42) {
+      if (!verifyIs42.is42) {
         res.redirect(process.env.HOME_REDIRECT);
         return;
+      }
+
+      if (verifyIs42.a2f) {
+        res.cookie('a2f', 'true');
+        res.cookie('tmp_name', `${btoa(verifyIs42.login)}`);
+        return res.redirect('/');
       }
 
       res.cookie(
