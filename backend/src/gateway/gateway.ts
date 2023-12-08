@@ -89,7 +89,6 @@ export class EventsGateway {
     message: beMessage,
   ) {
     this.server.emit('newMessage', message);
-    console.log('message = ', message);
 
     const msgDTO: CreateMessageDto = {
       author: null,
@@ -101,7 +100,6 @@ export class EventsGateway {
     msgDTO.recipient = message.recipient;
     msgDTO.content = message.content;
 
-    console.log('message dto is : ', msgDTO);
     const res = await this.messageService.create(msgDTO);
   }
 

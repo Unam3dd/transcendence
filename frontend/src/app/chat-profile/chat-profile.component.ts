@@ -45,7 +45,6 @@ export class ChatProfileComponent {
       
       for (let user of this.ws.BlockUserList) {
         this.listClients = this.listClients.filter(client => client.id !== user.user2);
-        // console.log(this.listClients);
       }
       
     } else {
@@ -84,6 +83,12 @@ export class ChatProfileComponent {
   refreshChat() {
     this.ws.received_messages = [];
     this.ws.getOldMessages();
+  }
+
+  truncateText(nickname :string, login: string, limit: number): string {
+    let str1 = nickname.length > limit ? nickname.substring(0, limit) + '...' : nickname;
+    let str2 = login.length > limit ? login.substring(0, limit - 2) + '...' : login;
+    return (str1 + ` (${str2})`)
   }
 
   ngOnDestroy()

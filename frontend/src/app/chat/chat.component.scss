@@ -36,9 +36,9 @@ ul {
 
 .messages {
   // send-message height is 80px
-  height: calc(100% - 80px);
-  width: 100%;
-  max-width: 100%;
+  // height: calc(100% - 80px);
+  // width: 100%;
+  // max-width: 100%;
   overflow-y: auto;
   background-image: linear-gradient(to top left,  rgb(23, 23, 23) 0%, rgb(50, 50, 50) 80%);
   padding-bottom: 10px;
@@ -125,4 +125,8 @@ ul {
   border-radius: 4px;
   height: 100%;
   // width: 80px;
+}
+
+textarea::placeholder {
+  color: rgb(197, 197, 197);
 }

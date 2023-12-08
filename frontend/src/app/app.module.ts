@@ -32,7 +32,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 const NotifcationOpt: Options = {
   position: ["top", "right"],
   showProgressBar: true,
-  timeOut: 3000
+  timeOut: 2000
 }
  
 function initializeWebSocket(ws: WebsocketService) {

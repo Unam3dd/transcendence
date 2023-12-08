@@ -19,7 +19,7 @@ import { A2fModule } from '../a2f/a2f.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '5h' },
     }),
     A2fModule,
   ],

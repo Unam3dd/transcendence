@@ -42,20 +42,23 @@
 
 /* app-friends.component.css */
 .status-circle {
-  position: absolute;
-  margin-left: 33px;
-  transform: translate(-28%, -117%);
-  border: 2px solid rgba(255, 255, 255, 0.5);
-  width: 12px;
-  height: 12px;
+  transform: translate(-120%, 100%);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
 }
 
-.gameState {
-  font-size: 10px;
-  margin-left: 25px;
-  font-style: italic;
+.status-like-space {
+  width: 15px;
+  height: 15px;
 }
+
+// .gameState {
+//   font-size: 10px;
+//   margin-left: 25px;
+//   font-style: italic;
+// }
 
 .option {
   display: block;

@@ -73,7 +73,7 @@ export class WebsocketService {
   }
 
   initializeWebsocketService() {
-    console.log('Websocket service was initialized !');
+    console.log('Websocket service has been initialized !');
   }
 
   getClient(): WsClient { return (this.client); }
