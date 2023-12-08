@@ -15,6 +15,7 @@ import { HttpStatusCode } from '@angular/common/http';
 export class RegisterComponent {
   responseData: any;
   qrcode: Object | null = null;
+  redirectLogin: string = LOGIN_PAGE;
 
   constructor (private formBuilder: FormBuilder, private req: RequestsService, private timerService: TimerService, private notif: NotificationsService) {}
 

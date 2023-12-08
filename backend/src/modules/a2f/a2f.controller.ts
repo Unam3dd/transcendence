@@ -15,9 +15,20 @@ export class A2fController {
 
   @Post('verify')
   async verify(@Req() req: Request, @Res() res: Response) {
-    const data: string | string[] = req.headers.tmp_name;
+  
+    const data: string | string[] = req.headers.cookie.split('; ');
+    let name = undefined;
 
-    const login = atob(<string>data);
+    for (let line of data) {
+      const [key, value] = line.split('=');
+
+      if (key === 'tmp_name')
+        name = value;
+    }
+
+    if (!name) return (res.status(HttpStatus.BAD_REQUEST).send());
+
+    const login = atob(<string>name);
 
     const { token } = JSON.parse(JSON.stringify(req.body));
 
