@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:20.11-bookworm-slim
 WORKDIR /project/
 RUN apt-get update && apt-get upgrade -y && apt-get install netcat-openbsd -y
 RUN npm update -g && npm upgrade -g && npm i -g @angular/cli && npm i -g @nestjs/cli
