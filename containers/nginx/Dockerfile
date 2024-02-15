@@ -1,4 +1,4 @@
-FROM nginx:latest
+FROM nginx:1.25.3-bookworm-perl
 
 RUN apt-get update && apt-get install -y openssl build-essential libssl-dev && apt-get clean && rm -rf /var/lib/apt/lists/*
 
